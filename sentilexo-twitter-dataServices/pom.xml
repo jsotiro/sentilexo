@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.raythos.messaging</groupId>
+    <artifactId>sentilexo-twitter-dataServices</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+   
+    </properties>
+    <repositories>
+		<repository>
+			<id>github-releases</id>
+			<url>http://oss.sonatype.org/content/repositories/github-releases/</url>
+		</repository>
+		<repository>
+			<id>clojars.org</id>
+			<url>http://clojars.org/repo</url>
+		</repository>
+		<repository>
+			<id>twitter4j</id>
+			<url>http://twitter4j.org/maven2</url>
+		</repository>
+	</repositories>
+    
+        
+        <build>
+            <plugins>    
+                 <!-- plugin>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-maven-plugin</artifactId>
+                    <version>1.7.1</version>
+                    <configuration>
+                    </configuration>
+                    <executions>
+                        <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>src/main/avro</sourceDirectory>
+                            <outputDirectory>target/generated-sources/avro/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin -->   
+         
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <manifest>
+                  <mainClass />
+                </manifest>
+              </archive>
+            </configuration>
+            <executions>
+              <execution>
+                <id>make-assembly</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+    </plugins>    
+    </build>
+    <dependencies> 
+           
+      <dependency>
+        <groupId>com.twitter</groupId>
+        <artifactId>hbc-twitter4j</artifactId> <!-- or  hbc-core  -->
+        <version>2.2.0</version> <!-- or whatever the latest version is -->
+       </dependency>       
+           
+           
+           
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>4.0.2</version>
+            <type>jar</type>
+        </dependency>
+       
+       <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_2.10</artifactId>
+        <version>0.8.1.1</version>
+        <scope>compile</scope>
+        <exclusions>
+            <exclusion>
+                <artifactId>jmxri</artifactId>
+                <groupId>com.sun.jmx</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>jms</artifactId>
+                <groupId>javax.jms</groupId>
+            </exclusion>
+            <exclusion>
+                <artifactId>jmxtools</artifactId>
+                <groupId>com.sun.jdmk</groupId>
+        </exclusion>
+        </exclusions>
+    </dependency>
+       
+         <dependency>
+	     <groupId>com.google.guava</groupId>
+	      <artifactId>guava</artifactId>
+	     <version>17.0</version>
+         </dependency>
+
+        <dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-api</artifactId>
+	<version>1.7.7</version>
+       </dependency>
+       
+       <dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-log4j12</artifactId>
+	<version>1.7.7</version>
+    </dependency>
+               <dependency>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro</artifactId>
+                <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.raythos.sentilexo</groupId>
+            <artifactId>sentilexo-common-twitter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <name>sentilexo-twitter-dataServices</name>
+</project>
