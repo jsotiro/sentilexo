@@ -5,13 +5,14 @@
  */
 package com.raythos.sentilexo.trident.twitter;
 
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
+import com.raythos.sentilexo.twitter.common.domain.TwitterQueryResultItemMapper;
 import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 import org.apache.avro.Schema;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.Decoder;
@@ -22,6 +23,7 @@ import storm.trident.operation.BaseFunction;
 import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
 
+
 /**
  *
  * @author yanni
@@ -29,6 +31,12 @@ import storm.trident.tuple.TridentTuple;
 public class DeserializeAvroResultItem  extends BaseFunction {
     
      protected static org.slf4j.Logger   log = LoggerFactory.getLogger(DeserializeAvroResultItem.class);
+     
+     public static final Fields avroObjectFields = new Fields("owner","queryName","StatusId","ResultItem","lang");
+     
+     void calculateAndUpdateQueryStats(){
+     }
+     
      
      transient Schema avroSchema = null;
      
@@ -62,15 +70,22 @@ public class DeserializeAvroResultItem  extends BaseFunction {
 		}
 		return result;
 	}
+    
+         
         
    @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-      byte[] bytes= tuple.getBinary(0);
+             
+             byte[] bytes= tuple.getBinary(0);
              TwitterQueryResultItemAvro result = deserializeBinary(bytes);
-             TwitterDataManager.getInstance().saveTwitterQueryResultItem(result);
+             Map fields = TwitterQueryResultItemMapper.asFieldMap(result);
+             TwitterDataManager.getInstance().saveTwitterQueryResultItem(fields);
              Long statusId = result.getStatusId();
+             String queryName = result.getQueryName();
+             if (queryName==null)
+                 queryName = "indyref";
              String clKeyspace = TwitterDataManager.getInstance().getKeyspace();
-            log.trace("Result Item StatusId = "+ statusId + " written to Cassandra keyspace"+clKeyspace);
-            collector.emit(new Values(statusId,result,result.getLang() ));
+             log.trace("Result Item StatusId = "+ statusId + " written to Cassandra keyspace"+clKeyspace);
+             collector.emit(new Values("raythos", queryName, statusId,fields,result.getLang() ));
     }   
 }

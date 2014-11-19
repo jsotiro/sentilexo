@@ -7,10 +7,11 @@ package com.raythos.sentilexo.trident.twitter;
 
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
-import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
+import com.raythos.sentilexo.twitter.common.domain.StatusFieldNames;
 import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import storm.trident.operation.BaseFunction;
 import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
@@ -24,7 +25,7 @@ import org.slf4j.LoggerFactory;
 public class CalculateSimpleSentimentTotals  extends BaseFunction{
     protected  static Logger log = LoggerFactory.getLogger(CalculateSimpleSentimentTotals.class);
     
-     static final Fields hashtagsFields = new Fields("queryName","statusId","createdAt","retweet", "hashtags");
+    public static final Fields hashtagsFields = new Fields("qOwner", "qName", "sId", "createdAt","retweet", "hashtags");
 
     
     int counter = 0;
@@ -105,29 +106,32 @@ public class CalculateSimpleSentimentTotals  extends BaseFunction{
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        
-        Long statusId = (long)tuple.getValue(0);
+        String qOwner = tuple.getStringByField("owner"); 
+        String qName = tuple.getStringByField("queryName");
+       
+        Long sId = (long)tuple.getLongByField("StatusId");
         try {
-            TwitterQueryResultItemAvro result = (TwitterQueryResultItemAvro) tuple.getValue(1);
-            String query = result.getQueryName();
+            Map<String,Object> result = ( Map<String,Object>) tuple.getValueByField("ResultItem");
+           
             Date resultCreationDate = new Date(); 
-            resultCreationDate.setTime(result.getCreatedAt());
-            List<String> hashtags  = result.getHashtags();
-            boolean isStatusRetweet=  result.getRetweet(); 
+            resultCreationDate.setTime(((Date)result.get(StatusFieldNames.CREATED_AT)).getTime());
+            List<String> hashtags  =  (List<String>)result.get(StatusFieldNames.HASHTAGS);
+            boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentiment(hashtags);
-            TwitterDataManager.getInstance().updateSimpleSentimentTotals(query,sentiment,resultCreationDate,retweet);  
-            log.trace("Hashtag totals for StatusId = "+ statusId + " written to Cassandra keyspace"+ TwitterDataManager.getInstance().getKeyspace());
-            collector.emit(new Values(  query, 
-                                        statusId, 
+            TwitterDataManager.getInstance().updateSimpleSentimentTotals(qOwner,qName,sentiment,resultCreationDate,retweet);  
+            log.trace("Hashtag totals for StatusId = "+sId + " written to Cassandra keyspace"+ TwitterDataManager.getInstance().getKeyspace());
+            // query, 
+            // statusId, 
+            collector.emit(new Values(  qOwner,qName,sId,
                                         resultCreationDate,
                                         retweet,
                                         hashtags));
-          log.trace("StatusId "+statusId+" emiting hashtags");         
+          log.trace("StatusId "+sId+" emiting hashtags");         
           result = null; 
           }
         catch (Exception e)     {
-            log.error("error when calculating simple sentiment totals for status for statusId "+statusId +". Error msg "+e);
+            log.error("error when calculating simple sentiment totals for status for statusId "+sId +". Error msg "+e);
         }
     }   
 

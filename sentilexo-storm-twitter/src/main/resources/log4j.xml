@@ -18,16 +18,16 @@
         </layout>           
      </appender>
 
-  <logger name="com.raythos.sentilexo">
-    <level value="warn" />
+ <logger name="com.raythos.sentilexo.trident.twitter.aggregations">
+    <level value="trace" />
         <appender-ref ref="console" />
-        <appender-ref ref="logfile"/>
+        <!--- appender-ref ref="logfile"/ -->
  </logger>
 
   <root> 
     <priority value ="warn" /> 
     <appender-ref ref="console" />
-    <appender-ref ref="logfile" /> 
+    <!-- appender-ref ref="logfile" / --> 
   </root>
   
 </log4j:configuration>

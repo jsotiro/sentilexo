@@ -10,7 +10,9 @@ import backtype.storm.tuple.Values;
 
 
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
+import com.raythos.sentilexo.twitter.common.domain.TwitterQueryResultItemMapper;
 import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
+import java.util.Map;
 
 
 
@@ -31,8 +33,9 @@ public class TwitterResultsCQLPersistenceBolt extends BaseCQLBolt {
     @Override
     public void execute(Tuple tuple) {
         long statusId = (long)tuple.getValue(0);
-        TwitterQueryResultItemAvro result = (TwitterQueryResultItemAvro) tuple.getValue(1);
+        TwitterQueryResultItemAvro object = (TwitterQueryResultItemAvro) tuple.getValue(1);
        // try{
+            Map<String,Object> result = TwitterQueryResultItemMapper.asFieldMap(object);
             TwitterDataManager.getInstance().saveTwitterQueryResultItem(result);
             log.warn("Result Item StatusId = "+ statusId + " written to Cassandra keyspace"+cqlKeyspace);
             collector.emit(new Values(statusId,result));

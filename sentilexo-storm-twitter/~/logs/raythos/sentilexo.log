@@ -1,0 +1,475 @@
+2014-10-03 09:46:02,463 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:03,494 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:08,598 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:08,607 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:08,609 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:08,615 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:13,710 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:13,715 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:18,816 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:18,823 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:24,615 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:29,694 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:30,305 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:30,346 [Thread-12-ht-total] WARN  core.FrameCompressor - Cannot find LZ4 class, you should make sure the LZ4 library is in the classpath if you intend to use it. LZ4 compression will not be available for the protocol.
+2014-10-03 09:46:30,367 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:30,373 [Thread-18-messages-SendThread(localhost:2181)] WARN  zookeeper.ClientCnxnSocket - Connected to an old server; r-o mode will be unavailable
+2014-10-03 09:46:30,374 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:35,384 [Thread-14-json-SendThread(fe80:0:0:0:0:0:0:1%1:2181)] WARN  zookeeper.ClientCnxnSocket - Connected to an old server; r-o mode will be unavailable
+2014-10-03 09:46:35,385 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:35,390 [Thread-14-json-SendThread(localhost:2181)] WARN  zookeeper.ClientCnxnSocket - Connected to an old server; r-o mode will be unavailable
+2014-10-03 09:46:35,390 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:35,469 [Thread-18-messages-SendThread(fe80:0:0:0:0:0:0:1%1:2181)] WARN  zookeeper.ClientCnxnSocket - Connected to an old server; r-o mode will be unavailable
+2014-10-03 09:46:35,469 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 09:46:36,160 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210575999684608. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,160 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210575999684608. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,160 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210581938802689to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,160 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210581938802689to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,164 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210584497344512. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,164 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210584497344512. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,172 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210610678177792. Error msg java.lang.NumberFormatException: For input string: "E.4205613"
+2014-10-03 09:46:36,172 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210610678177792. Error msg java.lang.NumberFormatException: For input string: "E.4205613"
+2014-10-03 09:46:36,172 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210621767917568to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.4205613E4"
+2014-10-03 09:46:36,172 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210621767917568to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.4205613E4"
+2014-10-03 09:46:36,176 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210626482307072. Error msg java.lang.NumberFormatException: For input string: "E.429014"
+2014-10-03 09:46:36,176 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210626482307072. Error msg java.lang.NumberFormatException: For input string: "E.429014"
+2014-10-03 09:46:36,176 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210634640261120to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.429014E4"
+2014-10-03 09:46:36,176 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210634640261120to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.429014E4"
+2014-10-03 09:46:36,182 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210647013425153to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,182 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210647013425153to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,182 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210640713592832. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,182 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210640713592832. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,203 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210672804200448to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,203 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210672804200448to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,206 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210673676632064. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,206 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210673676632064. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,206 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210679808712705to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,206 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210679808712705to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,213 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210682270752768to Cassandra. Error msgjava.lang.NumberFormatException: empty String
+2014-10-03 09:46:36,213 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210682270752768to Cassandra. Error msgjava.lang.NumberFormatException: empty String
+2014-10-03 09:46:36,295 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210722255069185. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,295 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210722255069185. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,298 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210736100470788to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,298 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210736100470788to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,298 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210733952958464. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,298 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210733952958464. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,301 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736725012480. Error msg java.lang.NumberFormatException: For input string: "E.4182014E4"
+2014-10-03 09:46:36,301 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736725012480. Error msg java.lang.NumberFormatException: For input string: "E.4182014E4"
+2014-10-03 09:46:36,301 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210741225897984to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.4182014E"
+2014-10-03 09:46:36,301 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210741225897984to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.4182014E"
+2014-10-03 09:46:36,304 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210745466339328to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,304 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210745466339328to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,316 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210754626306050. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,316 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210754626306050. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,326 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210761480175616. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,326 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210761480175616. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,326 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210770971914240to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,326 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210770971914240to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,334 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210780203184128. Error msg java.lang.NumberFormatException: For input string: "E.2909E2"
+2014-10-03 09:46:36,334 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210780203184128. Error msg java.lang.NumberFormatException: For input string: "E.2909E2"
+2014-10-03 09:46:36,334 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210781046607872to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.2909E2"
+2014-10-03 09:46:36,334 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210781046607872to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E.2909E2"
+2014-10-03 09:46:36,337 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210785391517696to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,337 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210785391517696to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,343 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793835044864. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,343 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793835044864. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,343 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210797966442497to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,343 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210797966442497to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,346 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210801477079042. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,346 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210801477079042. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,348 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210805042221057. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,348 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210805042221057. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,353 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210816861786112. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,353 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210816861786112. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,353 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210817654489089to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,353 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210817654489089to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,456 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210876559314944to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,456 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210876559314944to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,456 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210861166202880. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,456 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210861166202880. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,460 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210885921009664to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,460 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210885921009664to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,476 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210919773229056. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,476 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210919773229056. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,485 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210925473280000. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,485 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210925473280000. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,493 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210934214205440to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E20114"
+2014-10-03 09:46:36,493 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210934214205440to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "E20114"
+2014-10-03 09:46:36,493 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210932234493953. Error msg java.lang.NumberFormatException: For input string: "E20114"
+2014-10-03 09:46:36,493 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210932234493953. Error msg java.lang.NumberFormatException: For input string: "E20114"
+2014-10-03 09:46:36,499 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210944087613440to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,499 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210939683602432. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,499 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210939683602432. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,499 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210944087613440to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,502 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210950395822080to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,502 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210945538822144. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,502 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210945538822144. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,502 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210950395822080to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,506 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210952912416769. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,506 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210952912416769. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:46:36,516 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210961389113345to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,516 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210960567013377. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,516 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210960567013377. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:46:36,516 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210961389113345to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:47:30,410 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:47:30,432 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210637798563840to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,432 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210637798563840to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,510 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736725012480. Error msg java.lang.NumberFormatException: For input string: ".1717"
+2014-10-03 09:47:30,510 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736725012480. Error msg java.lang.NumberFormatException: For input string: ".1717"
+2014-10-03 09:47:30,518 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210745466339328. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,518 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210745466339328. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,550 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210782648836096. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,550 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210782648836096. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,565 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210811451125761to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,565 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210811451125761to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,573 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210822398259201. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,573 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210822398259201. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,583 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210828765212672to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,583 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210828765212672to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,586 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210832368111616. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,586 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210832368111616. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,596 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210842077921280. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,596 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210842077921280. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,599 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210843264933888. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,599 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210843264933888. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,601 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210849409564673to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException
+2014-10-03 09:47:30,601 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210849409564673to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException
+2014-10-03 09:47:30,601 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210844288327681. Error msg java.lang.ArrayIndexOutOfBoundsException
+2014-10-03 09:47:30,601 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210844288327681. Error msg java.lang.ArrayIndexOutOfBoundsException
+2014-10-03 09:47:30,627 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,627 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,634 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210887334486018to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException: -1
+2014-10-03 09:47:30,634 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210887334486018to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException: -1
+2014-10-03 09:47:30,695 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210934969171969. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,695 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210934969171969. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:47:30,705 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210952912416769to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException: -1
+2014-10-03 09:47:30,705 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210952912416769to Cassandra. Error msgjava.lang.ArrayIndexOutOfBoundsException: -1
+2014-10-03 09:47:35,392 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:48:30,457 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210672804200448. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:48:30,457 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210672804200448. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:48:30,466 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:48:35,409 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:49:30,410 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:49:30,484 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210694006431744to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:49:30,484 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210694006431744to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:49:30,689 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210934969171969. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:49:30,689 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210934969171969. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:49:35,393 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:50:30,594 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:50:35,394 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:51:30,488 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:51:30,706 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793721823233. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:51:30,706 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793721823233. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:51:30,775 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210824612872192. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:51:30,775 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210824612872192. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:51:35,407 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:52:30,483 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:52:30,615 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793721823233. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:52:30,615 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210793721823233. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:52:30,681 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210925473280000. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:52:30,681 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210925473280000. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:52:30,716 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210961389113345. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:52:30,716 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210961389113345. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:52:30,716 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210963008122880to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:52:30,716 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210963008122880to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:52:35,396 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:53:30,485 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:53:30,645 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210722255069185. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:53:30,645 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210722255069185. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:53:30,783 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:53:30,783 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:53:30,783 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210885921009664to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:53:30,783 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210885921009664to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:53:35,400 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:54:30,490 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:54:30,791 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210844288327681. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:54:30,791 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210844288327681. Error msg java.lang.NumberFormatException: multiple points
+2014-10-03 09:54:30,791 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210849409564673to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:54:30,791 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210849409564673to Cassandra. Error msgjava.lang.NumberFormatException: multiple points
+2014-10-03 09:54:35,411 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:55:30,487 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:55:30,662 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210934969171969to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:55:30,662 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210934969171969to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:55:30,666 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210945538822144to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:30,666 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210945538822144to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:30,671 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210960567013377to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:30,671 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210960567013377to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:30,672 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210961389113345. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:30,672 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210961389113345. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:55:35,400 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:56:30,488 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:56:30,630 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210782648836096. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:56:30,630 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210782648836096. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:56:30,646 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210822398259201. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:56:30,646 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210822398259201. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 09:56:35,402 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:57:30,489 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:57:35,415 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:58:30,491 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:58:30,641 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210960567013377to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:58:30,641 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210960567013377to Cassandra. Error msgjava.lang.NumberFormatException: For input string: ".E0"
+2014-10-03 09:58:35,403 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:59:30,493 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 09:59:35,403 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:00:30,493 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:00:30,534 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210679808712705. Error msg java.lang.NumberFormatException: For input string: "22014E.422014"
+2014-10-03 10:00:30,534 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210679808712705. Error msg java.lang.NumberFormatException: For input string: "22014E.422014"
+2014-10-03 10:00:30,534 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210680437854209to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "22014E.422014E4"
+2014-10-03 10:00:30,534 [Thread-20-persist] ERROR bolts.BaseCQLBolt - error when saving result for statusId507210680437854209to Cassandra. Error msgjava.lang.NumberFormatException: For input string: "22014E.422014E4"
+2014-10-03 10:00:35,412 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:01:30,493 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:01:30,541 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210679808712705. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:01:30,541 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210679808712705. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:01:35,404 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:02:30,495 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:02:30,561 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736100470788. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:02:30,561 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210736100470788. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:02:35,405 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:03:30,498 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:03:35,416 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:04:30,498 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:04:30,635 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:04:30,635 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210884901769217. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:04:35,405 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:05:30,498 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:05:35,405 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:06:30,499 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:06:30,603 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210832368111616. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:06:30,603 [Thread-10-ht-preprocess] ERROR bolts.BaseCQLBolt - error when pre-processing hashtags for statud id 507210832368111616. Error msg java.lang.NumberFormatException: For input string: ""
+2014-10-03 10:06:35,419 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:07:30,500 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:07:35,407 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:08:30,501 [Thread-18-messages] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:08:35,407 [Thread-14-json] WARN  kafka.KafkaUtils - No data found in Kafka Partition partition_0
+2014-10-03 10:13:08,116 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,116 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,513 [Thread-14-json] ERROR storm.util - Async loop died!
+java.lang.RuntimeException: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:103)
+	at storm.kafka.ZkCoordinator.getMyManagedPartitions(ZkCoordinator.java:69)
+	at storm.kafka.KafkaSpout.nextTuple(KafkaSpout.java:135)
+	at backtype.storm.daemon.executor$fn__3284$fn__3299$fn__3328.invoke(executor.clj:563)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:431)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:81)
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:79)
+	... 6 more
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:94)
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:65)
+	... 7 more
+Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:99)
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51)
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1548)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38)
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:91)
+	... 8 more
+2014-10-03 10:13:08,514 [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2000] WARN  server.NIOServerCnxn - caught end of stream exception
+EndOfStreamException: Unable to read additional data from client sessionid 0x148d52ff1d00005, likely client has closed socket
+	at org.apache.zookeeper.server.NIOServerCnxn.doIO(NIOServerCnxn.java:220)
+	at org.apache.zookeeper.server.NIOServerCnxnFactory.run(NIOServerCnxnFactory.java:224)
+	at java.lang.Thread.run(Thread.java:745)
+2014-10-03 10:13:08,516 [NIOServerCxn.Factory:0.0.0.0/0.0.0.0:2000] WARN  server.NIOServerCnxnFactory - Ignoring unexpected runtime exception
+java.nio.channels.CancelledKeyException
+	at sun.nio.ch.SelectionKeyImpl.ensureValid(SelectionKeyImpl.java:73)
+	at sun.nio.ch.SelectionKeyImpl.readyOps(SelectionKeyImpl.java:87)
+	at org.apache.zookeeper.server.NIOServerCnxnFactory.run(NIOServerCnxnFactory.java:203)
+	at java.lang.Thread.run(Thread.java:745)
+2014-10-03 10:13:08,516 [Thread-14-json] ERROR daemon.executor - 
+java.lang.RuntimeException: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:103)
+	at storm.kafka.ZkCoordinator.getMyManagedPartitions(ZkCoordinator.java:69)
+	at storm.kafka.KafkaSpout.nextTuple(KafkaSpout.java:135)
+	at backtype.storm.daemon.executor$fn__3284$fn__3299$fn__3328.invoke(executor.clj:563)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:431)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:81)
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:79)
+	... 6 more
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:94)
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:65)
+	... 7 more
+Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/json3/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:99)
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51)
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1548)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38)
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:91)
+	... 8 more
+2014-10-03 10:13:08,519 [Thread-14-json] ERROR server.NIOServerCnxnFactory - Thread Thread[Thread-14-json,5,main] died
+java.lang.RuntimeException: java.lang.InterruptedException
+	at backtype.storm.util$wrap_in_runtime.invoke(util.clj:44)
+	at backtype.storm.zookeeper$exists_node_QMARK_$fn__1658.invoke(zookeeper.clj:102)
+	at backtype.storm.zookeeper$exists_node_QMARK_.invoke(zookeeper.clj:98)
+	at backtype.storm.zookeeper$mkdirs.invoke(zookeeper.clj:114)
+	at backtype.storm.cluster$mk_distributed_cluster_state$reify__1866.mkdirs(cluster.clj:109)
+	at backtype.storm.cluster$mk_storm_cluster_state$reify__2285.report_error(cluster.clj:368)
+	at backtype.storm.daemon.executor$throttled_report_error_fn$fn__3132.invoke(executor.clj:178)
+	at backtype.storm.daemon.executor$mk_executor_data$fn__3185$fn__3186.invoke(executor.clj:237)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:441)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.InterruptedException
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Object.wait(Object.java:503)
+	at org.apache.zookeeper.ClientCnxn.submitRequest(ClientCnxn.java:1259)
+	at org.apache.zookeeper.ZooKeeper.exists(ZooKeeper.java:998)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:172)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl$2.call(ExistsBuilderImpl.java:161)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at backtype.storm.zookeeper$exists_node_QMARK_$fn__1658.invoke(zookeeper.clj:101)
+	... 9 more
+2014-10-03 10:13:08,613 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,613 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,614 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,614 [main-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,614 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,614 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,615 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,615 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,615 [main-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,616 [main-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,615 [main-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,614 [Thread-4-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,616 [Thread-18-messages] ERROR storm.util - Async loop died!
+java.lang.RuntimeException: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:103)
+	at storm.kafka.ZkCoordinator.getMyManagedPartitions(ZkCoordinator.java:69)
+	at storm.kafka.KafkaSpout.commit(KafkaSpout.java:190)
+	at storm.kafka.KafkaSpout.nextTuple(KafkaSpout.java:156)
+	at backtype.storm.daemon.executor$fn__3284$fn__3299$fn__3328.invoke(executor.clj:563)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:431)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:81)
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:79)
+	... 7 more
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:94)
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:65)
+	... 8 more
+Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:99)
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51)
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1548)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38)
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:91)
+	... 9 more
+2014-10-03 10:13:08,614 [main-EventThread] WARN  storm.cluster - Received event :disconnected::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,617 [Thread-18-messages] ERROR daemon.executor - 
+java.lang.RuntimeException: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:103)
+	at storm.kafka.ZkCoordinator.getMyManagedPartitions(ZkCoordinator.java:69)
+	at storm.kafka.KafkaSpout.commit(KafkaSpout.java:190)
+	at storm.kafka.KafkaSpout.nextTuple(KafkaSpout.java:156)
+	at backtype.storm.daemon.executor$fn__3284$fn__3299$fn__3328.invoke(executor.clj:563)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:431)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:81)
+	at storm.kafka.ZkCoordinator.refresh(ZkCoordinator.java:79)
+	... 7 more
+Caused by: java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:94)
+	at storm.kafka.DynamicBrokersReader.getBrokerInfo(DynamicBrokersReader.java:65)
+	... 8 more
+Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /brokers/topics/twitter7/partitions
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:99)
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51)
+	at org.apache.zookeeper.ZooKeeper.getChildren(ZooKeeper.java:1548)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:214)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl$3.call(GetChildrenBuilderImpl.java:203)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.pathInForeground(GetChildrenBuilderImpl.java:199)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:191)
+	at org.apache.curator.framework.imps.GetChildrenBuilderImpl.forPath(GetChildrenBuilderImpl.java:38)
+	at storm.kafka.DynamicBrokersReader.getNumPartitions(DynamicBrokersReader.java:91)
+	... 9 more
+2014-10-03 10:13:08,618 [Thread-18-messages] ERROR server.NIOServerCnxnFactory - Thread Thread[Thread-18-messages,5,main] died
+java.lang.RuntimeException: java.lang.InterruptedException
+	at backtype.storm.util$wrap_in_runtime.invoke(util.clj:44)
+	at backtype.storm.zookeeper$exists_node_QMARK_$fn__1658.invoke(zookeeper.clj:102)
+	at backtype.storm.zookeeper$exists_node_QMARK_.invoke(zookeeper.clj:98)
+	at backtype.storm.zookeeper$mkdirs.invoke(zookeeper.clj:114)
+	at backtype.storm.cluster$mk_distributed_cluster_state$reify__1866.mkdirs(cluster.clj:109)
+	at backtype.storm.cluster$mk_storm_cluster_state$reify__2285.report_error(cluster.clj:368)
+	at backtype.storm.daemon.executor$throttled_report_error_fn$fn__3132.invoke(executor.clj:178)
+	at backtype.storm.daemon.executor$mk_executor_data$fn__3185$fn__3186.invoke(executor.clj:237)
+	at backtype.storm.util$async_loop$fn__452.invoke(util.clj:441)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.InterruptedException
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.tryAcquireSharedNanos(AbstractQueuedSynchronizer.java:1325)
+	at java.util.concurrent.CountDownLatch.await(CountDownLatch.java:282)
+	at org.apache.curator.CuratorZookeeperClient.internalBlockUntilConnectedOrTimedOut(CuratorZookeeperClient.java:322)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:105)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.pathInForeground(ExistsBuilderImpl.java:157)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:148)
+	at org.apache.curator.framework.imps.ExistsBuilderImpl.forPath(ExistsBuilderImpl.java:36)
+	at backtype.storm.zookeeper$exists_node_QMARK_$fn__1658.invoke(zookeeper.clj:101)
+	... 9 more
+2014-10-03 10:13:08,727 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,727 [main-EventThread] WARN  storm.cluster - Received event :expired::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,727 [main-EventThread] WARN  curator.ConnectionState - Session expired event received
+2014-10-03 10:13:08,800 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,847 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,847 [main-EventThread] WARN  storm.cluster - Received event :expired::none: with disconnected Zookeeper.
+2014-10-03 10:13:08,847 [main-EventThread] WARN  curator.ConnectionState - Session expired event received
+2014-10-03 10:13:08,852 [ConnectionStateManager-0] WARN  state.ConnectionStateManager - There are no ConnectionStateListeners registered.
+2014-10-03 10:13:08,954 [executor-heartbeat-timer] ERROR daemon.worker - Error when processing event
+java.lang.RuntimeException: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /workerbeats/KAFKA_INCOMING_TWEETS_TOPOLOGY-1-1412325978/60658585-7744-4fcc-8345-60c6e9c73fc4-1024
+	at backtype.storm.util$wrap_in_runtime.invoke(util.clj:44)
+	at backtype.storm.zookeeper$set_data.invoke(zookeeper.clj:148)
+	at backtype.storm.cluster$mk_distributed_cluster_state$reify__1866.set_data(cluster.clj:90)
+	at backtype.storm.cluster$mk_storm_cluster_state$reify__2285.worker_heartbeat_BANG_(cluster.clj:303)
+	at sun.reflect.GeneratedMethodAccessor49.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at clojure.lang.Reflector.invokeMatchingMethod(Reflector.java:93)
+	at clojure.lang.Reflector.invokeInstanceMethod(Reflector.java:28)
+	at backtype.storm.daemon.worker$do_executor_heartbeats.doInvoke(worker.clj:55)
+	at clojure.lang.RestFn.invoke(RestFn.java:439)
+	at backtype.storm.daemon.worker$fn__4527$exec_fn__1096__auto____4528$fn__4531.invoke(worker.clj:367)
+	at backtype.storm.timer$schedule_recurring$this__1639.invoke(timer.clj:99)
+	at backtype.storm.timer$mk_timer$fn__1622$fn__1623.invoke(timer.clj:50)
+	at backtype.storm.timer$mk_timer$fn__1622.invoke(timer.clj:42)
+	at clojure.lang.AFn.run(AFn.java:24)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.apache.zookeeper.KeeperException$ConnectionLossException: KeeperErrorCode = ConnectionLoss for /workerbeats/KAFKA_INCOMING_TWEETS_TOPOLOGY-1-1412325978/60658585-7744-4fcc-8345-60c6e9c73fc4-1024
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:99)
+	at org.apache.zookeeper.KeeperException.create(KeeperException.java:51)
+	at org.apache.zookeeper.ZooKeeper.setData(ZooKeeper.java:1228)
+	at org.apache.curator.framework.imps.SetDataBuilderImpl$4.call(SetDataBuilderImpl.java:260)
+	at org.apache.curator.framework.imps.SetDataBuilderImpl$4.call(SetDataBuilderImpl.java:256)
+	at org.apache.curator.RetryLoop.callWithRetry(RetryLoop.java:107)
+	at org.apache.curator.framework.imps.SetDataBuilderImpl.pathInForeground(SetDataBuilderImpl.java:252)
+	at org.apache.curator.framework.imps.SetDataBuilderImpl.forPath(SetDataBuilderImpl.java:239)
+	at org.apache.curator.framework.imps.SetDataBuilderImpl.forPath(SetDataBuilderImpl.java:39)
+	at backtype.storm.zookeeper$set_data.invoke(zookeeper.clj:147)
+	... 15 more

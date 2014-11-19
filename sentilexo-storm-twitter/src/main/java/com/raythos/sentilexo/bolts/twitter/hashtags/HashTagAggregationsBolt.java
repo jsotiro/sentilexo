@@ -41,7 +41,7 @@ public class HashTagAggregationsBolt extends BaseCQLBolt {
         boolean isStatusRetweet= (Boolean )tuple.getValue(4);
         int retweet = ( isStatusRetweet==true)?1:0;
         try{
-            TwitterDataManager.getInstance().updateHashTagTotals(query,hashtag,createdAt,retweet);
+            TwitterDataManager.getInstance().updateHashTagTotals("raythos",query,hashtag,createdAt,retweet);
             log.trace("Hashtag totals for StatusId = "+ statusId + " written to Cassandra keyspace"+cqlKeyspace);
             collector.ack(tuple);
            // collector.emit(new Values(result));
