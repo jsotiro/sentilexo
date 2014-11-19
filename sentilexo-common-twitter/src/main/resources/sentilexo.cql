@@ -1,11 +1,11 @@
-CREATE KEYSPACE twitterqueries WITH replication = {
+CREATE KEYSPACE sentilexo WITH replication = {
   'class': 'SimpleStrategy',
   'replication_factor': '1'
 };
 
-USE twitterqueries;
+USE sentilexo;
 
-CREATE TABLE "QueryResultItems" (
+CREATE TABLE "twitter_data" (
   "StatusId" bigint,
   "CreatedAt" timestamp,
   "CurrentUserRetweetId" bigint,
@@ -49,23 +49,38 @@ CREATE TABLE "QueryResultItems" (
   text text,
   urls list<text>,
   PRIMARY KEY ("StatusId")
-) ;
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
 
-CREATE INDEX TwitterQueryResultsLangIDX ON "QueryResultItems" ("Lang");
+CREATE INDEX twitter_dataLangIDX ON "twitter_data" ("Lang");
 
-CREATE INDEX TwitterQueryResultsPlaceIDX ON "QueryResultItems" ("Place");
+CREATE INDEX twitter_dataPlaceIDX ON "twitter_data" ("Place");
 
-CREATE INDEX TwitterQueryResultsQueryNameDX ON "QueryResultItems" ("QueryName");
+CREATE INDEX twitter_dataQueryNameDX ON "twitter_data" ("QueryName");
 
-CREATE INDEX TwitterQueryResultsRetweetIDX ON "QueryResultItems" ("Retweet");
+CREATE INDEX twitter_dataRetweetIDX ON "twitter_data" ("Retweet");
 
-CREATE INDEX TwitterQueryResultsRetweetedIDX ON "QueryResultItems" ("Retweeted");
+CREATE INDEX twitter_dataRetweetedIDX ON "twitter_data" ("Retweeted");
 
-CREATE INDEX TwitterQueryResultsScreenNameIDX ON "QueryResultItems" ("ScreenName");
+CREATE INDEX twitter_dataScreenNameIDX ON "twitter_data" ("ScreenName");
 
-CREATE INDEX TwitterQueryResultsUserIdIDX ON "QueryResultItems" ("UserId");
+CREATE INDEX twitter_dataUserIdIDX ON "twitter_data" ("UserId");
 
 CREATE TABLE hashtag_totals (
+  owner text,
   query text,
   period_type int,
   time_id timestamp,
@@ -73,22 +88,119 @@ CREATE TABLE hashtag_totals (
   nonreetweet_total counter,
   retweet_total counter,
   total counter,
-  PRIMARY KEY ((query, period_type), time_id, hashtag)
-);
+  PRIMARY KEY ((owner,query, period_type), time_id, hashtag)
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
 
 CREATE TABLE jsonlog (
   "StatusId" bigint,
   json text,
   PRIMARY KEY ("StatusId")
-) ;
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+CREATE TABLE queries (
+  owner text,
+  queryname text,
+  active boolean,
+  connectionparams map<text, text>,
+  earliest timestamp,
+  latest timestamp,
+  maxid bigint,
+  minid bigint,
+  queryterms list<text>,
+  totalitems int,
+  PRIMARY KEY (owner, queryname)
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+
+CREATE TABLE query_indices (
+  owner text,
+  queryname text,
+  id bigint,
+  addedbydepl bigint,
+  PRIMARY KEY ((owner, queryname), id)
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+CREATE INDEX query_indicesDeploymentIDX ON "query_indices" ("addedbydepl");
+
 
 CREATE TABLE settings (
   name text,
   values list<text>,
   PRIMARY KEY (name)
-) ;
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
 
 CREATE TABLE simplesentiment_totals (
+  owner text,
   query text,
   period_type int,
   time_id timestamp,
@@ -104,5 +216,24 @@ CREATE TABLE simplesentiment_totals (
   yesnonretweet_total counter,
   yesretweet_total counter,
   yestotal counter,
-  PRIMARY KEY ((query, period_type), time_id)
-) ;
+  PRIMARY KEY ((owner, query, period_type), time_id)
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+
+INSERT INTO settings(name,values) VALUES('positivekeywords',['yes', 'goforitscotland', 'ourfuturescot', 'projectfear', 'patronisingbtlady']);
+INSERT INTO settings(name,values) VALUES('negativekeywords',['voteno', 'naw', '%no', 'no%', 'darlingwin', 'godarling', 'better', 'letsstaytogether', 'ukok']);
+ 

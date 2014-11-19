@@ -12,8 +12,12 @@ import com.raythos.sentilexo.twitter.common.utils.TwitterUtils;
 import com.raythos.sentilexo.utils.DateTimeUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
@@ -30,7 +34,70 @@ import twitter4j.User;
 public class TwitterQueryResultItemMapper {
    
     
-  
+    public static List cloneList(List l){
+        ArrayList<Object> list = new ArrayList();
+        if (l==null) return null; 
+        for (Object o : l){
+            list.add(o);
+        }
+        return list;
+    }
+    
+      public static Map asFieldMap(TwitterQueryResultItemAvro status){
+        
+       Date createdAt = new Date();
+       createdAt.setTime(status.getCreatedAt());
+       Date userCreatedAt = new Date(); //= DateTimeUtils.getDateFromString(status.getUserCreatedAtAsString());
+       userCreatedAt.setTime(status.getUserCreatedAt());
+       Map m = status.getMentions();
+       Map newMap = new HashMap();
+       for(Object key: m.keySet()){
+            newMap.put(key.toString(), (Long)m.get(key));
+    }
+       Map<String,Object> result = new HashMap<>();
+             result.put("StatusId", status.getStatusId());
+             result.put("CreatedAt",createdAt );
+             result.put("CurrentUserRetweetId", status.getCurrentUserRetweetId());    
+            result.put("FavoriteCount", status.getFavoriteCount() );
+            result.put("favourited", status.getFavourited() );
+            result.put("hashtags", cloneList(status.getHashtags()) );
+            result.put("InReplyToScreenName", (status.getInReplyToScreenName()));
+            result.put("InReplyToStatusId", status.getInReplyToStatusId());
+            result.put("InReplyToUserId", status.getInReplyToUserId() );
+            result.put("latitude",status.getLatitude());
+            result.put("mentions", newMap) ;
+            result.put("Place",  (status.getPlace()) );
+            result.put("PossiblySensitive" , status.getPossiblySensitive());
+            result.put("QueryName"  , (status.getQueryName()));
+            result.put("Query"  , (status.getQuery()));
+            result.put("relevantQueryTerms", cloneList(status.getRelevantQueryTerms()));
+            result.put("Retweet" , status.getRetweet());
+            result.put("RetweetCount",status.getRetweetCount());
+            result.put("retweetStatusId", status.getRetweetStatusId() );
+            result.put("Retweeted", status.getRetweeted());
+            result.put("RetweetedByMe", status.getRetweetedByMe());
+            result.put("RetweetedText", (status.getRetweetedText()));
+            result.put("Scopes",cloneList(status.getScopes()));
+            result.put("ScreenName", (status.getScreenName()));
+            result.put("Source", (status.getSource()));
+            result.put("text", (status.getText()));
+            result.put("Trucated", status.getTrucated());
+            result.put("urls", cloneList(status.getUrls()));
+            result.put("UserId",status.getUserId());
+            result.put("UserName",(status.getUserName()));
+            result.put("UserDescription", (status.getUserDescription()));
+            result.put("UserLocation", (status.getUserLocation()));
+            result.put("UserUrl",(status.getUserUrl()));
+            result.put("UserisProtected" , status.getUserIsProtected());
+            result.put("UserFollowersCount" ,status.getUserFollowersCount());
+            result.put("UserCreatedAt" , userCreatedAt);
+            result.put("UserFriendsCount" ,status.getUserFriendsCount());
+            result.put("UserListedCount" , status.getUserListedCount());
+            result.put("UserStatusesCount" , status.getUserStatusesCount());
+            result.put("UserFavouritesCount" , status.getUserFavoritesCount());
+       return result;
+    }
+    
     
     public static TwitterQueryResultItem getItemFromAvroObject(TwitterQueryResultItemAvro item){
         TwitterQueryResultItem result = new  TwitterQueryResultItem();
