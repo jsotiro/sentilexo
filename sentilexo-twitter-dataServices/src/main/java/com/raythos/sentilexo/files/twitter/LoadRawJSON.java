@@ -20,7 +20,7 @@ public final class LoadRawJSON {
    static Logger log = LoggerFactory.getLogger(LoadRawJSON.class);
     
     public static void main(String[] args) {
-       String basePath = "../data";
+       String basePath = "/Users/yanni/sentidata";
         if (args.length > 0) {
            basePath=args[0];    
          } 

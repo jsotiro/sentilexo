@@ -59,7 +59,7 @@
               </descriptorRefs>
               <archive>
                 <manifest>
-                  <mainClass />
+                  <mainClass>com.raythos.sentilexo.files.twitter.LoadRawJSON</mainClass>
                 </manifest>
               </archive>
             </configuration>
@@ -128,6 +128,7 @@
        <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-log4j12</artifactId>
+        
 	<version>1.7.7</version>
     </dependency>
                <dependency>

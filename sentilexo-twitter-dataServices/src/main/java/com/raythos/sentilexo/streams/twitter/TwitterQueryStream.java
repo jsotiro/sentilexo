@@ -141,6 +141,7 @@ public final class TwitterQueryStream implements  Serializable {
         numProcessingThreads = Integer.parseInt(AppProperties.getProperty("threads"));  
         topic = new TopicMessageProducer();
         topic.setTopic(AppProperties.getProperty("kafka.topic"));
+     
         log.trace("Stream basic properties loaded and configured from "+AppProperties.getPropertiesFile());   
         }
     

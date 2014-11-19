@@ -19,13 +19,13 @@
      </appender>
 
   <logger name="com.raythos.sentilexo">
-    <level value="warn" />
+    <level value="trace" />
         <appender-ref ref="console" />
         <appender-ref ref="logfile"/>
  </logger>
 
   <root> 
-    <priority value ="trace" /> 
+    <priority value ="warn" /> 
     <appender-ref ref="console" />
     <appender-ref ref="logfile" /> 
   </root>

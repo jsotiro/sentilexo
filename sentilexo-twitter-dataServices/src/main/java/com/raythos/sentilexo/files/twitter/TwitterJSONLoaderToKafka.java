@@ -19,29 +19,11 @@ import twitter4j.Status;
 public class TwitterJSONLoaderToKafka  extends TwitterJSONLoader {
     
 
-    private String  queryName; 
-    private String queryTerms;
     TopicMessageProducer twitterResultItemTopic;
     StringTopicMessageProducer twitterJsonTopic;
 
     
     
-    public String getQueryName() {
-        return queryName;
-    }
-
-    public void setQueryName(String queryName) {
-        this.queryName = queryName;
-    }
-
-    public String getQueryTerms() {
-        return queryTerms;
-    }
-
-    public void setQueryTerms(String queryTerms) {
-        this.queryTerms = queryTerms;
-    }
-
     public TopicMessageProducer getTwitterResultItemTopic() {
         return twitterResultItemTopic;
     }
@@ -66,7 +48,7 @@ public class TwitterJSONLoaderToKafka  extends TwitterJSONLoader {
                     TwitterQueryResultItemAvro tqri = new TwitterQueryResultItemAvro();
                     
                     tqri = TwitterQueryResultItemMapper.mapItem(queryName, queryTerms, status);
-                     byte[] data = TwitterQueryResultItemMapper.getAvroSerialized(tqri);
+                    byte[] data = TwitterQueryResultItemMapper.getAvroSerialized(tqri);
                     twitterResultItemTopic.postBinary(data);
                     twitterJsonTopic.postPropertyValuePair(tqri.getStatusId().toString(), rawJSONLine);
                    log.trace("Status with id " +status.getId() +"posted to Kafka topic  from file" + getFilename() +" line #"+lineNo);

@@ -27,6 +27,23 @@ public class TwitterJSONLoader {
    int filesRead  =0;
    File currentFile;
    String filename;
+   protected String  queryName; 
+   protected String queryTerms;
+ public String getQueryName() {
+        return queryName;
+    }
+
+    public void setQueryName(String queryName) {
+        this.queryName = queryName;
+    }
+
+    public String getQueryTerms() {
+        return queryTerms;
+    }
+
+    public void setQueryTerms(String queryTerms) {
+        this.queryTerms = queryTerms;
+    }
 
     public int getLinesRead() {
         return linesRead;
@@ -99,8 +116,8 @@ public  int importFilesFromPath(String basePath) {
                 filesRead++;
                 log.trace("Reading file "+filesRead + "  " + file.getName() );
                 readFileLines(file);
-               //  File newNameFile = new File(file.getName()+"-DONE");
-               // file.renameTo(newNameFile);
+                File newNameFile = new File(file.getName()+"-DONE");
+                file.renameTo(newNameFile);
              
             }
             
