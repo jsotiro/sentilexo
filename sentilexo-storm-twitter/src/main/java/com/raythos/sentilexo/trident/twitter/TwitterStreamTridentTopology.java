@@ -5,8 +5,7 @@ package com.raythos.sentilexo.trident.twitter;
  * @author yanni
  */
 
-   
-
+  
 import com.raythos.sentilexo.trident.twitter.aggregations.QueryTotalsAggregator;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -20,8 +19,10 @@ import com.raythos.sentilexo.trident.twitter.state.SentilexoStateFactory;
 import com.raythos.sentilexo.twitter.persistence.cql.Deployments;
 import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
 import com.raythos.sentilexo.utils.AppProperties;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.kafka.BrokerHosts;
@@ -32,15 +33,6 @@ import storm.trident.Stream;
 import storm.trident.TridentState;
 import storm.trident.TridentTopology;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author yanni
- */
 public class TwitterStreamTridentTopology {
      private static final String POSITIVE_KEYWORDS="positivekeywords";
      private static final String NEGATIVE_KEYWORDS="negativekeywords";
@@ -50,7 +42,7 @@ public class TwitterStreamTridentTopology {
      private static final Fields totalItemsFields = new Fields("totalitems");
      private static final Fields hashtagTotalFields = new Fields("oN","oQ", "statid", "hashtag","cAt","retwt");
      private static final Fields counterField = new Fields("count");
-   
+    
     
     static OpaqueTridentKafkaSpout getKafkaSpout(){
         String zkhosts = AppProperties.getProperty("zkhosts");
@@ -75,10 +67,18 @@ public class TwitterStreamTridentTopology {
           String cqlschema = AppProperties.getProperty("cqlschema","twitterqueries");
           TwitterDataManager dataMgr =  TwitterDataManager.getInstance();
           dataMgr.connect(cqlhost,cqlschema); 
+          
+          // keyword-based ("bag of words") sentiment classification
           List positiveKeywords = dataMgr.getKeywordsList(POSITIVE_KEYWORDS);
           List negativeKeywords =  dataMgr.getKeywordsList(NEGATIVE_KEYWORDS);
-         
-          
+          CalculateSimpleSentimentTotals simpleSentimentFunction = new CalculateSimpleSentimentTotals(positiveKeywords, negativeKeywords);
+                  
+          // neural network based sentiment calculation
+          Properties props = new Properties();          
+          // initialise the CoreNLP engine - this takes time do it before the topology is submited.
+          CoreNLPSentimentClassifier.getInstance().setup();
+          CalculateNLPSentiment neuralNetNLPSentimentAnalysisFunction = new CalculateNLPSentiment();
+
           
           TridentState queryStatsState =mainStream.each(DeserializeAvroResultItem.avroObjectFields, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
                             .groupBy(groupByFields)
@@ -88,11 +88,13 @@ public class TwitterStreamTridentTopology {
                                                                            totalItemsFields);
                                          
           
+            Fields statusFields = CalculateNLPSentiment.statusFields;
             Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagsFields;
-            
-            Stream hashtagStream = mainStream        
+
+            Stream analysisStream = mainStream        
                             .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) 
-                            .each(DeserializeAvroResultItem.avroObjectFields, new CalculateSimpleSentimentTotals(positiveKeywords, negativeKeywords),hashtagFields )
+                            .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,statusFields )
+                            .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
                             .each( hashtagFields, new ExtractHashtags(), hashtagTotalFields)
                             .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
 
@@ -104,7 +106,10 @@ public class TwitterStreamTridentTopology {
           // deploymentNo = dataManager.getDeploymentNo()+1;
           Deployments deploymentTracker = Deployments.getInstance();
           deploymentTracker.load();
-                  
+              
+          
+        
+          
           long deploymentNo = deploymentTracker.getDeploymentNo()+1;
           boolean local = true;
           boolean useKafka = false; 

@@ -25,15 +25,13 @@ import org.slf4j.LoggerFactory;
 public class CalculateSimpleSentimentTotals  extends BaseFunction{
     protected  static Logger log = LoggerFactory.getLogger(CalculateSimpleSentimentTotals.class);
     
-    public static final Fields hashtagsFields = new Fields("qOwner", "qName", "sId", "createdAt","retweet", "hashtags");
+    public static final Fields hashtagsFields = new Fields("hashtags");
 
     
     int counter = 0;
     List positiveKeywords;
     List negativeKeywords;
-    static final String  POSITIVE_SENTIMENT = "YES";
-    static final String  NEGATIVE_SENTIMENT = "NO";
-    static final String  UNCLEAR_SENTIMENT = "UNCLEAR";
+
    
     
     public CalculateSimpleSentimentTotals(List positiveKeywords, List negativeKeywords){
@@ -93,11 +91,11 @@ public class CalculateSimpleSentimentTotals  extends BaseFunction{
     
     
     public String calcSentiment(List<String> hashtags) {
-      String  result = UNCLEAR_SENTIMENT;
+      String  result = Sentiments.UNCLEAR_SENTIMENT;
       if ( hashtagListContainsAnyKeyword(hashtags, positiveKeywords) )
-         result  = POSITIVE_SENTIMENT;
+         result  = Sentiments.POSITIVE_SENTIMENT;
       else  if ( hashtagListContainsAnyKeyword(hashtags, negativeKeywords) )
-         result  = NEGATIVE_SENTIMENT;     
+         result  = Sentiments.NEGATIVE_SENTIMENT;     
       return result;
     }
        
@@ -119,7 +117,7 @@ public class CalculateSimpleSentimentTotals  extends BaseFunction{
             boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentiment(hashtags);
-            TwitterDataManager.getInstance().updateSimpleSentimentTotals(qOwner,qName,sentiment,resultCreationDate,retweet);  
+            TwitterDataManager.getInstance().updateSentimentTotals("simple", qOwner,qName,sentiment,resultCreationDate,retweet);  
             log.trace("Hashtag totals for StatusId = "+sId + " written to Cassandra keyspace"+ TwitterDataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 

@@ -12,7 +12,6 @@ import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
 import com.raythos.sentilexo.twitter.common.domain.TwitterQueryResultItemMapper;
 import com.raythos.sentilexo.utils.AppProperties;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
@@ -25,8 +24,8 @@ import twitter4j.Status;
  * @author yanni
  */
 @SuppressWarnings({ "serial", "rawtypes" })
-public class TextFileBacthedLinesSpout  implements IBatchSpout   {
-    protected  static Logger log = LoggerFactory.getLogger(TextFileBacthedLinesSpout.class);
+public class TextFileBatchedLinesSpout  implements IBatchSpout   {
+    protected  static Logger log = LoggerFactory.getLogger(TextFileBatchedLinesSpout.class);
     protected  JSONFileReaderWorker worker;
         
       
@@ -34,11 +33,11 @@ public class TextFileBacthedLinesSpout  implements IBatchSpout   {
             return worker;
         }
 	
-        public TextFileBacthedLinesSpout() throws IOException {
+        public TextFileBatchedLinesSpout() throws IOException {
                 this(5);
 	}
 
-	public TextFileBacthedLinesSpout(int batchSize) throws IOException {
+	public TextFileBatchedLinesSpout(int batchSize) throws IOException {
                 this.worker = new JSONFileReaderWorker();
                 this.worker.setBatchSize(batchSize);
                 this.worker.setBufferSize(batchSize *1000);
@@ -140,7 +139,7 @@ public class TextFileBacthedLinesSpout  implements IBatchSpout   {
         
         
 	public static void main(String[] args) throws IOException, ParseException {
-            TextFileBacthedLinesSpout spout = new TextFileBacthedLinesSpout(5);
+            TextFileBatchedLinesSpout spout = new TextFileBatchedLinesSpout(5);
             String testBasePath = "/Users/yanni/sentidata";
             try {
                 spout.getFileWorker().setBasePath(testBasePath);
