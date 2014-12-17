@@ -65,7 +65,7 @@ public class TwitterStreamTridentTopology {
      
      static JSONFileTwitterSpout initJSONFileTwitterSpout() throws IOException{
         JSONFileTwitterSpout spout = new JSONFileTwitterSpout(5);
-        spout.setBasePath("/Users/yanni/sentidata");
+        spout.getFileWorker().setBasePath("/Users/yanni/sentidata");
         return spout;
     } 
      
@@ -107,7 +107,7 @@ public class TwitterStreamTridentTopology {
                   
           long deploymentNo = deploymentTracker.getDeploymentNo()+1;
           boolean local = true;
-          boolean useKafka = true; 
+          boolean useKafka = false; 
           if (args != null && args.length > 0) {
             topologyName= args[0];
             local = false;

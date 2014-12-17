@@ -18,10 +18,10 @@
         </layout>           
      </appender>
 
- <logger name="com.raythos.sentilexo.trident.twitter.aggregations">
+ <logger name="com.raythos.sentilexo.trident.twitter.state" additivity="false">
     <level value="trace" />
         <appender-ref ref="console" />
-        <!--- appender-ref ref="logfile"/ -->
+        <appender-ref ref="logfile"/>
  </logger>
 
   <root> 

@@ -18,14 +18,15 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 /**
- * A Spout that emits fake tweets from json files. useful in testing topologies without having to go through the whole
+ * A Spout that emits lines from text files in batches.  
+ * 
  * Kafka round trip
 
  * @author yanni
  */
 @SuppressWarnings({ "serial", "rawtypes" })
-public class JSONFileTwitterSpout  implements IBatchSpout   {
-    protected  static Logger log = LoggerFactory.getLogger(JSONFileTwitterSpout.class);
+public class TextFileBacthedLinesSpout  implements IBatchSpout   {
+    protected  static Logger log = LoggerFactory.getLogger(TextFileBacthedLinesSpout.class);
     protected  JSONFileReaderWorker worker;
         
       
@@ -33,14 +34,14 @@ public class JSONFileTwitterSpout  implements IBatchSpout   {
             return worker;
         }
 	
-        public JSONFileTwitterSpout() throws IOException {
+        public TextFileBacthedLinesSpout() throws IOException {
                 this(5);
 	}
 
-	public JSONFileTwitterSpout(int batchSize) throws IOException {
+	public TextFileBacthedLinesSpout(int batchSize) throws IOException {
                 this.worker = new JSONFileReaderWorker();
                 this.worker.setBatchSize(batchSize);
-                this.worker.setBufferSize(batchSize *10);
+                this.worker.setBufferSize(batchSize *1000);
 	}
 
         void scanPathForFileReads(){
@@ -139,7 +140,7 @@ public class JSONFileTwitterSpout  implements IBatchSpout   {
         
         
 	public static void main(String[] args) throws IOException, ParseException {
-            JSONFileTwitterSpout spout = new JSONFileTwitterSpout(5);
+            TextFileBacthedLinesSpout spout = new TextFileBacthedLinesSpout(5);
             String testBasePath = "/Users/yanni/sentidata";
             try {
                 spout.getFileWorker().setBasePath(testBasePath);
