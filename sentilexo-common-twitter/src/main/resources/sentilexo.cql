@@ -123,9 +123,10 @@ CREATE TABLE settings (
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
 
-CREATE TABLE simplesentiment_totals (
+CREATE TABLE sentiment_totals (
   owner text,
   query text,
+  sentiment_type text, 
   period_type int,
   time_id timestamp,
   allnoretweet_total counter,
@@ -140,7 +141,7 @@ CREATE TABLE simplesentiment_totals (
   yesnonretweet_total counter,
   yesretweet_total counter,
   yestotal counter,
-  PRIMARY KEY ((owner, query, period_type), time_id)
+  PRIMARY KEY ((owner, query, sentiment_type, period_type), time_id)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
@@ -156,6 +157,9 @@ CREATE TABLE simplesentiment_totals (
   memtable_flush_period_in_ms=0 AND
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
+
+
+
 
 CREATE TABLE twitter_data (
   "StatusId" bigint,

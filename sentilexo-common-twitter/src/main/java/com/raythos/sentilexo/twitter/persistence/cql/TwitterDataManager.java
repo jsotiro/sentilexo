@@ -133,19 +133,19 @@ public class TwitterDataManager {
   }
    
    
-  void prepareSimpleSentimentStatements(){
+  void prepareSentimentStatements(){
       //YES and  RETWEET
-        updateSentimentTotalsYesRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allretweet_total=allretweet_total+?, yesretweet_total=yesretweet_total+? where owner=? and query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsYesRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allretweet_total=allretweet_total+?, yesretweet_total=yesretweet_total+? where sentiment_type=? and owner=? and query= ? and  period_type =? and time_id=?");
         //YES and NO RETWEET
-        updateSentimentTotalsYesNoRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allnoretweet_total=allnoretweet_total+?, yesnonretweet_total= yesnonretweet_total+?  where owner= ? and query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsYesNoRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allnoretweet_total=allnoretweet_total+?, yesnonretweet_total= yesnonretweet_total+?  where sentiment_type=? and owner= ? and query= ? and  period_type =? and time_id=?");
         //NO and  RETWEET
-        updateSentimentTotalsNoRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?, nototal=nototal+?,  allretweet_total=allretweet_total+?, noretweet_total=noretweet_total+? where owner=? and  query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsNoRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?, nototal=nototal+?,  allretweet_total=allretweet_total+?, noretweet_total=noretweet_total+? where sentiment_type=? and owner=? and  query= ? and  period_type =? and time_id=?");
         //NO and NO RETWEET
-        updateSentimentTotalsNoNoRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?  , nototal=nototal+?,  allnoretweet_total=allnoretweet_total+?, nononretweet_total= nononretweet_total+? where owner= ? and  query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsNoNoRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?  , nototal=nototal+?,  allnoretweet_total=allnoretweet_total+?, nononretweet_total= nononretweet_total+? where sentiment_type=? and owner= ? and  query= ? and  period_type =? and time_id=?");
         //UNCLEAR and  RETWEET
-        updateSentimentTotalsUnlcearRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?  , uncleartotal=uncleartotal+?,  allretweet_total=allretweet_total+?, unclearretweet_total=unclearretweet_total+? where owner=?  and  query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsUnlcearRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?  , uncleartotal=uncleartotal+?,  allretweet_total=allretweet_total+?, unclearretweet_total=unclearretweet_total+? where sentiment_type=? and owner=?  and  query= ? and  period_type =? and time_id=?");
         //UNCLEAR and NO RETWEET
-        updateSentimentTotalsUnlcearNoRetweets = session.prepare("UPDATE simplesentiment_totals SET alltotal = alltotal +?  , uncleartotal=uncleartotal+?,  allnoretweet_total=allnoretweet_total+?, unclearnoretweet_total= unclearnoretweet_total+?  where owner=?  and  query= ? and  period_type =? and time_id=?");
+        updateSentimentTotalsUnlcearNoRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?  , uncleartotal=uncleartotal+?,  allnoretweet_total=allnoretweet_total+?, unclearnoretweet_total= unclearnoretweet_total+?  where sentiment_type=? and owner=?  and  query= ? and  period_type =? and time_id=?");
   } 
    
   public  Session connect(String host, String keyspace){
@@ -160,7 +160,7 @@ public class TwitterDataManager {
       updateHashTagTotals = session.prepare("UPDATE hashtag_totals SET total = total + ? where owner= ? and  query= ? and period_type =? and time_id=?  and hashtag=?  ;");
       updateHashTagRetweetTotals = session.prepare("UPDATE hashtag_totals SET retweet_total= retweet_total+ ? where owner= ? and query= ? and period_type =? and time_id=? and hashtag=?  ;");   
       updateHashTagNonRetweetTotals = session.prepare("UPDATE hashtag_totals SET nonreetweet_total= nonreetweet_total+ ? where owner= ? and  query= ? and period_type =? and time_id=? and hashtag=?  ;");
-      prepareSimpleSentimentStatements();
+      prepareSentimentStatements();
       return session;
    }
 
@@ -193,7 +193,7 @@ public class TwitterDataManager {
    
    
    
-   public void  updateHashtatgSentimentTotalsCQL(String owner, String queryName, String sentiment, int period_type, String period,  Date time_id, int retweet){   
+   public void  updateSentimentTotalsCQL(String method, String owner, String queryName, String sentiment, int period_type, String period,  Date time_id, int retweet){   
         BoundStatement  boundUpdateSentimentTotals=null; 
         PreparedStatement stmt = null;
         switch (sentiment) {
@@ -211,14 +211,14 @@ public class TwitterDataManager {
              break;
          } 
         boundUpdateSentimentTotals = new BoundStatement(stmt);
-        boundUpdateSentimentTotals.bind(1L,1L,1L,1L,owner, queryName,period_type,time_id);
+        boundUpdateSentimentTotals.bind(1L,1L,1L,1L,method, owner, queryName,period_type,time_id);
         session.execute(boundUpdateSentimentTotals);
         
 }
    
-   public void updateSimpleSentimentTotals(String owner, String query, String sentiment, Date createdAt, int retweet) {
+   public void updateSentimentTotals(String method, String owner, String query, String sentiment, Date createdAt, int retweet) {
     for (int i=-1;i<DateTimeUtils.YEAR+1;i++){
-            this.updateHashtatgSentimentTotalsCQL(owner, query,sentiment, i,
+            this.updateSentimentTotalsCQL(method,owner, query,sentiment, i,
                                     DateTimeUtils.getBucket(i, createdAt),
                                     DateTimeUtils.getBucketDateTime(i, createdAt) , 
                                     retweet);

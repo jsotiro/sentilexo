@@ -16,6 +16,7 @@ public class StatusFieldNames {
         public static  final String QUERY="Query";
         public static  final String HASHTAGS = "hashtags";
         public static  final String RETWEET="Retweet";
+        public static  final String TEXT="text";
     
      /*   public static  final String CURRENTUS "CurrentUserRetweetId", status.getCurrentUserRetweetId());    
             public static  final String"FavoriteCount", status.getFavoriteCount() );
