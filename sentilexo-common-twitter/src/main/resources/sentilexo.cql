@@ -5,80 +5,6 @@ CREATE KEYSPACE sentilexo WITH replication = {
 
 USE sentilexo;
 
-CREATE TABLE "twitter_data" (
-  "StatusId" bigint,
-  "CreatedAt" timestamp,
-  "CurrentUserRetweetId" bigint,
-  "FavoriteCount" int,
-  "InReplyToScreenName" text,
-  "InReplyToStatusId" bigint,
-  "InReplyToUserId" bigint,
-  "Lang" text,
-  "Place" text,
-  "PossiblySensitive" boolean,
-  "Query" text,
-  "QueryName" text,
-  "Retweet" boolean,
-  "RetweetCount" int,
-  "Retweeted" boolean,
-  "RetweetedByMe" boolean,
-  "RetweetedText" text,
-  "Scopes" list<text>,
-  "ScreenName" text,
-  "Source" text,
-  "Trucated" boolean,
-  "UserCreatedAt" timestamp,
-  "UserDescription" text,
-  "UserFavouritesCount" int,
-  "UserFollowersCount" int,
-  "UserFriendsCount" int,
-  "UserId" bigint,
-  "UserListedCount" int,
-  "UserLocation" text,
-  "UserName" text,
-  "UserStatusesCount" int,
-  "UserUrl" text,
-  "UserisProtected" boolean,
-  favourited boolean,
-  hashtags list<text>,
-  latitude double,
-  longitude double,
-  mentions map<text, bigint>,
-  "relevantQueryTerms" list<text>,
-  "retweetStatusId" bigint,
-  text text,
-  urls list<text>,
-  PRIMARY KEY ("StatusId")
-) WITH
-  bloom_filter_fp_chance=0.010000 AND
-  caching='KEYS_ONLY' AND
-  comment='' AND
-  dclocal_read_repair_chance=0.000000 AND
-  gc_grace_seconds=864000 AND
-  index_interval=128 AND
-  read_repair_chance=0.100000 AND
-  replicate_on_write='true' AND
-  populate_io_cache_on_flush='false' AND
-  default_time_to_live=0 AND
-  speculative_retry='99.0PERCENTILE' AND
-  memtable_flush_period_in_ms=0 AND
-  compaction={'class': 'SizeTieredCompactionStrategy'} AND
-  compression={'sstable_compression': 'LZ4Compressor'};
-
-CREATE INDEX twitter_dataLangIDX ON "twitter_data" ("Lang");
-
-CREATE INDEX twitter_dataPlaceIDX ON "twitter_data" ("Place");
-
-CREATE INDEX twitter_dataQueryNameDX ON "twitter_data" ("QueryName");
-
-CREATE INDEX twitter_dataRetweetIDX ON "twitter_data" ("Retweet");
-
-CREATE INDEX twitter_dataRetweetedIDX ON "twitter_data" ("Retweeted");
-
-CREATE INDEX twitter_dataScreenNameIDX ON "twitter_data" ("ScreenName");
-
-CREATE INDEX twitter_dataUserIdIDX ON "twitter_data" ("UserId");
-
 CREATE TABLE hashtag_totals (
   owner text,
   query text,
@@ -88,7 +14,7 @@ CREATE TABLE hashtag_totals (
   nonreetweet_total counter,
   retweet_total counter,
   total counter,
-  PRIMARY KEY ((owner,query, period_type), time_id, hashtag)
+  PRIMARY KEY ((owner, query, period_type), time_id, hashtag)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
@@ -153,7 +79,6 @@ CREATE TABLE queries (
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
 
-
 CREATE TABLE query_indices (
   owner text,
   queryname text,
@@ -176,8 +101,7 @@ CREATE TABLE query_indices (
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
 
-CREATE INDEX query_indicesDeploymentIDX ON "query_indices" ("addedbydepl");
-
+CREATE INDEX query_indicesDeploymentIDX ON query_indices (addedbydepl);
 
 CREATE TABLE settings (
   name text,
@@ -233,7 +157,80 @@ CREATE TABLE simplesentiment_totals (
   compaction={'class': 'SizeTieredCompactionStrategy'} AND
   compression={'sstable_compression': 'LZ4Compressor'};
 
+CREATE TABLE twitter_data (
+  "StatusId" bigint,
+  "CreatedAt" timestamp,
+  "CurrentUserRetweetId" bigint,
+  "FavoriteCount" int,
+  "InReplyToScreenName" text,
+  "InReplyToStatusId" bigint,
+  "InReplyToUserId" bigint,
+  "Lang" text,
+  "Place" text,
+  "PossiblySensitive" boolean,
+  "Query" text,
+  "QueryName" text,
+  "Retweet" boolean,
+  "RetweetCount" int,
+  "Retweeted" boolean,
+  "RetweetedByMe" boolean,
+  "RetweetedText" text,
+  "Scopes" list<text>,
+  "ScreenName" text,
+  "Source" text,
+  "Trucated" boolean,
+  "UserCreatedAt" timestamp,
+  "UserDescription" text,
+  "UserFavouritesCount" int,
+  "UserFollowersCount" int,
+  "UserFriendsCount" int,
+  "UserId" bigint,
+  "UserListedCount" int,
+  "UserLocation" text,
+  "UserName" text,
+  "UserStatusesCount" int,
+  "UserUrl" text,
+  "UserisProtected" boolean,
+  favourited boolean,
+  hashtags list<text>,
+  latitude double,
+  longitude double,
+  mentions map<text, bigint>,
+  "relevantQueryTerms" list<text>,
+  "retweetStatusId" bigint,
+  text text,
+  urls list<text>,
+  PRIMARY KEY ("StatusId")
+) WITH
+  bloom_filter_fp_chance=0.010000 AND
+  caching='KEYS_ONLY' AND
+  comment='' AND
+  dclocal_read_repair_chance=0.000000 AND
+  gc_grace_seconds=864000 AND
+  index_interval=128 AND
+  read_repair_chance=0.100000 AND
+  replicate_on_write='true' AND
+  populate_io_cache_on_flush='false' AND
+  default_time_to_live=0 AND
+  speculative_retry='99.0PERCENTILE' AND
+  memtable_flush_period_in_ms=0 AND
+  compaction={'class': 'SizeTieredCompactionStrategy'} AND
+  compression={'sstable_compression': 'LZ4Compressor'};
+
+CREATE INDEX twitter_dataLangIDX ON twitter_data ("Lang");
+
+CREATE INDEX twitter_dataPlaceIDX ON twitter_data ("Place");
+
+CREATE INDEX twitter_dataQueryNameDX ON twitter_data ("QueryName");
+
+CREATE INDEX twitter_dataRetweetIDX ON twitter_data ("Retweet");
+
+CREATE INDEX twitter_dataRetweetedIDX ON twitter_data ("Retweeted");
+
+CREATE INDEX twitter_dataScreenNameIDX ON twitter_data ("ScreenName");
+
+CREATE INDEX twitter_dataUserIdIDX ON twitter_data ("UserId");
 
 INSERT INTO settings(name,values) VALUES('positivekeywords',['yes', 'goforitscotland', 'ourfuturescot', 'projectfear', 'patronisingbtlady']);
 INSERT INTO settings(name,values) VALUES('negativekeywords',['voteno', 'naw', '%no', 'no%', 'darlingwin', 'godarling', 'better', 'letsstaytogether', 'ukok']);
- 
+INSERT INTO queries(owner,queryname) VALUES('raythos','indyref');
