@@ -14,6 +14,8 @@ import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.tuple.Fields;
 import com.raythos.sentilexo.spouts.JSONFileTwitterSpout;
+import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
+import com.raythos.sentilexo.storm.pmml.NaiveBayesPMMLModelLoader;
 import com.raythos.sentilexo.trident.twitter.state.QueryStatsCqlStorageConfigValues;
 import com.raythos.sentilexo.trident.twitter.state.SentilexoStateFactory;
 import com.raythos.sentilexo.twitter.persistence.cql.Deployments;
@@ -80,6 +82,11 @@ public class TwitterStreamTridentTopology {
           CalculateNLPSentiment neuralNetNLPSentimentAnalysisFunction = new CalculateNLPSentiment();
 
           
+          // setup for the Naive Bayes classification model developed in R and exported using PMML 
+          NaiveBayesHandler handler =  NaiveBayesPMMLModelLoader.loadModel(AppProperties.getProperty("bayes-model", "/twitter-sentiment-bayes.xml"));
+          CalculatePmmlBayesSentiment bayesModelClassifier = new CalculatePmmlBayesSentiment(handler);
+          
+          
           TridentState queryStatsState =mainStream.each(DeserializeAvroResultItem.avroObjectFields, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
                             .groupBy(groupByFields)
                             .persistentAggregate(new SentilexoStateFactory(new QueryStatsCqlStorageConfigValues()),
@@ -88,12 +95,13 @@ public class TwitterStreamTridentTopology {
                                                                            totalItemsFields);
                                          
           
-            Fields statusFields = CalculateNLPSentiment.statusFields;
+          
             Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagsFields;
 
             Stream analysisStream = mainStream        
                             .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) 
-                            .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,statusFields )
+                            .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,CalculateNLPSentiment.statusFields)
+                            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , CalculatePmmlBayesSentiment.statusFields)
                             .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
                             .each( hashtagFields, new ExtractHashtags(), hashtagTotalFields)
                             .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
