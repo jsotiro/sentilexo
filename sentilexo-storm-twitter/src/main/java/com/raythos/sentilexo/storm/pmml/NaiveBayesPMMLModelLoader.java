@@ -26,7 +26,10 @@ public class NaiveBayesPMMLModelLoader {
         SAXParserFactory spf = SAXParserFactory. newInstance();        
         SAXParser parser = spf.newSAXParser();
         log.trace("pasring model from file " + pmmlModelFile);
-        parser.parse(new File(pmmlModelFile), handler);
+        if (pmmlModelFile.contains(System.clearProperty("file.separator")))                
+            parser.parse(new File(pmmlModelFile), handler);
+        else
+           parser.parse(ClassLoader.getSystemResourceAsStream(pmmlModelFile), handler);
         log.trace("model loaded from file " + pmmlModelFile);
 
         // create local and final variables for use in the map function

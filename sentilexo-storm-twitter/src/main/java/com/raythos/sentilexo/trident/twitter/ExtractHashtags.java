@@ -22,12 +22,12 @@ public class ExtractHashtags  extends BaseFunction{
     protected  static Logger log = LoggerFactory.getLogger(ExtractHashtags.class);
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        String owner = tuple.getStringByField("qOwner");
-        String query = tuple.getStringByField("qName");
-        Long statusId = (long)tuple.getLongByField("sId");
+        String owner = tuple.getStringByField("qOwner.1");
+        String query = tuple.getStringByField("qName.1");
+        Long statusId = (long)tuple.getLongByField("sId.1");
         try{
-            Date resultCreationDate = (Date)tuple.getValueByField("createdAt");
-            Integer retweet = (int)tuple.getIntegerByField("retweet");
+            Date resultCreationDate = (Date)tuple.getValueByField("createdAt.1");
+            Integer retweet = (int)tuple.getIntegerByField("retweet.1");
             List<String> hashtags = (List)tuple.getValueByField("hashtags");
             log.trace("processing status id " + statusId + "with creation date "+ resultCreationDate);
            

@@ -70,8 +70,8 @@ public class OldTwitterStreamTridentTopology {
 				.parallelismHint(1)
 	                        .each(new Fields("bytes"),new DeserializeAvroResultItem(), DeserializeAvroResultItem.avroObjectFields)
                                 .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) 
-                                .each(DeserializeAvroResultItem.avroObjectFields, new CalculateSimpleSentimentTotals(positiveKeywords, negativeKeywords),CalculateSimpleSentimentTotals.hashtagsFields )
-                                .each(CalculateSimpleSentimentTotals.hashtagsFields , new ExtractHashtags(), hashtagTotalFields)
+                                .each(DeserializeAvroResultItem.avroObjectFields, new CalculateSimpleSentimentTotals(positiveKeywords, negativeKeywords),CalculateSimpleSentimentTotals.hashtagFields )
+                                .each(CalculateSimpleSentimentTotals.hashtagFields , new ExtractHashtags(), hashtagTotalFields)
                                 .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
                                     
         

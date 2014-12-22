@@ -91,7 +91,7 @@ public class CalculateNLPSentiment extends BaseFunction {
           result = null; 
           }
         catch (Exception e)     {
-            log.error("error when calculating simple sentiment totals for status for statusId "+sId +". Error msg "+e);
+            log.error("error when calculating NLP sentiment totals for status for statusId "+sId +". Error msg "+e);
         }
     }
 

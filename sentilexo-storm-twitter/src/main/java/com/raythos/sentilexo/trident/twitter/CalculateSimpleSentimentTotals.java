@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 public class CalculateSimpleSentimentTotals  extends BaseFunction{
     protected  static Logger log = LoggerFactory.getLogger(CalculateSimpleSentimentTotals.class);
     
-    public static final Fields hashtagsFields = new Fields("hashtags");
 
+      public static final Fields hashtagFields = new Fields("qOwner.1", "qName.1", "sId.1", "createdAt.1","retweet.1", "hashtags");
     
     int counter = 0;
     List positiveKeywords;
@@ -121,7 +121,9 @@ public class CalculateSimpleSentimentTotals  extends BaseFunction{
             log.trace("Hashtag totals for StatusId = "+sId + " written to Cassandra keyspace"+ TwitterDataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 
-            collector.emit(new Values(  qOwner,qName,sId,
+            collector.emit(new Values(  qOwner,
+                                        qName,
+                                        sId,
                                         resultCreationDate,
                                         retweet,
                                         hashtags));

@@ -83,7 +83,7 @@ public class TwitterStreamTridentTopology {
 
           
           // setup for the Naive Bayes classification model developed in R and exported using PMML 
-          NaiveBayesHandler handler =  NaiveBayesPMMLModelLoader.loadModel(AppProperties.getProperty("bayes-model", "/twitter-sentiment-bayes.xml"));
+          NaiveBayesHandler handler=null;// =  NaiveBayesPMMLModelLoader.loadModel(AppProperties.getProperty("bayes-model", "twitter-sentiment-bayes.xml"));
           CalculatePmmlBayesSentiment bayesModelClassifier = new CalculatePmmlBayesSentiment(handler);
           
           
@@ -96,15 +96,17 @@ public class TwitterStreamTridentTopology {
                                          
           
           
-            Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagsFields;
+            Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagFields;
 
+            Stream nlpSentimentStream = mainStream
+                    .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,CalculateNLPSentiment.statusFields);
+            Stream bayesSentimentStream = mainStream
+            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , CalculatePmmlBayesSentiment.statusFields);
+         
             Stream analysisStream = mainStream        
-                            .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) 
-                            .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,CalculateNLPSentiment.statusFields)
-                            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , CalculatePmmlBayesSentiment.statusFields)
-                            .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
-                            .each( hashtagFields, new ExtractHashtags(), hashtagTotalFields)
-                            .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
+                    .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
+                    .each(hashtagFields, new ExtractHashtags(), hashtagTotalFields)
+                    .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
 
      }
 
@@ -145,7 +147,8 @@ public class TwitterStreamTridentTopology {
                         .parallelismHint(1).
                         each(new Fields("bytes"),
                              new DeserializeAvroResultItem(), 
-                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter());            }
+                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter())
+                             .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) ;            }
             else {
                 JSONFileTwitterSpout spout = initJSONFileTwitterSpout();
                  mainStream = topology.newStream("twitter-stream", spout)

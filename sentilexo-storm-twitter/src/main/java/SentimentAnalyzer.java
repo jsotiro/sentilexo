@@ -47,7 +47,7 @@ public class SentimentAnalyzer {
         System.out.println(sentiment);
         sentiment = SentimentAnalyzer.sentimentScore("I think i should be");
         System.out.println(sentiment);
-        sentiment = SentimentAnalyzer.sentimentScore("het lost!");
+        sentiment = SentimentAnalyzer.sentimentScore("her lost!");
         System.out.println(sentiment);
         
         
