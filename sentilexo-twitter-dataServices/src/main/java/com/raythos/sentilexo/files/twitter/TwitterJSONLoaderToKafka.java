@@ -9,7 +9,7 @@ package com.raythos.sentilexo.files.twitter;
 import com.raythos.messaging.kafka.StringTopicMessageProducer;
 import com.raythos.messaging.kafka.TopicMessageProducer;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
-import com.raythos.sentilexo.twitter.common.domain.TwitterQueryResultItemMapper;
+import com.raythos.sentilexo.twitter.domain.TwitterQueryResultItemMapper;
 import twitter4j.Status;
 
 /**

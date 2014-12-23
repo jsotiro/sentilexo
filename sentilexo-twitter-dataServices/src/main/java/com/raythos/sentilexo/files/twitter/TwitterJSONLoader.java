@@ -6,7 +6,6 @@
 
 package com.raythos.sentilexo.files.twitter;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
 
 import java.io.*;

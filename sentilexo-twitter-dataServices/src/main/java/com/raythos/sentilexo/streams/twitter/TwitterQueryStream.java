@@ -3,7 +3,7 @@ package com.raythos.sentilexo.streams.twitter;
 
 import com.google.common.collect.Lists;
 import com.raythos.messaging.kafka.TopicMessageProducer;
-import com.raythos.sentilexo.utils.AppProperties;
+import com.raythos.sentilexo.common.utils.AppProperties;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Constants;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;

@@ -1,5 +1,5 @@
 package com.raythos.sentilexo.streams.twitter;
-import com.raythos.sentilexo.twitter.common.domain.TwitterQueryResultItemMapper;
+import com.raythos.sentilexo.twitter.domain.TwitterQueryResultItemMapper;
 import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;  
 import com.twitter.hbc.twitter4j.message.DisconnectMessage;
 import com.twitter.hbc.twitter4j.message.StallWarningMessage;

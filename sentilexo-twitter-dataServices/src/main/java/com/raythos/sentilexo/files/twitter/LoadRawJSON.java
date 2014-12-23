@@ -8,7 +8,7 @@ package com.raythos.sentilexo.files.twitter;
 
 import com.raythos.messaging.kafka.StringTopicMessageProducer;
 import com.raythos.messaging.kafka.TopicMessageProducer;
-import  com.raythos.sentilexo.utils.AppProperties;
+import  com.raythos.sentilexo.common.utils.AppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

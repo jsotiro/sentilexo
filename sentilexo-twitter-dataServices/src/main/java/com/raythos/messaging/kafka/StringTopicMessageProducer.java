@@ -8,7 +8,7 @@ package com.raythos.messaging.kafka;
 
 
 
-import com.raythos.sentilexo.utils.AppProperties;
+import com.raythos.sentilexo.common.utils.AppProperties;
 import java.io.Serializable;
 import java.util.Properties;
 import kafka.javaapi.producer.Producer;
