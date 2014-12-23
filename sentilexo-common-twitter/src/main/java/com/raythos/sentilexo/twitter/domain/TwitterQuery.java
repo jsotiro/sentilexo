@@ -1,15 +1,26 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 (c) Raythos Interactive Ltd  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.raythos.sentilexo.twitter.persistence.cql;
+
+package com.raythos.sentilexo.twitter.domain;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.persistence.cql.PersistedEntity;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +29,7 @@ import java.util.Map;
  *
  * @author yanni
  */
-public class TwitterQuery {
+public class TwitterQuery extends PersistedEntity{
     
   private String owner;
   private String queryName;
@@ -30,19 +41,8 @@ public class TwitterQuery {
   private Date latest;
   private long minId;
   private long maxId;   
-  private Session session;  
-  private PreparedStatement loadQuery;
-  private PreparedStatement saveQuery;  
-  BoundStatement boundLoadStatement;
-  BoundStatement boundSaveStatement; 
-  
-  
-    public TwitterQuery(Session session){
-        super();
-        setSession(session);
-         
-    }
-  
+  private Session session;
+   
     public String getOwner() {
         return owner;
     }
@@ -128,6 +128,7 @@ public class TwitterQuery {
     }
 
     
+  @Override
    public void valuesFromRow(Row row){
         owner = row.getString(0);
         queryName = row.getString(1);
@@ -141,34 +142,16 @@ public class TwitterQuery {
         totalItems = row.getInt(9);
 
     }
+ 
+          
+  @Override
+   public void bindCQLLoadParameters(BoundStatement boundStm) {
+       boundStm.bind(owner,queryName);   
+   } 
     
-
-    public void setSession(Session session) {
-        this.session = session;
-        loadQuery = session.prepare("select * from queries where owner=? and queryName=?");
-        saveQuery = session.prepare("INSERT INTO queries(owner,   queryname,   active, queryterms, connectionparams, totalitems,earliest, latest, minid, maxid) values (?,?,?,?,?,?,?,?,?,?)");
-         boundLoadStatement = new BoundStatement(loadQuery);
-         boundSaveStatement = new BoundStatement(saveQuery);
-
-    }
-    
-   public boolean load(){
-   boolean found;
-   boundLoadStatement.bind(owner,queryName);
-   ResultSet results = session.execute(boundLoadStatement);
-   found = results.getAvailableWithoutFetching() > 0;
-   if (found) {
-        Row row = results.all().get(0);
-        valuesFromRow(row);
-    }     
-   return found;
-   }
-   
-   
-   
-   
-   public void save() {        
-      boundSaveStatement.bind(owner,queryName,active,queryTerms,connectionParams,totalItems,earliest, latest, minId, maxId);
-      ResultSet results = session.execute(boundSaveStatement);
-     }
+  @Override
+   public void bindCQLSaveParameters(BoundStatement boundStm) {
+       boundStm.bind(owner,queryName,active,queryTerms,connectionParams,totalItems,earliest, latest, minId, maxId);
+   } 
+      
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.raythos.sentilexo.twitter.common.utils;
+package com.raythos.sentilexo.twitter.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

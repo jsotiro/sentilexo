@@ -105,12 +105,11 @@ CREATE INDEX query_indicesDeploymentIDX ON query_indices (addedbydepl);
 
 
 CREATE TABLE topologies_journal (
-  owner text,
   topology text,
-  query text,
   id bigint,
-  addedbydepl bigint,
-  PRIMARY KEY ((owner, topology, query), id)
+  query text,
+  owner text,
+  PRIMARY KEY ((topology), id,query, owner)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND

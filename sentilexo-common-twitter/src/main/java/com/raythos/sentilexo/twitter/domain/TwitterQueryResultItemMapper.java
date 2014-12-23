@@ -1,15 +1,26 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 (c) Raythos Interactive Ltd  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package com.raythos.sentilexo.twitter.common.domain;
+package com.raythos.sentilexo.twitter.domain;
 
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
-import com.raythos.sentilexo.twitter.common.utils.StatusArraysHelper;
-import com.raythos.sentilexo.twitter.common.utils.TwitterUtils;
-import com.raythos.sentilexo.utils.DateTimeUtils;
+import com.raythos.sentilexo.twitter.utils.StatusArraysHelper;
+import com.raythos.sentilexo.twitter.utils.TwitterUtils;
+import com.raythos.sentilexo.common.utils.DateTimeUtils;
+import com.raythos.sentilexo.common.utils.Helpers;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,16 +45,9 @@ import twitter4j.User;
 public class TwitterQueryResultItemMapper {
    
     
-    public static List cloneList(List l){
-        ArrayList<Object> list = new ArrayList();
-        if (l==null) return null; 
-        for (Object o : l){
-            list.add(o);
-        }
-        return list;
-    }
+   
     
-      public static Map asFieldMap(TwitterQueryResultItemAvro status){
+      public static Map getFieldsMap(TwitterQueryResultItemAvro status){
         
        Date createdAt = new Date();
        createdAt.setTime(status.getCreatedAt());
@@ -55,57 +59,56 @@ public class TwitterQueryResultItemMapper {
             newMap.put(key.toString(), (Long)m.get(key));
     }
        Map<String,Object> result = new HashMap<>();
-             result.put("StatusId", status.getStatusId());
-             result.put("CreatedAt",createdAt );
-             result.put("CurrentUserRetweetId", status.getCurrentUserRetweetId());    
-            result.put("FavoriteCount", status.getFavoriteCount() );
-            result.put("favourited", status.getFavourited() );
-            result.put("hashtags", cloneList(status.getHashtags()) );
-            result.put("InReplyToScreenName", (status.getInReplyToScreenName()));
-            result.put("InReplyToStatusId", status.getInReplyToStatusId());
-            result.put("InReplyToUserId", status.getInReplyToUserId() );
-            result.put("latitude",status.getLatitude());
-            result.put("mentions", newMap) ;
-            result.put("Place",  (status.getPlace()) );
-            result.put("PossiblySensitive" , status.getPossiblySensitive());
-            result.put("QueryName"  , (status.getQueryName()));
-            result.put("Query"  , (status.getQuery()));
-            result.put("relevantQueryTerms", cloneList(status.getRelevantQueryTerms()));
-            result.put("Retweet" , status.getRetweet());
-            result.put("RetweetCount",status.getRetweetCount());
-            result.put("retweetStatusId", status.getRetweetStatusId() );
-            result.put("Retweeted", status.getRetweeted());
-            result.put("RetweetedByMe", status.getRetweetedByMe());
-            result.put("RetweetedText", (status.getRetweetedText()));
-            result.put("Scopes",cloneList(status.getScopes()));
-            result.put("ScreenName", (status.getScreenName()));
-            result.put("Source", (status.getSource()));
-            result.put("text", (status.getText()));
-            result.put("Trucated", status.getTrucated());
-            result.put("urls", cloneList(status.getUrls()));
-            result.put("UserId",status.getUserId());
-            result.put("UserName",(status.getUserName()));
-            result.put("UserDescription", (status.getUserDescription()));
-            result.put("UserLocation", (status.getUserLocation()));
-            result.put("UserUrl",(status.getUserUrl()));
-            result.put("UserisProtected" , status.getUserIsProtected());
-            result.put("UserFollowersCount" ,status.getUserFollowersCount());
-            result.put("UserCreatedAt" , userCreatedAt);
-            result.put("UserFriendsCount" ,status.getUserFriendsCount());
-            result.put("UserListedCount" , status.getUserListedCount());
-            result.put("UserStatusesCount" , status.getUserStatusesCount());
-            result.put("UserFavouritesCount" , status.getUserFavoritesCount());
+            result.put(StatusFieldNames.STATUS_ID, status.getStatusId());
+            result.put(StatusFieldNames.CREATED_AT,createdAt );
+            result.put(StatusFieldNames.CURRENT_USER_RETWEET_ID, status.getCurrentUserRetweetId());    
+            result.put(StatusFieldNames.FAVOURITE_COUNT , status.getFavoriteCount() );
+            result.put(StatusFieldNames.FAVOURITED, status.getFavourited() );
+            result.put(StatusFieldNames.HASHTAGS, Helpers.cloneList(status.getHashtags()) );
+            result.put(StatusFieldNames.IN_REPLY_TO_SCREEN_NAME, (status.getInReplyToScreenName()));
+            result.put(StatusFieldNames.IN_REPLY_TO_STATUS_ID, status.getInReplyToStatusId());
+            result.put(StatusFieldNames.IN_REPLY_TO_USER_ID, status.getInReplyToUserId() );
+            result.put(StatusFieldNames.LATITUDE,status.getLatitude());
+            result.put(StatusFieldNames.LONGITUDE,status.getLongitude());
+            result.put(StatusFieldNames.MENTIONS, newMap) ;
+            result.put(StatusFieldNames.LANGUAGE, status.getLang());  
+            result.put(StatusFieldNames.PLACE,  status.getPlace() );
+            result.put(StatusFieldNames.POSSIBLY_SENSITIVE , status.getPossiblySensitive());
+            result.put(StatusFieldNames.QUERY_NAME  , (status.getQueryName()));
+            result.put(StatusFieldNames.QUERY , (status.getQuery()));
+            result.put(StatusFieldNames.RELEVANT_QUERY_TERMS, Helpers.cloneList(status.getRelevantQueryTerms()));
+            result.put(StatusFieldNames.RETWEET, status.getRetweet());
+            result.put(StatusFieldNames.RETWEET_COUNT,status.getRetweetCount());
+            result.put(StatusFieldNames.RETWEET_STATUS_ID, status.getRetweetStatusId() );
+            result.put(StatusFieldNames.RETWEETED, status.getRetweeted());
+            result.put(StatusFieldNames.RETWEETED_BY_ME, status.getRetweetedByMe());
+            result.put(StatusFieldNames.RETWEETED_TEXT, (status.getRetweetedText()));
+            result.put(StatusFieldNames.SCOPES,Helpers.cloneList(status.getScopes()));
+            result.put(StatusFieldNames.SCREEN_NAME, (status.getScreenName()));
+            result.put(StatusFieldNames.SOURCE, (status.getSource()));
+            result.put(StatusFieldNames.TEXT, (status.getText()));
+            result.put(StatusFieldNames.TRUNCATED, status.getTrucated());
+            result.put(StatusFieldNames.URLS, Helpers.cloneList(status.getUrls()));
+            result.put(StatusFieldNames.USER_ID,status.getUserId());
+            result.put(StatusFieldNames.USER_NAME,(status.getUserName()));
+            result.put(StatusFieldNames.USER_DESCRIPTION, (status.getUserDescription()));
+            result.put(StatusFieldNames.USER_LOCATION, (status.getUserLocation()));
+            result.put(StatusFieldNames.USER_URL,(status.getUserUrl()));
+            result.put(StatusFieldNames.USER_IS_PROTECTED , status.getUserIsProtected());
+            result.put(StatusFieldNames.USER_FOLLOWERS_COUNT ,status.getUserFollowersCount());
+            result.put(StatusFieldNames.USER_CREATED_AT , userCreatedAt);
+            result.put(StatusFieldNames.USER_FRIENDS_COUNT,status.getUserFriendsCount());
+            result.put(StatusFieldNames.USER_LISTED_COUNT, status.getUserListedCount());
+            result.put(StatusFieldNames.USER_STATUSES_COUNT, status.getUserStatusesCount());
+            result.put(StatusFieldNames.USER_FAVOURITES_COUNT , status.getUserFavoritesCount());
        return result;
     }
     
     
     public static TwitterQueryResultItem getItemFromAvroObject(TwitterQueryResultItemAvro item){
         TwitterQueryResultItem result = new  TwitterQueryResultItem();
-       
-        
         return result;
     }
-    
     
     public static byte[] getAvroSerializedFromStatus( String queryName, String queryString, Status status) throws IOException{
         TwitterQueryResultItemAvro item = mapItem(queryName, queryString, status);
@@ -154,9 +157,7 @@ public class TwitterQueryResultItemMapper {
         result.setRelevantQueryTerms(TwitterUtils.relevantQueryTermsFromStatus(queryString, status));
         result.setLang(status.getLang());
       
-      
-       // result.setJson(TwitterObjectFactory.getRawJSON(status));
-      
+           
         result.setCreatedAt(status.getCreatedAt().getTime());
       
         User user = status.getUser();
@@ -169,7 +170,7 @@ public class TwitterQueryResultItemMapper {
         result.setUserFollowersCount(user.getFollowersCount());
         result.setUserCreatedAt(user.getCreatedAt().getTime());
         result.setUserCreatedAtAsString(DateTimeUtils.getDateAsText(user.getCreatedAt()));
-         result.setCreatedAtAsString(DateTimeUtils.getDateAsText(status.getCreatedAt()));
+        result.setCreatedAtAsString(DateTimeUtils.getDateAsText(status.getCreatedAt()));
         result.setUserFriendsCount(user.getFriendsCount());
         result.setUserListedCount(user.getListedCount());
         result.setUserStatusesCount(user.getStatusesCount());
@@ -212,11 +213,7 @@ public class TwitterQueryResultItemMapper {
        if (status.getPlace()!=null){
             result.setPlace(status.getPlace().getFullName());
         }
-    
-      
-     // List contrs = Arrays.asList(Long.class,status.getContributors());
-     //    result.setContributors(contrs);
-    
+        
         Scopes scopesObj = status.getScopes();
         if (scopesObj!=null){
             List scopes = Arrays.asList(scopesObj.getPlaceIds());
