@@ -1,4 +1,20 @@
 /*
+ * Copyright 2014 (c) Raythos Interactive Ltd.  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * Code based and adapted from material in 
  * Big Data Analytics Beyond Hadoop
  * by Vijay Srinivas Agneeswaran, Ph.D.
@@ -6,7 +22,7 @@
  */
 package com.raythos.sentilexo.storm.pmml;
 
-import com.raythos.sentilexo.trident.twitter.CalculatePmmlBayesSentiment;
+import com.raythos.sentilexo.trident.twitter.DirectCalculatePmmlBayesSentiment;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,8 +41,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class NaiveBayesHandler extends DefaultHandler implements Serializable {
 
-    protected  static Logger log = LoggerFactory.getLogger(NaiveBayesHandler.class);
-    
+    protected static Logger log = LoggerFactory.getLogger(NaiveBayesHandler.class);
+
     boolean miningSchema = false;
     boolean miningField = false;
     boolean bayesInputs = false;
@@ -81,7 +97,11 @@ public class NaiveBayesHandler extends DefaultHandler implements Serializable {
                     Iterator<String> s2 = set2.iterator();
                     while (s2.hasNext()) {
                         String class1 = s2.next();
-                        prob_map.put((class1 + "_" + valueOfField + "_" + fieldName), (var.tc_map.get(class1).floatValue() + 1) / stats.get(class1));
+                        Float divisor = stats.get(class1);
+                        if (divisor == null) {
+                            divisor = 1.0F;
+                        }
+                        prob_map.put((class1 + "_" + valueOfField + "_" + fieldName), (var.tc_map.get(class1).floatValue() + 1) / divisor);
                     }
                 }
             }
@@ -177,15 +197,15 @@ public class NaiveBayesHandler extends DefaultHandler implements Serializable {
         if (qName == "MiningSchema") {
             miningSchema = false;
             /*
-            System.out.print(targetVar + "=");
-            for (int i = 0; i < predictors.size(); i++) {
-                System.out.print(predictors.get(i));
-                if (i < predictors.size() - 1) {
-                    System.out.print("+");
-                }
-            }
-            System.out.println();
-            */        
+             System.out.print(targetVar + "=");
+             for (int i = 0; i < predictors.size(); i++) {
+             System.out.print(predictors.get(i));
+             if (i < predictors.size() - 1) {
+             System.out.print("+");
+             }
+             }
+             System.out.println();
+             */
         } else if (miningSchema == true && qName == "MiningField") {
             miningField = false;
         } else if (qName.compareTo("BayesInputs") == 0) {
@@ -236,7 +256,7 @@ public class NaiveBayesHandler extends DefaultHandler implements Serializable {
                     //outputFile.println("At least one of the expected variables are not supplied correctly");
                     //System.exit(0);
                 }
-                
+
                 prob_for_this_class *= prob_mapArg.get(map_variable);
             }
             prob_for_this_class *= prior_prob;
@@ -248,7 +268,7 @@ public class NaiveBayesHandler extends DefaultHandler implements Serializable {
             strT = new StringTokenizer(input, ",");
             printed = true;
         }
-            return determined_target;
-        }
-  
+        return determined_target;
+    }
+
 }

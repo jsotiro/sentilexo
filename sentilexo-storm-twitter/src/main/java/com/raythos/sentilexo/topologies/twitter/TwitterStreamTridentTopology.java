@@ -1,4 +1,21 @@
-package com.raythos.sentilexo.trident.twitter;
+/*
+ * Copyright 2014 (c) Raythos Interactive Ltd.  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package com.raythos.sentilexo.topologies.twitter;
 
 /**
  *
@@ -16,15 +33,28 @@ import backtype.storm.tuple.Fields;
 import com.raythos.sentilexo.spouts.JSONFileTwitterSpout;
 import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
 import com.raythos.sentilexo.storm.pmml.NaiveBayesPMMLModelLoader;
+import com.raythos.sentilexo.storm.pmml.PmmlModel;
+import com.raythos.sentilexo.storm.pmml.PmmlModelEvaluationFunction;
 import com.raythos.sentilexo.trident.twitter.state.QueryStatsCqlStorageConfigValues;
 import com.raythos.sentilexo.trident.twitter.state.SentilexoStateFactory;
-import com.raythos.sentilexo.twitter.persistence.cql.Deployments;
-import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
-import com.raythos.sentilexo.utils.AppProperties;
+import com.raythos.sentilexo.twitter.domain.Deployments;
+import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.common.utils.AppProperties;
+import com.raythos.sentilexo.trident.twitter.CalculateHashtagTotals;
+import com.raythos.sentilexo.trident.twitter.CalculateNLPSentiment;
+import com.raythos.sentilexo.trident.twitter.CalculateSimpleSentimentTotals;
+import com.raythos.sentilexo.trident.twitter.CoreNLPSentimentClassifier;
+import com.raythos.sentilexo.trident.twitter.DeserializeAvroResultItem;
+import com.raythos.sentilexo.trident.twitter.DirectCalculatePmmlBayesSentiment;
+import com.raythos.sentilexo.trident.twitter.DuplicatesFilter;
+import com.raythos.sentilexo.trident.twitter.ExtractHashtags;
+import com.raythos.sentilexo.trident.twitter.ExtractStatsFields;
+import com.raythos.sentilexo.trident.twitter.LanguageFilter;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.kafka.BrokerHosts;
@@ -67,7 +97,7 @@ public class TwitterStreamTridentTopology {
      static void setupTopology(Stream mainStream) {        
           String cqlhost =  AppProperties.getProperty("cqlhost", "localhost");
           String cqlschema = AppProperties.getProperty("cqlschema","twitterqueries");
-          TwitterDataManager dataMgr =  TwitterDataManager.getInstance();
+          DataManager dataMgr =  DataManager.getInstance();
           dataMgr.connect(cqlhost,cqlschema); 
           
           // keyword-based ("bag of words") sentiment classification
@@ -83,9 +113,18 @@ public class TwitterStreamTridentTopology {
 
           
           // setup for the Naive Bayes classification model developed in R and exported using PMML 
-          NaiveBayesHandler handler=null;// =  NaiveBayesPMMLModelLoader.loadModel(AppProperties.getProperty("bayes-model", "twitter-sentiment-bayes.xml"));
-          CalculatePmmlBayesSentiment bayesModelClassifier = new CalculatePmmlBayesSentiment(handler);
-          
+          String pmmlFileName = AppProperties.getProperty("bayes-model", "twitter-sentiment-bayes.xml");
+          NaiveBayesHandler handler= null;//NaiveBayesPMMLModelLoader.loadModel(pmmlFileName);
+          DirectCalculatePmmlBayesSentiment bayesModelClassifier = new DirectCalculatePmmlBayesSentiment(handler);
+         /*try {
+             PmmlModel model = new PmmlModel(pmmlFileName);
+             PmmlModelEvaluationFunction calcPmml = new PmmlModelEvaluationFunction();
+             calcPmml.setEvaluator(model.getModelEvaluator());
+             
+         } catch (Exception ex) {
+            log.error("Error loading PMML model " + pmmlFileName + " .The error was", ex);
+         }
+           */   
           
           TridentState queryStatsState =mainStream.each(DeserializeAvroResultItem.avroObjectFields, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
                             .groupBy(groupByFields)
@@ -101,8 +140,10 @@ public class TwitterStreamTridentTopology {
             Stream nlpSentimentStream = mainStream
                     .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,CalculateNLPSentiment.statusFields);
             Stream bayesSentimentStream = mainStream
-            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , CalculatePmmlBayesSentiment.statusFields);
-         
+            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , DirectCalculatePmmlBayesSentiment.statusFields);
+
+ 
+            
             Stream analysisStream = mainStream        
                     .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
                     .each(hashtagFields, new ExtractHashtags(), hashtagTotalFields)
@@ -111,15 +152,11 @@ public class TwitterStreamTridentTopology {
      }
 
      public static void main(String[] args)  {
-          String topologyName="KAFKA_INCOMING_TRIDENT_TWEETS_TOPOLOGY";
+          String topologyName="INCOMING_TRIDENT_TWEETS_TOPOLOGY";
           // read topologies from cassandra, increment and update with timestamp
           // deploymentNo = dataManager.getDeploymentNo()+1;
           Deployments deploymentTracker = Deployments.getInstance();
           deploymentTracker.load();
-              
-          
-        
-          
           long deploymentNo = deploymentTracker.getDeploymentNo()+1;
           boolean local = true;
           boolean useKafka = false; 

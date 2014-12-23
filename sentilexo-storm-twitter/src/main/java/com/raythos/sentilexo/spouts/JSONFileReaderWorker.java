@@ -1,4 +1,17 @@
 /*
+ * Copyright 2014 (c) Raythos Interactive Ltd.  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.raythos.sentilexo.spouts;
 
@@ -20,32 +33,31 @@ import twitter4j.TwitterObjectFactory;
  * @author yanni
  */
 public class JSONFileReaderWorker implements Runnable, Serializable {
+
     private int batchSize;
     private int bufferSize;
-    private String basePath;     
+    private String basePath;
     private boolean finished = false;
     private File[] files;
     private File currentFile = null;
     private int currentFileIdx = 0;
     private final String pathSep = System.getProperty("file.separator");
-    
-    
+
     private FileInputStream fis = null;
     private InputStreamReader isr = null;
     private BufferedReader br = null;
-   
-    private int linesRead  =0;
-    private int statusesRead  =0;
-    private int filesRead  =0;
-   
+
+    private int linesRead = 0;
+    private int statusesRead = 0;
+    private int filesRead = 0;
+
     private String filename;
-    private String  queryName; 
+    private String queryName;
     private String queryTerms;
-    private  ArrayList<String> buffer = new ArrayList<>();
-    
-    protected  static Logger log = LoggerFactory.getLogger(JSONFileReaderWorker.class);
- 
-    
+    private ArrayList<String> buffer = new ArrayList<>();
+
+    protected static Logger log = LoggerFactory.getLogger(JSONFileReaderWorker.class);
+
     public int getBatchSize() {
         return batchSize;
     }
@@ -77,7 +89,6 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     public void setBuffer(ArrayList<String> buffer) {
         this.buffer = buffer;
     }
-
 
     public String getQueryName() {
         return queryName;
@@ -122,7 +133,7 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     public static Logger getLog() {
         return log;
     }
-    
+
     public File getCurrentFile() {
         return currentFile;
     }
@@ -130,166 +141,157 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     public void setCurrentFile(File currentFile) {
         this.currentFile = currentFile;
     }
-   
+
     public String getFilename() {
         return filename;
     }
-    
 
-    protected  Status getStatusFromRawJsonLine(String rawJSONLine) {
-        int lineNo = this.getLinesRead() ;  
-        Status status=null;
-          try {
-             log.trace("processing File + "+ filename +" - line #"+lineNo);
-            if (rawJSONLine.startsWith("{\"created_at")){
-                status = TwitterObjectFactory.createStatus(rawJSONLine);    
+    protected Status getStatusFromRawJsonLine(String rawJSONLine) {
+        int lineNo = this.getLinesRead();
+        Status status = null;
+        try {
+            log.trace("processing File + " + filename + " - line #" + lineNo);
+            if (rawJSONLine.startsWith("{\"created_at")) {
+                status = TwitterObjectFactory.createStatus(rawJSONLine);
                 statusesRead++;
-                log.trace("File + "+ filename +"line #"+lineNo + "containes twitter status. So far "+statusesRead+" Status objects read");
+                log.trace("File + " + filename + "line #" + lineNo + "containes twitter status. So far " + statusesRead + " Status objects read");
 
-              }
-            else 
-                log.warn("File "+ filename+  " line "+lineNo +  " has no twitter status JSON text");
+            } else {
+                log.warn("File " + filename + " line " + lineNo + " has no twitter status JSON text");
+            }
         } catch (Exception ex) {
             log.error("Exception was raised: " + ex);
         }
-     return status;   
+        return status;
     }
-    
-      
-    public void startReadingFiles() throws IOException{
-     
-          if (finished) return;
-          openNextFile();
-          try
-           {
+
+    public void startReadingFiles() throws IOException {
+
+        if (finished) {
+            return;
+        }
+        openNextFile();
+        try {
             openStreams();
             readNextBacthOfFileLines();
-           } 
-           catch (IOException ioe) {
+        } catch (IOException ioe) {
             log.error("Failed to read tweets: " + ioe.getMessage());
             finished = true;
-            
-       }   
-        
-    }
-    
-      void endOfJob(){
-         log.trace(" Files read :"+ getFilesRead());
-         log.trace(" Lines read :"+getLinesRead());
-         finished = true;
- 
-      }
-    
-      
-      void openNextFile() throws IOException{
-          currentFile = files[currentFileIdx];
-          filename = getCurrentFile().getName();         
-          log.trace("Reading file "+currentFileIdx + "  " + currentFile.getName() );
-          openStreams();  
-      }
-      
-      void endOfFile() throws IOException{
-       closeStreams();
-       File newNameFile = new File(basePath + pathSep+currentFile.getName()+"-DONE");
-       currentFile.renameTo(newNameFile); 
-       filesRead++;
-       currentFileIdx++;
-       if (currentFileIdx>=files.length)
-         endOfJob();
-       else {
-           openNextFile();
-       
+
         }
-   
+
     }
-    
-    
-    public  int scanForFilesFromPath() {
-       
-       linesRead  =0;
-       statusesRead  =0;
-       filesRead = 0;
-       finished = false;
-       currentFileIdx = 0;
-      
-            File dir = new File(basePath);
-            files = dir.listFiles(new FilenameFilter() {
+
+    void endOfJob() {
+        log.trace(" Files read :" + getFilesRead());
+        log.trace(" Lines read :" + getLinesRead());
+        finished = true;
+
+    }
+
+    void openNextFile() throws IOException {
+        currentFile = files[currentFileIdx];
+        filename = getCurrentFile().getName();
+        log.trace("Reading file " + currentFileIdx + "  " + currentFile.getName());
+        openStreams();
+    }
+
+    void endOfFile() throws IOException {
+        closeStreams();
+        File newNameFile = new File(basePath + pathSep + currentFile.getName() + "-DONE");
+        currentFile.renameTo(newNameFile);
+        filesRead++;
+        currentFileIdx++;
+        if (currentFileIdx >= files.length) {
+            endOfJob();
+        } else {
+            openNextFile();
+
+        }
+
+    }
+
+    public int scanForFilesFromPath() {
+
+        linesRead = 0;
+        statusesRead = 0;
+        filesRead = 0;
+        finished = false;
+        currentFileIdx = 0;
+
+        File dir = new File(basePath);
+        files = dir.listFiles(new FilenameFilter() {
             @Override
-              public boolean accept(File dir, String name) {
-                    return name.endsWith(".json");
-                }
-            });
-            System.out.println("Base path is "+basePath);
-            int filesToRead=0;
-            if (files!=null) {
-                filesToRead = files.length; 
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".json");
             }
-            finished = filesToRead < 1; 
-            System.out.println("Containing "+filesToRead+ "  files");
-            return filesToRead;
-       
- 
+        });
+        System.out.println("Base path is " + basePath);
+        int filesToRead = 0;
+        if (files != null) {
+            filesToRead = files.length;
+        }
+        finished = filesToRead < 1;
+        System.out.println("Containing " + filesToRead + "  files");
+        return filesToRead;
+
     }
 
-             
-            
-             
-    
-    public  void readNextBacthOfFileLines() throws IOException {
-            String rawJSONLine;
-            while ((rawJSONLine = br.readLine()) != null) {
-               linesRead++;
-               log.trace("Reading line "+filesRead + linesRead+" of file  " + currentFile.getName() );  
-               buffer.add(rawJSONLine);
-               if (buffer.size()>=bufferSize) {
-                 log.trace("max bufferSize reached - paused till data is emmited to read next batch");
-                  return;   
-                }  
-               }
-            if (rawJSONLine==null)
-                endOfFile();
-            
-         }
-           
+    public void readNextBacthOfFileLines() throws IOException {
+        String rawJSONLine;
+        while ((rawJSONLine = br.readLine()) != null) {
+            linesRead++;
+            log.trace("Reading line " + filesRead + linesRead + " of file  " + currentFile.getName());
+            buffer.add(rawJSONLine);
+            if (buffer.size() >= bufferSize) {
+                log.trace("max bufferSize reached - paused till data is emmited to read next batch");
+                return;
+            }
+        }
+        if (rawJSONLine == null) {
+            endOfFile();
+        }
 
-  void openStreams() throws IOException {
-         fis = new FileInputStream(currentFile);
-         isr = new InputStreamReader(fis, "UTF-8");
-        br = new BufferedReader(isr);  
-  }  
-  void closeStreams() {
-       if (br != null) {
-        try {
-            br.close();
-        } catch (IOException ignore) {
-        }
-        }
-           if (isr != null) {
-                try {
-                    isr.close();
-                } catch (IOException ignore) {
-                }
-            }
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException ignore) {
-                }
+    }
+
+    void openStreams() throws IOException {
+        fis = new FileInputStream(currentFile);
+        isr = new InputStreamReader(fis, "UTF-8");
+        br = new BufferedReader(isr);
+    }
+
+    void closeStreams() {
+        if (br != null) {
+            try {
+                br.close();
+            } catch (IOException ignore) {
             }
         }
-    
-    
-     public boolean isFinished() {
-       return this.finished;    
+        if (isr != null) {
+            try {
+                isr.close();
+            } catch (IOException ignore) {
+            }
+        }
+        if (fis != null) {
+            try {
+                fis.close();
+            } catch (IOException ignore) {
+            }
+        }
+    }
+
+    public boolean isFinished() {
+        return this.finished;
     }
 
     public boolean hasNoMoreData() {
-       return (finished && (buffer.isEmpty())); 
+        return (finished && (buffer.isEmpty()));
     }
 
     @Override
     public void run() {
-    //  importFilesFromPath();
+        //  importFilesFromPath();
     }
-    
+
 }

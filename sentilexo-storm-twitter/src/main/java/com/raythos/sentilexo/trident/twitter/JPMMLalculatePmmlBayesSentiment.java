@@ -24,19 +24,14 @@ package com.raythos.sentilexo.trident.twitter;
 
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
 
 import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
 import com.raythos.sentilexo.persistence.cql.DataManager;
-import java.util.Properties;
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.rnn.RNNCoreAnnotations;
-import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
-import edu.stanford.nlp.trees.Tree;
-import edu.stanford.nlp.util.CoreMap;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.trident.operation.BaseFunction;
@@ -44,41 +39,40 @@ import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
 
  
-public class CalculateNLPSentiment extends BaseFunction { 
+public class JPMMLalculatePmmlBayesSentiment extends BaseFunction { 
 
-    public static final Fields statusFields = new Fields("qOwner", "qName", "sId", "createdAt","retweet", "text");
-    protected  static Logger log = LoggerFactory.getLogger(CalculateNLPSentiment.class);
-   
+    public static final Fields statusFields = new Fields("qOwner1", "qName1", "sId1", "createdAt1","retweet1", "text1");
+    protected  static Logger log = LoggerFactory.getLogger(JPMMLalculatePmmlBayesSentiment.class);
+    private NaiveBayesHandler handler;
+    private final String[] sentimentLabels={"YES","NO","UKNOWN"};
+    private final Map<String, Float> prior;
+    private final Map<String, Float> prob_map;
+    private final List<String> predictors;
+    private final Set<String> possibleTargets;
     
-   
-
-    private String textSentiment(int sentiment) {
-    if (sentiment<2) return Sentiments.NEGATIVE_SENTIMENT;
-        else if (sentiment>3) return Sentiments.POSITIVE_SENTIMENT; 
-            else return Sentiments.NEGATIVE_SENTIMENT;
-    
+    public JPMMLalculatePmmlBayesSentiment(NaiveBayesHandler handler){
+      super();
+      this.handler = handler;
+      prior = NaiveBayesHandler.prior;
+      prob_map = NaiveBayesHandler.prob_map;
+      predictors = NaiveBayesHandler.predictors;
+      possibleTargets = NaiveBayesHandler.possibleTargets;
     }
-    
+       
     private String calcSentimentForTweetMessage(String statusText) {
-     
-        int mainSentiment = 0;
-         StanfordCoreNLP pipeline = CoreNLPSentimentClassifier.getInstance().getPipeline();
-   
-        if (statusText != null && statusText.length() > 0) {
-            int longest = 0;
-            Annotation annotation = pipeline.process(statusText);
-            for (CoreMap sentence : annotation.get(CoreAnnotations.SentencesAnnotation.class)) {
-                Tree tree = sentence.get(SentimentCoreAnnotations.AnnotatedTree.class);
-                int sentiment = RNNCoreAnnotations.getPredictedClass(tree);
-                String partText = sentence.toString();
-                if (partText.length() > longest) {
-                    mainSentiment = sentiment;
-                    longest = partText.length();
-                }
- 
-            }
+        int sentiment;
+        String prediction = handler.predictItNow(statusText, prior, predictors, prob_map, possibleTargets);
+        sentiment = Integer.parseInt(prediction);
+        if (sentiment > 3) {
+            log.warn("Sentiment value "+sentiment +" greater than upper bound of 3. Assuming Unknown");
+            sentiment = 3;
         }
-        return textSentiment(mainSentiment);
+        if (sentiment < 1) {
+            log.warn("Sentiment value "+sentiment +" lower than lower bound of 1. Assuming Unknown");
+            sentiment = 3;
+        }
+        
+        return sentimentLabels[sentiment-1];
    }     
 
     @Override
@@ -94,8 +88,8 @@ public class CalculateNLPSentiment extends BaseFunction {
             boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentimentForTweetMessage(tweetMessage);
-            DataManager.getInstance().updateSentimentTotals("nlp",qOwner,qName,sentiment,resultCreationDate,retweet);  
-            log.trace("Sentiment for StatusId = "+sId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
+            DataManager.getInstance().updateSentimentTotals("bayes",qOwner,qName,sentiment,resultCreationDate,retweet);  
+            log.trace("Bayes Sentiment for StatusId = "+sId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 
             collector.emit(new Values(  qOwner,qName,sId,
@@ -106,7 +100,7 @@ public class CalculateNLPSentiment extends BaseFunction {
           result = null; 
           }
         catch (Exception e)     {
-            log.error("error when calculating NLP sentiment totals for status for statusId "+sId +". Error msg "+e);
+            log.error("error when calculating bayes sentiment totals for status for statusId "+sId +". Error msg "+e);
         }
     }
 

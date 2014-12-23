@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 (c) Raythos Interactive Ltd.  http://www.raythos.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.raythos.sentilexo.trident.twitter;
 /**
@@ -11,8 +26,8 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
 
-import com.raythos.sentilexo.twitter.common.domain.StatusFieldNames;
-import com.raythos.sentilexo.twitter.persistence.cql.TwitterDataManager;
+import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
+import com.raythos.sentilexo.persistence.cql.DataManager;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +39,10 @@ import storm.trident.operation.TridentCollector;
 import storm.trident.tuple.TridentTuple;
 
  
-public class CalculatePmmlBayesSentiment extends BaseFunction { 
+public class DirectCalculatePmmlBayesSentiment extends BaseFunction { 
 
     public static final Fields statusFields = new Fields("qOwner1", "qName1", "sId1", "createdAt1","retweet1", "text1");
-    protected  static Logger log = LoggerFactory.getLogger(CalculatePmmlBayesSentiment.class);
+    protected  static Logger log = LoggerFactory.getLogger(DirectCalculatePmmlBayesSentiment.class);
     private NaiveBayesHandler handler;
     private final String[] sentimentLabels={"YES","NO","UKNOWN"};
     private final Map<String, Float> prior;
@@ -35,7 +50,7 @@ public class CalculatePmmlBayesSentiment extends BaseFunction {
     private final List<String> predictors;
     private final Set<String> possibleTargets;
     
-    public CalculatePmmlBayesSentiment(NaiveBayesHandler handler){
+    public DirectCalculatePmmlBayesSentiment(NaiveBayesHandler handler){
       super();
       this.handler = handler;
       prior = NaiveBayesHandler.prior;
@@ -73,8 +88,8 @@ public class CalculatePmmlBayesSentiment extends BaseFunction {
             boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentimentForTweetMessage(tweetMessage);
-            TwitterDataManager.getInstance().updateSentimentTotals("bayes",qOwner,qName,sentiment,resultCreationDate,retweet);  
-            log.trace("Bayes Sentiment for StatusId = "+sId + " written to Cassandra keyspace"+ TwitterDataManager.getInstance().getKeyspace());
+            DataManager.getInstance().updateSentimentTotals("bayes",qOwner,qName,sentiment,resultCreationDate,retweet);  
+            log.trace("Bayes Sentiment for StatusId = "+sId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 
             collector.emit(new Values(  qOwner,qName,sId,
