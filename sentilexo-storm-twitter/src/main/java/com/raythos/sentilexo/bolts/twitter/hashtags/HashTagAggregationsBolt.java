@@ -21,6 +21,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 
 import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.twitter.domain.HashtagTotals;
 import java.util.Date;
 
 /**
@@ -45,7 +46,8 @@ public class HashTagAggregationsBolt extends BaseCQLBolt {
         boolean isStatusRetweet = (Boolean) tuple.getValue(4);
         int retweet = (isStatusRetweet == true) ? 1 : 0;
         try {
-            DataManager.getInstance().updateHashTagTotals("raythos", query, hashtag, createdAt, retweet);
+            HashtagTotals dataItem = new HashtagTotals();
+            dataItem.updateHashTagTotals("raythos", query, hashtag, createdAt, retweet);
             log.trace("Hashtag totals for StatusId = " + statusId + " written to Cassandra keyspace" + cqlKeyspace);
             collector.ack(tuple);
             // collector.emit(new Values(result));

@@ -18,7 +18,7 @@
 package com.raythos.sentilexo.trident.twitter;
 
 import com.raythos.sentilexo.twitter.domain.Deployments;
-import com.raythos.sentilexo.twitter.domain.TwitterQueryIndex;
+import com.raythos.sentilexo.twitter.domain.QueryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.trident.operation.BaseFilter;
@@ -40,10 +40,10 @@ public class DuplicatesFilter extends BaseFilter {
      String owner = tuple.getStringByField("owner");
      String queryName = tuple.getStringByField("queryName");
      long id = tuple.getLongByField("StatusId");
-     boolean duplicate = TwitterQueryIndex.exists(owner, queryName, id);
+     boolean duplicate = QueryIndex.exists(owner, queryName, id);
      log.info("Duplicate "+duplicate +" Item "+ id + "for "+owner+","+queryName);
      if (!duplicate) {
-           TwitterQueryIndex dataItem = new TwitterQueryIndex(owner, queryName,id, Deployments.getInstance().getDeploymentNo());
+           QueryIndex dataItem = new QueryIndex(owner, queryName,id, Deployments.getInstance().getDeploymentNo());
            dataItem.save();
      }      
      return !duplicate;                 

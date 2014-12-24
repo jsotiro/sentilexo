@@ -18,6 +18,7 @@ package com.raythos.sentilexo.trident.twitter;
 
 import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.twitter.domain.HashtagTotals;
 import java.util.Date;
 import storm.trident.operation.BaseFunction;
 import storm.trident.operation.TridentCollector;
@@ -42,7 +43,8 @@ public class CalculateHashtagTotals  extends BaseFunction{
         int retweet = (int)tuple.getIntegerByField("retwt");
         try{
             counter++;
-            DataManager.getInstance().updateHashTagTotals(owner,query,hashtag,createdAt,retweet);
+            HashtagTotals dataItem = new HashtagTotals();
+            dataItem.updateHashTagTotals(owner,query,hashtag,createdAt,retweet);
             log.trace("#"+counter + " Hashtag totals for StatusId = "+ statusId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
             collector.emit(new Values(counter));
         }

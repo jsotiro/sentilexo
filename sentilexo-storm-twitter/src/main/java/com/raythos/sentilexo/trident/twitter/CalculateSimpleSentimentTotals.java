@@ -19,8 +19,9 @@ package com.raythos.sentilexo.trident.twitter;
 
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
-import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
 import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.twitter.domain.SentimentTotals;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -124,12 +125,13 @@ public class CalculateSimpleSentimentTotals  extends BaseFunction{
             Map<String,Object> result = ( Map<String,Object>) tuple.getValueByField("ResultItem");
            
             Date resultCreationDate = new Date(); 
-            resultCreationDate.setTime(((Date)result.get(StatusFieldNames.CREATED_AT)).getTime());
-            List<String> hashtags  =  (List<String>)result.get(StatusFieldNames.HASHTAGS);
-            boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
+            resultCreationDate.setTime(((Date)result.get(QueryResultItemFieldNames.CREATED_AT)).getTime());
+            List<String> hashtags  =  (List<String>)result.get(QueryResultItemFieldNames.HASHTAGS);
+            boolean isStatusRetweet=  (boolean)result.get(QueryResultItemFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentiment(hashtags);
-            DataManager.getInstance().updateSentimentTotals("simple", qOwner,qName,sentiment,resultCreationDate,retweet);  
+            SentimentTotals dataItem = new SentimentTotals();
+            dataItem.updateSentimentTotals("simple", qOwner,qName,sentiment,resultCreationDate,retweet);  
             log.trace("Hashtag totals for StatusId = "+sId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 

@@ -50,6 +50,7 @@ import com.raythos.sentilexo.trident.twitter.DuplicatesFilter;
 import com.raythos.sentilexo.trident.twitter.ExtractHashtags;
 import com.raythos.sentilexo.trident.twitter.ExtractStatsFields;
 import com.raythos.sentilexo.trident.twitter.LanguageFilter;
+import com.raythos.sentilexo.twitter.domain.DefaultSetting;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.io.IOException;
 import java.util.List;
@@ -101,9 +102,12 @@ public class TwitterStreamTridentTopology {
           dataMgr.connect(cqlhost,cqlschema); 
           
           // keyword-based ("bag of words") sentiment classification
-          List positiveKeywords = dataMgr.getKeywordsList(POSITIVE_KEYWORDS);
-          List negativeKeywords =  dataMgr.getKeywordsList(NEGATIVE_KEYWORDS);
-          CalculateSimpleSentimentTotals simpleSentimentFunction = new CalculateSimpleSentimentTotals(positiveKeywords, negativeKeywords);
+          
+          DefaultSetting positiveKeywords = new DefaultSetting(POSITIVE_KEYWORDS, null);
+          positiveKeywords.load();
+          DefaultSetting negativeKeywords = new DefaultSetting(NEGATIVE_KEYWORDS, null);
+          negativeKeywords.load();
+          CalculateSimpleSentimentTotals simpleSentimentFunction = new CalculateSimpleSentimentTotals(positiveKeywords.getValues(), negativeKeywords.getValues());
                   
           // neural network based sentiment calculation
           Properties props = new Properties();          

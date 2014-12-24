@@ -20,7 +20,7 @@ import com.raythos.sentilexo.bolts.BaseCQLBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import com.raythos.sentilexo.twitter.domain.TwitterResultJson;
+import com.raythos.sentilexo.twitter.domain.ResultJson;
 
 
 
@@ -48,7 +48,7 @@ public class TwitterJSONCQLPersistenceBolt extends BaseCQLBolt {
         String json = messageFields[1];
         try{
             
-            TwitterResultJson dataItem = new TwitterResultJson(statusId, json);
+            ResultJson dataItem = new ResultJson(statusId, json);
             dataItem.save();
             log.trace("Json for StatusId = "+ statusId + " written to Cassandra keyspace"+cqlKeyspace);
             collector.ack(tuple);

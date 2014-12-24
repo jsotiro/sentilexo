@@ -18,7 +18,7 @@
 package com.raythos.sentilexo.trident.twitter;
 
 import backtype.storm.tuple.Fields;
-import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +47,7 @@ public class ExtractStatsFields  extends BaseFunction{
             Map<String,Object> result = (Map) tuple.getValueByField("ResultItem");
         
             Date resultCreationDate = new Date(); 
-            resultCreationDate.setTime(((Date)result.get(StatusFieldNames.CREATED_AT)).getTime());
+            resultCreationDate.setTime(((Date)result.get(QueryResultItemFieldNames.CREATED_AT)).getTime());
             List<Object> v = new ArrayList<>(); 
         //     v.add("raythos"); // will param in the next iteration - for now only one owner 
             // v.add(query); 

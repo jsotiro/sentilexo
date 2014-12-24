@@ -26,7 +26,7 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
-import com.raythos.sentilexo.twitter.domain.TwitterQueryResultItemMapper;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
 import com.raythos.sentilexo.common.utils.AppProperties;
 import java.util.logging.Level;
 import org.slf4j.Logger;
@@ -144,8 +144,8 @@ public class JSONFileTwitterSpout implements IBatchSpout {
         log.trace("Posting Status with id " + status.getId() + " from File " + this.worker.getFilename());
         try {
             TwitterQueryResultItemAvro tqri = new TwitterQueryResultItemAvro();
-            tqri = TwitterQueryResultItemMapper.mapItem(this.worker.getQueryName(), this.worker.getQueryTerms(), status);
-            data = TwitterQueryResultItemMapper.getAvroSerialized(tqri);
+            tqri = QueryResultItemMapper.mapItem(this.worker.getQueryName(), this.worker.getQueryTerms(), status);
+            data = QueryResultItemMapper.getAvroSerialized(tqri);
             log.trace("AVRO serialised Status with id " + status.getId() + " was obtained from file" + this.worker.getFilename());
         } catch (Exception e) {
             log.error("Error when emmitting bytes. The exception was " + e);

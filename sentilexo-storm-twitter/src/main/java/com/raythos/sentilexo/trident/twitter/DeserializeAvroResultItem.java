@@ -20,7 +20,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
 import com.raythos.sentilexo.persistence.cql.DataManager;
-import com.raythos.sentilexo.twitter.domain.TwitterResultItem;
+import com.raythos.sentilexo.twitter.domain.ResultItem;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.avro.Schema;
@@ -88,7 +88,7 @@ public class DeserializeAvroResultItem  extends BaseFunction {
              
              byte[] bytes= tuple.getBinary(0);
              TwitterQueryResultItemAvro result = deserializeBinary(bytes);
-             TwitterResultItem  dataItem = new TwitterResultItem(result);
+             ResultItem  dataItem = new ResultItem(result);
              dataItem.save();
              //DataManager.getInstance().saveTwitterQueryResultItem(dataItem.getFields());
              Long statusId = result.getStatusId();

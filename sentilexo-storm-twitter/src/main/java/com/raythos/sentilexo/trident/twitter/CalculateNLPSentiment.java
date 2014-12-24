@@ -25,8 +25,9 @@ package com.raythos.sentilexo.trident.twitter;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
-import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
 import com.raythos.sentilexo.persistence.cql.DataManager;
+import com.raythos.sentilexo.twitter.domain.SentimentTotals;
 import java.util.Properties;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -89,12 +90,13 @@ public class CalculateNLPSentiment extends BaseFunction {
         try {
             Map<String,Object> result = ( Map<String,Object>) tuple.getValueByField("ResultItem");
             Date resultCreationDate = new Date(); 
-            resultCreationDate.setTime(((Date)result.get(StatusFieldNames.CREATED_AT)).getTime());
-            String tweetMessage = (String)result.get(StatusFieldNames.TEXT); 
-            boolean isStatusRetweet=  (boolean)result.get(StatusFieldNames.RETWEET);
+            resultCreationDate.setTime(((Date)result.get(QueryResultItemFieldNames.CREATED_AT)).getTime());
+            String tweetMessage = (String)result.get(QueryResultItemFieldNames.TEXT); 
+            boolean isStatusRetweet=  (boolean)result.get(QueryResultItemFieldNames.RETWEET);
             int retweet = ( isStatusRetweet==true)?1:0;
             String sentiment = calcSentimentForTweetMessage(tweetMessage);
-            DataManager.getInstance().updateSentimentTotals("nlp",qOwner,qName,sentiment,resultCreationDate,retweet);  
+            SentimentTotals dataItem = new SentimentTotals();
+            dataItem.updateSentimentTotals("nlp",qOwner,qName,sentiment,resultCreationDate,retweet);  
             log.trace("Sentiment for StatusId = "+sId + " written to Cassandra keyspace"+ DataManager.getInstance().getKeyspace());
             // query, 
             // statusId, 
