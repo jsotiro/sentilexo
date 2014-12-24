@@ -23,7 +23,7 @@ import com.raythos.sentilexo.persistence.cql.PersistedEntity;
  *
  * @author yanni
  */
-public class TwitterResultJson  extends PersistedEntity {
+public class ResultJson  extends PersistedEntity {
     private long statusId; 
     private String jsonText;
     private boolean parseData = true; 
@@ -46,16 +46,16 @@ public class TwitterResultJson  extends PersistedEntity {
     
     
     
-    public TwitterResultJson(){
+    public ResultJson(){
     }
     
-    public TwitterResultJson(long statusId, String jsonText){
+    public ResultJson(long statusId, String jsonText){
        super(); 
 
     }
     
     public static boolean exists(long statusId){
-      TwitterResultJson temp = new TwitterResultJson(statusId,null);
+      ResultJson temp = new ResultJson(statusId,null);
       temp.parseData = false;
       return temp.load();
     }

@@ -21,7 +21,7 @@ package com.raythos.sentilexo.twitter.domain;
  * @author yanni
  */
 
-public class StatusFieldNames {
+public class QueryResultItemFieldNames {
         public static  final int FiedlCount = 41;
         public static  final String STATUS_ID = "StatusId";
         public static  final String CREATED_AT = "CreatedAt";

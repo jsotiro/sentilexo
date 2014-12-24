@@ -129,7 +129,7 @@ CREATE TABLE topologies_journal (
 CREATE INDEX query_indicesDeploymentIDX ON query_indices (addedbydepl);
 
 
-CREATE TABLE settings (
+CREATE TABLE default_settings (
   name text,
   values list<text>,
   PRIMARY KEY (name)
@@ -261,6 +261,6 @@ CREATE INDEX twitter_dataScreenNameIDX ON twitter_data ("ScreenName");
 
 CREATE INDEX twitter_dataUserIdIDX ON twitter_data ("UserId");
 
-INSERT INTO settings(name,values) VALUES('positivekeywords',['yes', 'goforitscotland', 'ourfuturescot', 'projectfear', 'patronisingbtlady']);
-INSERT INTO settings(name,values) VALUES('negativekeywords',['voteno', 'naw', '%no', 'no%', 'darlingwin', 'godarling', 'better', 'letsstaytogether', 'ukok']);
+INSERT INTO default_settings(name,values) VALUES('positivekeywords',['yes', 'goforitscotland', 'ourfuturescot', 'projectfear', 'patronisingbtlady']);
+INSERT INTO default_settings(name,values) VALUES('negativekeywords',['voteno', 'naw', '%no', 'no%', 'darlingwin', 'godarling', 'better', 'letsstaytogether', 'ukok']);
 INSERT INTO queries(owner,queryname) VALUES('raythos','indyref');

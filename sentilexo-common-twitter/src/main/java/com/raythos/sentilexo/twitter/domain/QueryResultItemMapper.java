@@ -42,7 +42,7 @@ import twitter4j.User;
  *
  * @author yanni
  */
-public class TwitterQueryResultItemMapper {
+public class QueryResultItemMapper {
    
     
    
@@ -59,54 +59,54 @@ public class TwitterQueryResultItemMapper {
             newMap.put(key.toString(), (Long)m.get(key));
     }
        Map<String,Object> result = new HashMap<>();
-            result.put(StatusFieldNames.STATUS_ID, status.getStatusId());
-            result.put(StatusFieldNames.CREATED_AT,createdAt );
-            result.put(StatusFieldNames.CURRENT_USER_RETWEET_ID, status.getCurrentUserRetweetId());    
-            result.put(StatusFieldNames.FAVOURITE_COUNT , status.getFavoriteCount() );
-            result.put(StatusFieldNames.FAVOURITED, status.getFavourited() );
-            result.put(StatusFieldNames.HASHTAGS, Helpers.cloneList(status.getHashtags()) );
-            result.put(StatusFieldNames.IN_REPLY_TO_SCREEN_NAME, (status.getInReplyToScreenName()));
-            result.put(StatusFieldNames.IN_REPLY_TO_STATUS_ID, status.getInReplyToStatusId());
-            result.put(StatusFieldNames.IN_REPLY_TO_USER_ID, status.getInReplyToUserId() );
-            result.put(StatusFieldNames.LATITUDE,status.getLatitude());
-            result.put(StatusFieldNames.LONGITUDE,status.getLongitude());
-            result.put(StatusFieldNames.MENTIONS, newMap) ;
-            result.put(StatusFieldNames.LANGUAGE, status.getLang());  
-            result.put(StatusFieldNames.PLACE,  status.getPlace() );
-            result.put(StatusFieldNames.POSSIBLY_SENSITIVE , status.getPossiblySensitive());
-            result.put(StatusFieldNames.QUERY_NAME  , (status.getQueryName()));
-            result.put(StatusFieldNames.QUERY , (status.getQuery()));
-            result.put(StatusFieldNames.RELEVANT_QUERY_TERMS, Helpers.cloneList(status.getRelevantQueryTerms()));
-            result.put(StatusFieldNames.RETWEET, status.getRetweet());
-            result.put(StatusFieldNames.RETWEET_COUNT,status.getRetweetCount());
-            result.put(StatusFieldNames.RETWEET_STATUS_ID, status.getRetweetStatusId() );
-            result.put(StatusFieldNames.RETWEETED, status.getRetweeted());
-            result.put(StatusFieldNames.RETWEETED_BY_ME, status.getRetweetedByMe());
-            result.put(StatusFieldNames.RETWEETED_TEXT, (status.getRetweetedText()));
-            result.put(StatusFieldNames.SCOPES,Helpers.cloneList(status.getScopes()));
-            result.put(StatusFieldNames.SCREEN_NAME, (status.getScreenName()));
-            result.put(StatusFieldNames.SOURCE, (status.getSource()));
-            result.put(StatusFieldNames.TEXT, (status.getText()));
-            result.put(StatusFieldNames.TRUNCATED, status.getTrucated());
-            result.put(StatusFieldNames.URLS, Helpers.cloneList(status.getUrls()));
-            result.put(StatusFieldNames.USER_ID,status.getUserId());
-            result.put(StatusFieldNames.USER_NAME,(status.getUserName()));
-            result.put(StatusFieldNames.USER_DESCRIPTION, (status.getUserDescription()));
-            result.put(StatusFieldNames.USER_LOCATION, (status.getUserLocation()));
-            result.put(StatusFieldNames.USER_URL,(status.getUserUrl()));
-            result.put(StatusFieldNames.USER_IS_PROTECTED , status.getUserIsProtected());
-            result.put(StatusFieldNames.USER_FOLLOWERS_COUNT ,status.getUserFollowersCount());
-            result.put(StatusFieldNames.USER_CREATED_AT , userCreatedAt);
-            result.put(StatusFieldNames.USER_FRIENDS_COUNT,status.getUserFriendsCount());
-            result.put(StatusFieldNames.USER_LISTED_COUNT, status.getUserListedCount());
-            result.put(StatusFieldNames.USER_STATUSES_COUNT, status.getUserStatusesCount());
-            result.put(StatusFieldNames.USER_FAVOURITES_COUNT , status.getUserFavoritesCount());
+            result.put(QueryResultItemFieldNames.STATUS_ID, status.getStatusId());
+            result.put(QueryResultItemFieldNames.CREATED_AT,createdAt );
+            result.put(QueryResultItemFieldNames.CURRENT_USER_RETWEET_ID, status.getCurrentUserRetweetId());    
+            result.put(QueryResultItemFieldNames.FAVOURITE_COUNT , status.getFavoriteCount() );
+            result.put(QueryResultItemFieldNames.FAVOURITED, status.getFavourited() );
+            result.put(QueryResultItemFieldNames.HASHTAGS, Helpers.cloneList(status.getHashtags()) );
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_SCREEN_NAME, (status.getInReplyToScreenName()));
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_STATUS_ID, status.getInReplyToStatusId());
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_USER_ID, status.getInReplyToUserId() );
+            result.put(QueryResultItemFieldNames.LATITUDE,status.getLatitude());
+            result.put(QueryResultItemFieldNames.LONGITUDE,status.getLongitude());
+            result.put(QueryResultItemFieldNames.MENTIONS, newMap) ;
+            result.put(QueryResultItemFieldNames.LANGUAGE, status.getLang());  
+            result.put(QueryResultItemFieldNames.PLACE,  status.getPlace() );
+            result.put(QueryResultItemFieldNames.POSSIBLY_SENSITIVE , status.getPossiblySensitive());
+            result.put(QueryResultItemFieldNames.QUERY_NAME  , (status.getQueryName()));
+            result.put(QueryResultItemFieldNames.QUERY , (status.getQuery()));
+            result.put(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS, Helpers.cloneList(status.getRelevantQueryTerms()));
+            result.put(QueryResultItemFieldNames.RETWEET, status.getRetweet());
+            result.put(QueryResultItemFieldNames.RETWEET_COUNT,status.getRetweetCount());
+            result.put(QueryResultItemFieldNames.RETWEET_STATUS_ID, status.getRetweetStatusId() );
+            result.put(QueryResultItemFieldNames.RETWEETED, status.getRetweeted());
+            result.put(QueryResultItemFieldNames.RETWEETED_BY_ME, status.getRetweetedByMe());
+            result.put(QueryResultItemFieldNames.RETWEETED_TEXT, (status.getRetweetedText()));
+            result.put(QueryResultItemFieldNames.SCOPES,Helpers.cloneList(status.getScopes()));
+            result.put(QueryResultItemFieldNames.SCREEN_NAME, (status.getScreenName()));
+            result.put(QueryResultItemFieldNames.SOURCE, (status.getSource()));
+            result.put(QueryResultItemFieldNames.TEXT, (status.getText()));
+            result.put(QueryResultItemFieldNames.TRUNCATED, status.getTrucated());
+            result.put(QueryResultItemFieldNames.URLS, Helpers.cloneList(status.getUrls()));
+            result.put(QueryResultItemFieldNames.USER_ID,status.getUserId());
+            result.put(QueryResultItemFieldNames.USER_NAME,(status.getUserName()));
+            result.put(QueryResultItemFieldNames.USER_DESCRIPTION, (status.getUserDescription()));
+            result.put(QueryResultItemFieldNames.USER_LOCATION, (status.getUserLocation()));
+            result.put(QueryResultItemFieldNames.USER_URL,(status.getUserUrl()));
+            result.put(QueryResultItemFieldNames.USER_IS_PROTECTED , status.getUserIsProtected());
+            result.put(QueryResultItemFieldNames.USER_FOLLOWERS_COUNT ,status.getUserFollowersCount());
+            result.put(QueryResultItemFieldNames.USER_CREATED_AT , userCreatedAt);
+            result.put(QueryResultItemFieldNames.USER_FRIENDS_COUNT,status.getUserFriendsCount());
+            result.put(QueryResultItemFieldNames.USER_LISTED_COUNT, status.getUserListedCount());
+            result.put(QueryResultItemFieldNames.USER_STATUSES_COUNT, status.getUserStatusesCount());
+            result.put(QueryResultItemFieldNames.USER_FAVOURITES_COUNT , status.getUserFavoritesCount());
        return result;
     }
     
     
-    public static TwitterQueryResultItem getItemFromAvroObject(TwitterQueryResultItemAvro item){
-        TwitterQueryResultItem result = new  TwitterQueryResultItem();
+    public static QueryResultItem getItemFromAvroObject(TwitterQueryResultItemAvro item){
+        QueryResultItem result = new  QueryResultItem();
         return result;
     }
     

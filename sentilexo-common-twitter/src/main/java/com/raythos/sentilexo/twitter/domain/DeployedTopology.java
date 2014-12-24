@@ -22,7 +22,7 @@ import java.util.Date;
  *
  * @author yanni
  */
-public class TwitterTopology {
+public class DeployedTopology {
     private String name;
     private String owner;
     private String query;
@@ -70,7 +70,7 @@ public class TwitterTopology {
     }
  
     
-  public TwitterTopology(String name, String owner, String query, long id, Date processed ){
+  public DeployedTopology(String name, String owner, String query, long id, Date processed ){
       super();
       this.name=name;
       this.owner = owner;

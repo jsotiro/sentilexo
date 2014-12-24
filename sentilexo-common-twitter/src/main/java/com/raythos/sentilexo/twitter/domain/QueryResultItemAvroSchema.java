@@ -19,11 +19,11 @@ import java.io.File;
 import org.apache.avro.Schema;
 import org.apache.avro.reflect.ReflectData;
 
-public class TwitterQueryResultItemAvroSchema {
+public class QueryResultItemAvroSchema {
     
     public static void main(String[] args) {
   
-    Schema schema = ReflectData.get().getSchema(TwitterQueryResultItem.class);
+    Schema schema = ReflectData.get().getSchema(QueryResultItem.class);
     System.out.println(schema);
     }   
     

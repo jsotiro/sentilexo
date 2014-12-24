@@ -20,7 +20,7 @@ package com.raythos.sentilexo.persistence.cql;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.raythos.sentilexo.common.utils.Helpers;
-import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
 
 /**
  *
@@ -28,35 +28,35 @@ import com.raythos.sentilexo.twitter.domain.StatusFieldNames;
  */
 public class RegisteredPreparedStatements {
     
-    static PreparedStatement selectKeywords;    
+    public static  PreparedStatement selectDefaultSetting;    
+    public static  PreparedStatement insertDefaultSetting;
+    public static  PreparedStatement selectStatus;
+    public static  PreparedStatement insertStatus;
     
-    static PreparedStatement selectStatus;
-    static PreparedStatement insertStatus;
+    public static  PreparedStatement selectResultItemJson;
+    public static  PreparedStatement insertResultItemJson;
     
-    static PreparedStatement selectResultItemJson;
-    static PreparedStatement insertResultItemJson;
-    
-    static PreparedStatement selectQueryIndex;    
-    static PreparedStatement insertQueryResultIndex;
+    public static  PreparedStatement selectQueryIndex;    
+    public static  PreparedStatement insertQueryResultIndex;
     
     
     
-    static PreparedStatement updateHashTagTotals;
-    static PreparedStatement updateHashTagRetweetTotals;
-    static PreparedStatement updateHashTagNonRetweetTotals;
+    public static  PreparedStatement updateHashTagTotals;
+    public static  PreparedStatement updateHashTagRetweetTotals;
+    public static  PreparedStatement updateHashTagNonRetweetTotals;
    
-    static PreparedStatement updateSentimentTotalsYesRetweets;
-    static PreparedStatement updateSentimentTotalsYesNoRetweets;
-    static PreparedStatement updateSentimentTotalsNoRetweets;
-    static PreparedStatement updateSentimentTotalsNoNoRetweets;
-    static PreparedStatement updateSentimentTotalsUnlcearRetweets;
-    static PreparedStatement updateSentimentTotalsUnlcearNoRetweets;
-    static  PreparedStatement loadQuery;
-    static  PreparedStatement saveQuery;  
+    public static  PreparedStatement updateSentimentTotalsYesRetweets;
+    public static  PreparedStatement updateSentimentTotalsYesNoRetweets;
+    public static  PreparedStatement updateSentimentTotalsNoRetweets;
+    public static  PreparedStatement updateSentimentTotalsNoNoRetweets;
+    public static  PreparedStatement updateSentimentTotalsUnlcearRetweets;
+    public static  PreparedStatement updateSentimentTotalsUnlcearNoRetweets;
+    public static  PreparedStatement loadQuery;
+    public static  PreparedStatement saveQuery;  
    
 
     
-    static void prepareSentimentStatements(Session session){
+    static  void prepareSentimentStatements(Session session){
       //YES and  RETWEET
         updateSentimentTotalsYesRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allretweet_total=allretweet_total+?, yesretweet_total=yesretweet_total+? where sentiment_type=? and owner=? and query= ? and  period_type =? and time_id=?");
         //YES and NO RETWEET
@@ -71,7 +71,8 @@ public class RegisteredPreparedStatements {
         updateSentimentTotalsUnlcearNoRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?  , uncleartotal=uncleartotal+?,  allnoretweet_total=allnoretweet_total+?, unclearnoretweet_total= unclearnoretweet_total+?  where sentiment_type=? and owner=?  and  query= ? and  period_type =? and time_id=?");
         
                 
-        selectKeywords = session.prepare("select values from settings where name= ?");    
+        selectDefaultSetting = session.prepare("select values from default_settings where name= ?");    
+        insertDefaultSetting = session.prepare("insert into default_settings(name,values) values( ?, ?)");
         selectStatus = session.prepare("select * from \"twitter_data\" where \"StatusId\"=?");  
         insertStatus = session.prepare(saveResultItemCQL());
         
@@ -97,49 +98,49 @@ public class RegisteredPreparedStatements {
 
   static String saveResultItemCQL(){
       StringBuilder statusInsert =  new StringBuilder("Insert INTO twitter_data(")
-            .append(Helpers.quotedString(StatusFieldNames.STATUS_ID)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.CREATED_AT)).append(",") 
-            .append(Helpers.quotedString(StatusFieldNames.CURRENT_USER_RETWEET_ID)).append(",") 
-            .append(Helpers.quotedString(StatusFieldNames.FAVOURITE_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.FAVOURITED)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.HASHTAGS)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.IN_REPLY_TO_SCREEN_NAME)).append(",")
-            .append(Helpers.quotedString( StatusFieldNames.IN_REPLY_TO_STATUS_ID)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.IN_REPLY_TO_USER_ID)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.LATITUDE)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.LONGITUDE)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.MENTIONS)).append(",") 
-            .append(Helpers.quotedString(StatusFieldNames.PLACE)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.POSSIBLY_SENSITIVE)).append(",") 
-            .append(Helpers.quotedString(StatusFieldNames.QUERY_NAME)).append(",") 
-            .append(Helpers.quotedString(StatusFieldNames.QUERY)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RELEVANT_QUERY_TERMS)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RETWEET)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RETWEET_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RETWEET_STATUS_ID)).append(",") 
-            .append(Helpers.quotedString( StatusFieldNames.RETWEETED)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RETWEETED_BY_ME)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.RETWEETED_TEXT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.SCOPES)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.SCREEN_NAME)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.SOURCE)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.TEXT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.TRUNCATED)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.URLS)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_ID)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_NAME)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_DESCRIPTION)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_LOCATION)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_URL)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_IS_PROTECTED )).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_FOLLOWERS_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_CREATED_AT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_FRIENDS_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_LISTED_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_STATUSES_COUNT)).append(",")
-            .append(Helpers.quotedString(StatusFieldNames.USER_FAVOURITES_COUNT)).append(")")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.STATUS_ID)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.CREATED_AT)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.CURRENT_USER_RETWEET_ID)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.FAVOURITE_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.FAVOURITED)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.HASHTAGS)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.IN_REPLY_TO_SCREEN_NAME)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.IN_REPLY_TO_STATUS_ID)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.IN_REPLY_TO_USER_ID)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.LATITUDE)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.LONGITUDE)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.MENTIONS)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.PLACE)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.POSSIBLY_SENSITIVE)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY_NAME)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEET)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEET_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEET_STATUS_ID)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEETED)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEETED_BY_ME)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEETED_TEXT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.SCOPES)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.SCREEN_NAME)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.SOURCE)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.TEXT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.TRUNCATED)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.URLS)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_ID)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_NAME)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_DESCRIPTION)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_LOCATION)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_URL)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_IS_PROTECTED )).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_FOLLOWERS_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_CREATED_AT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_FRIENDS_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_LISTED_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_STATUSES_COUNT)).append(",")
+            .append(Helpers.quotedString(QueryResultItemFieldNames.USER_FAVOURITES_COUNT)).append(")")
             .append(" values ( ");
-             for (int i=0;i<StatusFieldNames.FiedlCount-1;i++){
+             for (int i=0;i<QueryResultItemFieldNames.FiedlCount-1;i++){
                 statusInsert.append("?,");
               }
             statusInsert.append("? )");

@@ -23,7 +23,7 @@ import com.raythos.sentilexo.persistence.cql.PersistedEntity;
  *
  * @author yanni
  */
-public class TwitterQueryIndex extends PersistedEntity {
+public class QueryIndex extends PersistedEntity {
 
     private String owner;
     private String queryName;
@@ -63,10 +63,10 @@ public class TwitterQueryIndex extends PersistedEntity {
         this.addedByDepl = addedByDepl;
     }
 
-    public TwitterQueryIndex(){
+    public QueryIndex(){
         
     }
-    public TwitterQueryIndex(String owner, String queryName, long id, long addedByDeplNo){
+    public QueryIndex(String owner, String queryName, long id, long addedByDeplNo){
         super();
         this.owner = owner;
         this.queryName = queryName;
@@ -75,7 +75,7 @@ public class TwitterQueryIndex extends PersistedEntity {
     }
     
     public static boolean exists(String owner, String queryName, long id) {
-        TwitterQueryIndex temp = new TwitterQueryIndex(owner,queryName, id,0);
+        QueryIndex temp = new QueryIndex(owner,queryName, id,0);
         temp.parseData = false;
         return temp.load();
 

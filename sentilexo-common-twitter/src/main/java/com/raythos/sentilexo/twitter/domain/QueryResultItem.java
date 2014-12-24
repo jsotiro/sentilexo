@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author yanni
  */
-public class TwitterQueryResultItem implements Serializable {
+public class QueryResultItem implements Serializable {
     private static final long serialVersionUID = 1L;
     private long statusId;
    
@@ -90,12 +90,12 @@ public class TwitterQueryResultItem implements Serializable {
     private int userStatusesCount;
     private int userFavoritesCount;
 
-    public TwitterQueryResultItem() {
+    public QueryResultItem() {
     }
     
     
 
-    public TwitterQueryResultItem(long statusId) {
+    public QueryResultItem(long statusId) {
         this.statusId = statusId;
     }
 

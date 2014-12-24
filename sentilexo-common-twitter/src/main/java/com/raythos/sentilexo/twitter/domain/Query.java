@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author yanni
  */
-public class TwitterQuery extends PersistedEntity{
+public class Query extends PersistedEntity{
     
   private String owner;
   private String queryName;

@@ -16,7 +16,7 @@
 
 package com.raythos.sentilexo.twitter.domain;
 
-import com.raythos.sentilexo.twitter.domain.TwitterQuery;
+import com.raythos.sentilexo.twitter.domain.Query;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author yanni
  */
-public class TwitterQueries {
+public class Queries {
     
     private Session session;
 
@@ -52,14 +52,14 @@ public class TwitterQueries {
  
     }
     
-    public TwitterQueries(Session session){
+    public Queries(Session session){
         super();
         setSession(session);
     }
     
                         
-    public List<TwitterQuery>getQueries(String owner) {
-        List<TwitterQuery> items=new ArrayList<>();
+    public List<Query>getQueries(String owner) {
+        List<Query> items=new ArrayList<>();
         BoundStatement stmt;
         if (owner==null || owner.isEmpty())
            stmt = boundAllLoadStatement;
@@ -70,7 +70,7 @@ public class TwitterQueries {
            }
         ResultSet results = session.execute(stmt);
         for (Row row : results){
-           TwitterQuery queryObj = new TwitterQuery();
+           Query queryObj = new Query();
            queryObj.valuesFromRow(row);
            items.add(queryObj);
         }

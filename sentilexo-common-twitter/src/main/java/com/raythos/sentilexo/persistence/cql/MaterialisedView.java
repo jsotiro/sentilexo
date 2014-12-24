@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 (c) Raythos Interactive Ltd  http://www.raythos.com
+ * Copyright 2014 Expression project.organization is undefined on line 4, column 57 in Templates/Licenses/license-apache20.txt..
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.raythos.sentilexo.persistence.cql;
 
-package com.raythos.sentilexo.twitter.domain;
+import com.datastax.driver.core.Session;
 
 /**
  *
  * @author yanni
  */
-public class TwitterTopologies {
+public class MaterialisedView {
+    private Session session; 
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
     
+  public  MaterialisedView(){
+      super();
+      this.session = DataManager.getInstance().getSession();
+              
+    }
 }

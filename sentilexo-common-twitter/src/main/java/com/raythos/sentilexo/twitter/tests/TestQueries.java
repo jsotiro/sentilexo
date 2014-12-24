@@ -18,8 +18,8 @@ package com.raythos.sentilexo.twitter.tests;
 
 import com.datastax.driver.core.Session;
 import com.raythos.sentilexo.persistence.cql.DataManager;
-import com.raythos.sentilexo.twitter.domain.TwitterQueries;
-import com.raythos.sentilexo.twitter.domain.TwitterQuery;
+import com.raythos.sentilexo.twitter.domain.Queries;
+import com.raythos.sentilexo.twitter.domain.Query;
 import com.raythos.sentilexo.common.utils.AppProperties;
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class TestQueries {
         
                 Session session = DataManager.getInstance().getSession();
                 
-                TwitterQuery q = new TwitterQuery();
+                Query q = new Query();
                 q.setOwner("john");
                 q.setQueryName("ukip");
                 q.save();
@@ -49,16 +49,16 @@ public class TestQueries {
                 q.setOwner("john");
                 q.setQueryName("all parties");
                 q.save();
-                TwitterQueries tqs = new TwitterQueries(session);
-                List<TwitterQuery> queries = tqs.getQueries(null);
-                for (TwitterQuery qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
+                Queries tqs = new Queries(session);
+                List<Query> queries = tqs.getQueries(null);
+                for (Query qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
                 q.setOwner("ray");
                 q.setQueryName("My brand");
                 q.save();
                  queries = tqs.getQueries(null);
-                for (TwitterQuery qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
+                for (Query qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
                  queries = tqs.getQueries("john");
-                for (TwitterQuery qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
+                for (Query qObj : queries) { System.out.println(qObj.getOwner() + " "+qObj.getQueryName()); }
  
 
     }
