@@ -9,7 +9,7 @@ package com.raythos.sentilexo.files.twitter;
 import com.raythos.messaging.kafka.StringTopicMessageProducer;
 import com.raythos.messaging.kafka.TopicMessageProducer;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
-import com.raythos.sentilexo.twitter.domain.TwitterQueryResultItemMapper;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
 import twitter4j.Status;
 
 /**
@@ -47,8 +47,8 @@ public class TwitterJSONLoaderToKafka  extends TwitterJSONLoader {
                 try{
                     TwitterQueryResultItemAvro tqri = new TwitterQueryResultItemAvro();
                     
-                    tqri = TwitterQueryResultItemMapper.mapItem(queryName, queryTerms, status);
-                    byte[] data = TwitterQueryResultItemMapper.getAvroSerialized(tqri);
+                    tqri = QueryResultItemMapper.mapItem(queryName, queryTerms, status);
+                    byte[] data = QueryResultItemMapper.getAvroSerialized(tqri);
                     twitterResultItemTopic.postBinary(data);
                     twitterJsonTopic.postPropertyValuePair(tqri.getStatusId().toString(), rawJSONLine);
                    log.trace("Status with id " +status.getId() +"posted to Kafka topic  from file" + getFilename() +" line #"+lineNo);

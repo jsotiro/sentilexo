@@ -1,5 +1,5 @@
 package com.raythos.sentilexo.streams.twitter;
-import com.raythos.sentilexo.twitter.domain.TwitterQueryResultItemMapper;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
 import com.twitter.hbc.twitter4j.handler.StatusStreamHandler;  
 import com.twitter.hbc.twitter4j.message.DisconnectMessage;
 import com.twitter.hbc.twitter4j.message.StallWarningMessage;
@@ -84,9 +84,9 @@ public class TwitterQueryListener implements StatusStreamHandler {
     
     void saveStatus(Status status){
      String s = TwitterObjectFactory.getRawJSON(status);
-     TwitterQueryResultItemAvro tqri = TwitterQueryResultItemMapper.mapItem(queryName, listenerQuery, status);
+     TwitterQueryResultItemAvro tqri = QueryResultItemMapper.mapItem(queryName, listenerQuery, status);
          try {
-             byte[] avroData = TwitterQueryResultItemMapper.getAvroSerialized(tqri);
+             byte[] avroData = QueryResultItemMapper.getAvroSerialized(tqri);
              topic.postBinary(avroData);
          } catch (IOException ex) {
             log.error("error when saving Avro string with message "+ex.getMessage());
