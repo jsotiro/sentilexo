@@ -45,6 +45,7 @@ public class DataManager {
     private final EntityPersister queryResultItemPersister = new EntityPersister();
     private final EntityPersister resultJsonLogPersister = new EntityPersister();
     private final EntityPersister settingsPersister = new EntityPersister();
+    private final EntityPersister deploymentsPersister = new EntityPersister();
     
    
     
@@ -70,15 +71,6 @@ public class DataManager {
                 log.trace(info +" execution returned " + results.one().toString());
   }
       
-   public long loadLastDeployment() {
-     return 0L;  
-   }
-  
-   public void updateDeployment(long DeploymentNo, Date deployedWhen){
-           
-   }
-  
-  
   
     void setupPersisters(){
         queryPersister.setLoadEntityPrepStmt(RegisteredPreparedStatements.loadQuery);
@@ -108,6 +100,11 @@ public class DataManager {
         persistersForClassNames.put(com.raythos.sentilexo.twitter.domain.DefaultSetting.class.getCanonicalName(), settingsPersister);        
         
         
+        deploymentsPersister.setLoadEntityPrepStmt(RegisteredPreparedStatements.selectLastDeployment);
+        deploymentsPersister.setSaveEntityPrepStmt(RegisteredPreparedStatements.insertDeployment);
+        deploymentsPersister.setSession(session);
+        persistersForClassNames.put(com.raythos.sentilexo.twitter.domain.Deployment.class.getCanonicalName(), deploymentsPersister);        
+      
     }
   
   public Session connect(String host, String keyspace){

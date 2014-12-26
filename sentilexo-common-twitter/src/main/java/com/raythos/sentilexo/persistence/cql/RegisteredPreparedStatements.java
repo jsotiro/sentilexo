@@ -30,6 +30,11 @@ public class RegisteredPreparedStatements {
     
     public static  PreparedStatement selectDefaultSetting;    
     public static  PreparedStatement insertDefaultSetting;
+ 
+    public static  PreparedStatement selectLastDeployment;    
+    public static  PreparedStatement insertDeployment;
+    
+
     public static  PreparedStatement selectStatus;
     public static  PreparedStatement insertStatus;
     
@@ -73,6 +78,12 @@ public class RegisteredPreparedStatements {
                 
         selectDefaultSetting = session.prepare("select values from default_settings where name= ?");    
         insertDefaultSetting = session.prepare("insert into default_settings(name,values) values( ?, ?)");
+       
+        
+        selectLastDeployment = session.prepare("select  dateOf(deployment_time) as depl_time, depl_id from deployments where topology= ? limit 1");    
+        insertDeployment = session.prepare("insert INTO deployments (deployment_time, topology, depl_id) VALUES (now(), ?, ?);"); 
+        
+        
         selectStatus = session.prepare("select * from \"twitter_data\" where \"StatusId\"=?");  
         insertStatus = session.prepare(saveResultItemCQL());
         
@@ -146,6 +157,9 @@ public class RegisteredPreparedStatements {
             statusInsert.append("? )");
    return statusInsert.toString();
   }   
-    
+  
+  
+  
+  
        
 }

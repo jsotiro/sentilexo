@@ -118,6 +118,7 @@ public class ResultItem  extends PersistedEntity {
                 fields.get(QueryResultItemFieldNames.IN_REPLY_TO_STATUS_ID),
                 fields.get(QueryResultItemFieldNames.IN_REPLY_TO_USER_ID),
                 fields.get(QueryResultItemFieldNames.LATITUDE),
+                fields.get(QueryResultItemFieldNames.LONGITUDE),
                 fields.get(QueryResultItemFieldNames.MENTIONS),
                 fields.get(QueryResultItemFieldNames.PLACE),
                 fields.get(QueryResultItemFieldNames.POSSIBLY_SENSITIVE),

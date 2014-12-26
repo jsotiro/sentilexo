@@ -1,5 +1,6 @@
 /*
- * Copyright 2014 (c) Raythos Interactive Ltd  http://www.raythos.com
+* Copyright 2014 (c) Raythos Interactive Ltd  http://www.raythos.com
+
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,36 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.raythos.sentilexo.twitter.domain;
+
+import java.util.HashMap;
 
 /**
  *
  * @author yanni
  */
 public class Deployments {
-  private long deploymentNo = 0L;
-  private static Deployments instance;
-  
-  private Deployments(){
-     super(); 
-  }
-  public static Deployments getInstance(){
-      if (instance==null) 
-           instance = new Deployments();
-      return instance;
-  }
+  static HashMap<String,Deployment> deployments = new HashMap();    
 
-    public long getDeploymentNo() {
-        return deploymentNo;
+    public static Deployment getInstance(String topologyName) {
+        Deployment depl;
+        String topology = topologyName.toUpperCase();
+        if(deployments.containsKey(topology)){
+            depl = deployments.get(topology);
+        }
+        else depl = new Deployment(topology,0);
+        return depl;
     }
-
-    public void setDeploymentNo(long deploymentNo) {
-        this.deploymentNo = deploymentNo;
-    }
-  
-    public void load(){}
-    
-    public void save(){}
-  
 }
