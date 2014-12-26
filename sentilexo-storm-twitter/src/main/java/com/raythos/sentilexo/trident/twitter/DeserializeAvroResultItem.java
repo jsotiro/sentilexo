@@ -90,7 +90,6 @@ public class DeserializeAvroResultItem  extends BaseFunction {
              TwitterQueryResultItemAvro result = deserializeBinary(bytes);
              ResultItem  dataItem = new ResultItem(result);
              dataItem.save();
-             //DataManager.getInstance().saveTwitterQueryResultItem(dataItem.getFields());
              Long statusId = result.getStatusId();
              String queryName = result.getQueryName();
              if (queryName==null)

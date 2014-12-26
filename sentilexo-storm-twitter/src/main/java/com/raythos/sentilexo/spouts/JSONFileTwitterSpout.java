@@ -17,21 +17,14 @@ package com.raythos.sentilexo.spouts;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Map;
-
-import storm.trident.operation.TridentCollector;
-import storm.trident.spout.IBatchSpout;
-import backtype.storm.Config;
-import backtype.storm.task.TopologyContext;
-import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
+import static com.raythos.sentilexo.spouts.TextFileReaderWorker.log;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
 import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
-import com.raythos.sentilexo.common.utils.AppProperties;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
+import twitter4j.TwitterObjectFactory;
 
 /**
  * A Spout that emits fake tweets from json files. useful in testing topologies
@@ -40,51 +33,34 @@ import twitter4j.Status;
  * @author yanni
  */
 @SuppressWarnings({"serial", "rawtypes"})
-public class JSONFileTwitterSpout implements IBatchSpout {
+public class JSONFileTwitterSpout extends  TextFileBatchedLinesSpout {
 
     protected static Logger log = LoggerFactory.getLogger(JSONFileTwitterSpout.class);
-    protected JSONFileReaderWorker worker;
-
-    public JSONFileReaderWorker getFileWorker() {
-        return worker;
-    }
+    private int statusesRead;
 
     public JSONFileTwitterSpout() throws IOException {
-        this(5);
+        super();
     }
 
     public JSONFileTwitterSpout(int batchSize) throws IOException {
-        this.worker = new JSONFileReaderWorker();
-        this.worker.setBatchSize(batchSize);
-        this.worker.setBufferSize(batchSize * 10);
+        super(batchSize);
+        getFileWorker().setFileExt(".json");
     }
 
-    void scanPathForFileReads() {
-        int filestoProcess = this.worker.scanForFilesFromPath();
-        log.trace(filestoProcess + " JSON files scanned for processing");
-        try {
-            if (filestoProcess > 0) {
-                this.worker.startReadingFiles();
-            }
-        } catch (IOException ex) {
-            log.error("Error when starting reading files. The exception was ", ex);
-        }
+    public int getStatusesRead() {
+        return statusesRead;
     }
 
-    @Override
-    public void open(Map conf, TopologyContext context) {
-        // init
-        this.worker.setQueryName(AppProperties.getProperty("QueryName"));
-        this.worker.setQueryTerms(AppProperties.getProperty("QueryTerms"));
-        log.trace("Stream basic properties loaded and configured from " + AppProperties.getPropertiesFile());
-        scanPathForFileReads();
+    public void setStatusesRead(int statusesRead) {
+        this.statusesRead = statusesRead;
     }
-
-    private Values getNextTweet() {
+    
+    @Override 
+    protected Values getNextLine() {
         Values result = null;
         if (worker.getBuffer().size() > 0) {
             String lineToProcess = (String) worker.getBuffer().get(0);
-            Status status = worker.getStatusFromRawJsonLine(lineToProcess);
+            Status status = getStatusFromRawJsonLine(lineToProcess);
             if (status != null) {
                 byte[] data = getSerialisedStatusObject(status);
                 result = new Values(data);
@@ -93,50 +69,31 @@ public class JSONFileTwitterSpout implements IBatchSpout {
         }
         return result;
     }
+protected Status getStatusFromRawJsonLine(String rawJSONLine) {
+        int lineNo = this.getFileWorker().getLinesRead();
+        String filename  = this.getFileWorker().getFilename();
+        Status status = null;
+        try {
+            log.trace("processing File + " + this.getFileWorker().getFilename() + " - line #" + lineNo);
+            if (rawJSONLine.startsWith("{\"created_at")) {
+                status = TwitterObjectFactory.createStatus(rawJSONLine);
+                statusesRead++;
+                log.trace("File + " + filename + "line #" + lineNo + "containes twitter status. So far " + statusesRead + " Status objects read");
 
-    @Override
-    public void emitBatch(long batchId, TridentCollector collector) {
-        // emit batchSize 
-        Values result = null;
-        for (int i = 0; i < this.worker.getBuffer().size(); i++) {
-            result = getNextTweet();
-            worker.getBuffer().remove(0);
-            if (result != null) {
-                collector.emit(result);
+            } else {
+                log.warn("File " + filename + " line " + lineNo + " has no twitter status JSON text");
             }
+        } catch (Exception ex) {
+            log.error("Exception was raised: " + ex);
         }
-
-        if (worker.isFinished()) {
-            scanPathForFileReads();
-        } else {
-            try {
-                worker.readNextBacthOfFileLines();
-            } catch (IOException ex) {
-                log.error("error reading next batch. The exception was ", ex);
-            }
-        }
-
+        return status;
     }
+    
 
     @Override
-    public void ack(long batchId) {
-        // nothing to do here
-    }
-
-    @Override
-    public void close() {
-        // nothing to do here
-    }
-
-    @Override
-    public Map getComponentConfiguration() {
-        // no particular configuration here
-        return new Config();
-    }
-
-    @Override
-    public Fields getOutputFields() {
-        return new Fields("bytes");
+     void scanPathForFileReads() {
+       statusesRead=0;  
+       super.scanPathForFileReads();
     }
 
     byte[] getSerialisedStatusObject(Status status) {
@@ -153,22 +110,6 @@ public class JSONFileTwitterSpout implements IBatchSpout {
         return data;
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
-        JSONFileTwitterSpout spout = new JSONFileTwitterSpout(5);
-        String testBasePath = "/Users/yanni/sentidata";
-        try {
-            spout.getFileWorker().setBasePath(testBasePath);
-            spout.open(null, null);
-            while (!spout.getFileWorker().hasNoMoreData()) {
-                spout.getNextTweet();
-            }
-            log.trace("Status items read : " + spout.getFileWorker().getStatusesRead());
-            System.exit(0);
-        } catch (Exception e) {
-
-            log.error("exception with error: " + e.getMessage());
-            System.exit(-10);
-        }
-    }
+    
 
 }

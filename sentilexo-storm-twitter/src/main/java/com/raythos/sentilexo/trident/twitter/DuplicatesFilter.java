@@ -30,8 +30,9 @@ import storm.trident.tuple.TridentTuple;
  */
 public class DuplicatesFilter extends BaseFilter {
    protected  static Logger log = LoggerFactory.getLogger(DuplicatesFilter.class);
-    public DuplicatesFilter() {
-
+   private String topologyName; 
+   public DuplicatesFilter(String topologyName) {
+       this.topologyName = topologyName;
   }
 
   @Override
@@ -43,9 +44,10 @@ public class DuplicatesFilter extends BaseFilter {
      boolean duplicate = QueryIndex.exists(owner, queryName, id);
      log.info("Duplicate "+duplicate +" Item "+ id + "for "+owner+","+queryName);
      if (!duplicate) {
-           QueryIndex dataItem = new QueryIndex(owner, queryName,id, Deployments.getInstance().getDeploymentNo());
+           QueryIndex dataItem = new QueryIndex(owner, queryName,id, Deployments.getInstance(topologyName).getDeploymentNo());
            dataItem.save();
-     }      
+     }
+     
      return !duplicate;                 
   }
 

@@ -36,8 +36,14 @@ public class LanguageFilter extends BaseFilter {
   @Override
 
   public boolean isKeep(TridentTuple tuple) {
+
+    // no filtering on language is needed
+    if (languages==null || languages.length <1 ){
+      return true;   
+    } 
+
+    // filtering on language is needed
     boolean result = false;
-    
     String value = tuple.getStringByField("lang").toLowerCase();
     for (String lang : languages ){
         if (lang.equals(lang.toLowerCase())) {

@@ -32,12 +32,9 @@ import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.tuple.Fields;
 import com.raythos.sentilexo.spouts.JSONFileTwitterSpout;
 import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
-import com.raythos.sentilexo.storm.pmml.NaiveBayesPMMLModelLoader;
-import com.raythos.sentilexo.storm.pmml.PmmlModel;
-import com.raythos.sentilexo.storm.pmml.PmmlModelEvaluationFunction;
 import com.raythos.sentilexo.trident.twitter.state.QueryStatsCqlStorageConfigValues;
 import com.raythos.sentilexo.trident.twitter.state.SentilexoStateFactory;
-import com.raythos.sentilexo.twitter.domain.Deployments;
+import com.raythos.sentilexo.twitter.domain.Deployment;
 import com.raythos.sentilexo.persistence.cql.DataManager;
 import com.raythos.sentilexo.common.utils.AppProperties;
 import com.raythos.sentilexo.trident.twitter.CalculateHashtagTotals;
@@ -51,11 +48,9 @@ import com.raythos.sentilexo.trident.twitter.ExtractHashtags;
 import com.raythos.sentilexo.trident.twitter.ExtractStatsFields;
 import com.raythos.sentilexo.trident.twitter.LanguageFilter;
 import com.raythos.sentilexo.twitter.domain.DefaultSetting;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import com.raythos.sentilexo.twitter.domain.Deployments;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.kafka.BrokerHosts;
@@ -96,10 +91,7 @@ public class TwitterStreamTridentTopology {
      
      
      static void setupTopology(Stream mainStream) {        
-          String cqlhost =  AppProperties.getProperty("cqlhost", "localhost");
-          String cqlschema = AppProperties.getProperty("cqlschema","twitterqueries");
-          DataManager dataMgr =  DataManager.getInstance();
-          dataMgr.connect(cqlhost,cqlschema); 
+           
           
           // keyword-based ("bag of words") sentiment classification
           
@@ -157,11 +149,15 @@ public class TwitterStreamTridentTopology {
 
      public static void main(String[] args)  {
           String topologyName="INCOMING_TRIDENT_TWEETS_TOPOLOGY";
+          
+          String cqlhost =  AppProperties.getProperty("cqlhost", "localhost");
+          String cqlschema = AppProperties.getProperty("cqlschema","twitterqueries");
+          DataManager dataMgr =  DataManager.getInstance();
+          dataMgr.connect(cqlhost,cqlschema);
+          
           // read topologies from cassandra, increment and update with timestamp
-          // deploymentNo = dataManager.getDeploymentNo()+1;
-          Deployments deploymentTracker = Deployments.getInstance();
+          Deployment deploymentTracker = Deployments.getInstance(topologyName);
           deploymentTracker.load();
-          long deploymentNo = deploymentTracker.getDeploymentNo()+1;
           boolean local = true;
           boolean useKafka = false; 
           if (args != null && args.length > 0) {
@@ -172,9 +168,6 @@ public class TwitterStreamTridentTopology {
           }
           
      
-
-        
-
          try {
             Config config = new Config();
             config.setDebug(true);
@@ -188,7 +181,7 @@ public class TwitterStreamTridentTopology {
                         .parallelismHint(1).
                         each(new Fields("bytes"),
                              new DeserializeAvroResultItem(), 
-                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter())
+                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter(topologyName))
                              .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) ;            }
             else {
                 JSONFileTwitterSpout spout = initJSONFileTwitterSpout();
@@ -196,7 +189,8 @@ public class TwitterStreamTridentTopology {
                         .parallelismHint(1).
                         each(new Fields("bytes"),
                              new DeserializeAvroResultItem(), 
-                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter()); 
+                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter(topologyName))
+                            .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) ;
        
             }    
             
@@ -220,7 +214,6 @@ public class TwitterStreamTridentTopology {
             }
             
             deploymentTracker.save();
-             // dataManager.updateDeploymentNo(DeploymentNo);
             if ( local )while (true) {
              // run a loop
             }

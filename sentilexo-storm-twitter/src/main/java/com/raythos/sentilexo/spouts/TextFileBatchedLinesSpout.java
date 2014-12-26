@@ -16,7 +16,6 @@
 package com.raythos.sentilexo.spouts;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Map;
 
 import storm.trident.operation.TridentCollector;
@@ -33,19 +32,18 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 /**
- * A Spout that emits lines from text files in batches.
- *
- * Kafka round trip
- *
+ * A Spout that emits lines from text files in batches and processes them.
+ * directly instead of doing the Kafka round trip.
+ * useful esp for testing topologies with small files during development
  * @author yanni
  */
 @SuppressWarnings({"serial", "rawtypes"})
 public class TextFileBatchedLinesSpout implements IBatchSpout {
 
     protected static Logger log = LoggerFactory.getLogger(TextFileBatchedLinesSpout.class);
-    protected JSONFileReaderWorker worker;
+    protected TextFileReaderWorker worker;
 
-    public JSONFileReaderWorker getFileWorker() {
+    public TextFileReaderWorker getFileWorker() {
         return worker;
     }
 
@@ -54,14 +52,14 @@ public class TextFileBatchedLinesSpout implements IBatchSpout {
     }
 
     public TextFileBatchedLinesSpout(int batchSize) throws IOException {
-        this.worker = new JSONFileReaderWorker();
+        this.worker = new TextFileReaderWorker();
         this.worker.setBatchSize(batchSize);
         this.worker.setBufferSize(batchSize * 1000);
     }
 
     void scanPathForFileReads() {
         int filestoProcess = this.worker.scanForFilesFromPath();
-        log.trace(filestoProcess + " JSON files scanned for processing");
+        log.trace(filestoProcess + " files scanned for processing");
         try {
             if (filestoProcess > 0) {
                 this.worker.startReadingFiles();
@@ -80,16 +78,11 @@ public class TextFileBatchedLinesSpout implements IBatchSpout {
         scanPathForFileReads();
     }
 
-    private Values getNextTweet() {
+    protected Values getNextLine() {
         Values result = null;
         if (worker.getBuffer().size() > 0) {
-            String lineToProcess = (String) worker.getBuffer().get(0);
-            Status status = worker.getStatusFromRawJsonLine(lineToProcess);
-            if (status != null) {
-                byte[] data = getSerialisedStatusObject(status);
+            String data = (String) worker.getBuffer().get(0);
                 result = new Values(data);
-
-            }
         }
         return result;
     }
@@ -99,7 +92,7 @@ public class TextFileBatchedLinesSpout implements IBatchSpout {
         // emit batchSize 
         Values result = null;
         for (int i = 0; i < this.worker.getBuffer().size(); i++) {
-            result = getNextTweet();
+            result = getNextLine();
             worker.getBuffer().remove(0);
             if (result != null) {
                 collector.emit(result);
@@ -138,37 +131,5 @@ public class TextFileBatchedLinesSpout implements IBatchSpout {
     public Fields getOutputFields() {
         return new Fields("bytes");
     }
-
-    byte[] getSerialisedStatusObject(Status status) {
-        byte[] data = null;
-        log.trace("Posting Status with id " + status.getId() + " from File " + this.worker.getFilename());
-        try {
-            TwitterQueryResultItemAvro tqri = new TwitterQueryResultItemAvro();
-            tqri = QueryResultItemMapper.mapItem(this.worker.getQueryName(), this.worker.getQueryTerms(), status);
-            data = QueryResultItemMapper.getAvroSerialized(tqri);
-            log.trace("AVRO serialised Status with id " + status.getId() + " was obtained from file" + this.worker.getFilename());
-        } catch (Exception e) {
-            log.error("Error when emmitting bytes. The exception was " + e);
-        }
-        return data;
-    }
-
-    public static void main(String[] args) throws IOException, ParseException {
-        TextFileBatchedLinesSpout spout = new TextFileBatchedLinesSpout(5);
-        String testBasePath = "/Users/yanni/sentidata";
-        try {
-            spout.getFileWorker().setBasePath(testBasePath);
-            spout.open(null, null);
-            while (!spout.getFileWorker().hasNoMoreData()) {
-                spout.getNextTweet();
-            }
-            log.trace("Status items read : " + spout.getFileWorker().getStatusesRead());
-            System.exit(0);
-        } catch (Exception e) {
-
-            log.error("exception with error: " + e.getMessage());
-            System.exit(-10);
-        }
-    }
-
+  
 }

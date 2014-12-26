@@ -25,14 +25,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import twitter4j.Status;
-import twitter4j.TwitterObjectFactory;
 
 /**
  *
  * @author yanni
  */
-public class JSONFileReaderWorker implements Runnable, Serializable {
+public class TextFileReaderWorker implements Runnable, Serializable {
 
     private int batchSize;
     private int bufferSize;
@@ -42,13 +40,13 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     private File currentFile = null;
     private int currentFileIdx = 0;
     private final String pathSep = System.getProperty("file.separator");
-
+    private String fileExt = "";
     private FileInputStream fis = null;
     private InputStreamReader isr = null;
     private BufferedReader br = null;
 
     private int linesRead = 0;
-    private int statusesRead = 0;
+   
     private int filesRead = 0;
 
     private String filename;
@@ -56,7 +54,7 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     private String queryTerms;
     private ArrayList<String> buffer = new ArrayList<>();
 
-    protected static Logger log = LoggerFactory.getLogger(JSONFileReaderWorker.class);
+    protected static Logger log = LoggerFactory.getLogger(TextFileReaderWorker.class);
 
     public int getBatchSize() {
         return batchSize;
@@ -114,13 +112,15 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
         this.linesRead = linesRead;
     }
 
-    public int getStatusesRead() {
-        return statusesRead;
+    public String getFileExt() {
+        return fileExt;
     }
 
-    public void setStatusesRead(int statusesRead) {
-        this.statusesRead = statusesRead;
+    public void setFileExt(String fileExt) {
+        this.fileExt = fileExt;
     }
+
+ 
 
     public int getFilesRead() {
         return filesRead;
@@ -146,25 +146,7 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
         return filename;
     }
 
-    protected Status getStatusFromRawJsonLine(String rawJSONLine) {
-        int lineNo = this.getLinesRead();
-        Status status = null;
-        try {
-            log.trace("processing File + " + filename + " - line #" + lineNo);
-            if (rawJSONLine.startsWith("{\"created_at")) {
-                status = TwitterObjectFactory.createStatus(rawJSONLine);
-                statusesRead++;
-                log.trace("File + " + filename + "line #" + lineNo + "containes twitter status. So far " + statusesRead + " Status objects read");
-
-            } else {
-                log.warn("File " + filename + " line " + lineNo + " has no twitter status JSON text");
-            }
-        } catch (Exception ex) {
-            log.error("Exception was raised: " + ex);
-        }
-        return status;
-    }
-
+  
     public void startReadingFiles() throws IOException {
 
         if (finished) {
@@ -175,7 +157,7 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
             openStreams();
             readNextBacthOfFileLines();
         } catch (IOException ioe) {
-            log.error("Failed to read tweets: " + ioe.getMessage());
+            log.error("Failed to read lines: " + ioe.getMessage());
             finished = true;
 
         }
@@ -214,7 +196,6 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     public int scanForFilesFromPath() {
 
         linesRead = 0;
-        statusesRead = 0;
         filesRead = 0;
         finished = false;
         currentFileIdx = 0;
@@ -223,7 +204,10 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
         files = dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(".json");
+                if (fileExt==null || fileExt.equals(""))
+                    return true;
+                else        
+                    return name.endsWith(fileExt);
             }
         });
         System.out.println("Base path is " + basePath);
@@ -238,17 +222,17 @@ public class JSONFileReaderWorker implements Runnable, Serializable {
     }
 
     public void readNextBacthOfFileLines() throws IOException {
-        String rawJSONLine;
-        while ((rawJSONLine = br.readLine()) != null) {
+        String fileLine;
+        while ((fileLine = br.readLine()) != null) {
             linesRead++;
             log.trace("Reading line " + filesRead + linesRead + " of file  " + currentFile.getName());
-            buffer.add(rawJSONLine);
+            buffer.add(fileLine);
             if (buffer.size() >= bufferSize) {
                 log.trace("max bufferSize reached - paused till data is emmited to read next batch");
                 return;
             }
         }
-        if (rawJSONLine == null) {
+        if (fileLine == null) {
             endOfFile();
         }
 
