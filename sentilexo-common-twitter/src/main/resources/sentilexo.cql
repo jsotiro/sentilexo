@@ -1,3 +1,4 @@
+DROP KEYSPACE sentilexo;
 CREATE KEYSPACE sentilexo WITH replication = {
   'class': 'SimpleStrategy',
   'replication_factor': '1'
@@ -62,7 +63,7 @@ CREATE TABLE queries (
   minid bigint,
   queryterms list<text>,
   totalitems int,
-  PRIMARY KEY (owner, queryname)
+  PRIMARY KEY ((owner), queryname)
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
@@ -125,11 +126,13 @@ CREATE TABLE deployments (
 
 CREATE TABLE topologies_journal (
   topology text,
-  statsusid bigint,
-  query text,
+  id bigint,
+  query_name text,
   owner text,
-  PRIMARY KEY ((topology), status id,query, owner)
+  update_time timeuuid,
+  PRIMARY KEY ((topology), id, query_name, owner)
 ) WITH
+  CLUSTERING ORDER BY (id DESC) AND
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
   comment='' AND
@@ -245,11 +248,12 @@ CREATE TABLE twitter_data (
   latitude double,
   longitude double,
   mentions map<text, bigint>,
+  "queryOwner" text,
   "relevantQueryTerms" list<text>,
   "retweetStatusId" bigint,
   text text,
   urls list<text>,
-  PRIMARY KEY ("StatusId")
+  PRIMARY KEY (("StatusId"))
 ) WITH
   bloom_filter_fp_chance=0.010000 AND
   caching='KEYS_ONLY' AND
@@ -280,6 +284,8 @@ CREATE INDEX twitter_dataScreenNameIDX ON twitter_data ("ScreenName");
 
 CREATE INDEX twitter_dataUserIdIDX ON twitter_data ("UserId");
 
+CREATE INDEX twitter_dataQueryOwnerDX ON twitter_data ("queryOwner");   
+
 INSERT INTO default_settings(name,values) VALUES('positivekeywords',['yes', 'goforitscotland', 'ourfuturescot', 'projectfear', 'patronisingbtlady']);
 INSERT INTO default_settings(name,values) VALUES('negativekeywords',['voteno', 'naw', '%no', 'no%', 'darlingwin', 'godarling', 'better', 'letsstaytogether', 'ukok']);
-INSERT INTO queries(owner,queryname) VALUES('raythos','indyref');
+INSERT INTO queries(owner,queryname, queryterms) VALUES('raythos','indyref', ['indyref','voteyes','bettertogether', 'yesperation', 'nothanks', 'scotland indep', 'scottish indep', 'scotfwd']);

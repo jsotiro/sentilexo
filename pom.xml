@@ -9,6 +9,8 @@
         <module>sentilexo-common-twitter</module>
         <module>sentilexo-storm-twitter</module>
         <module>sentilexo-twitter-dataServices</module>
+        <module>storm-common</module>
+        <module>DbUtils</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -19,27 +19,46 @@ import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.Row;
 import com.raythos.sentilexo.persistence.cql.PersistedEntity;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
+import java.util.HashMap;
 import java.util.Map;
+import twitter4j.Status;
 
 /**
  *
  * @author yanni
  */
 public class ResultItem  extends PersistedEntity {
-    private Map<String,Object> fields;
+    private Map<String,Object> fields = new HashMap();
     private boolean parseData=true;
-
-    public Map getFields() {
+    
+    public Map<String,Object> getFields() {
         return fields;
     }
     
     public ResultItem(){
     }
     
+    public ResultItem(long statusId){
+        super();
+        fields.put(QueryResultItemFieldNames.STATUS_ID, statusId);
+    }
+ 
+    public ResultItem(Map fields){
+        super();
+        this.fields = fields;
+    }
+    
     public ResultItem(TwitterQueryResultItemAvro avroStatus){
        super(); 
        fields = QueryResultItemMapper.getFieldsMap(avroStatus);
     }
+   
+     public ResultItem(String queryOwner, String queryName, String queryString, Status status){
+       super(); 
+       fields = QueryResultItemMapper.getFieldsMapFromStatus(queryOwner, queryName, queryString, status);
+    }
+    
+    
     
     public static boolean exists(long statusId){
       ResultItem temp = new ResultItem();
@@ -47,6 +66,15 @@ public class ResultItem  extends PersistedEntity {
       temp.fields.put(QueryResultItemFieldNames.STATUS_ID, statusId);
       return temp.load();
     }
+    
+    public Object get(String fieldName){
+        return fields.get(fieldName);
+    }
+
+    public void put(String fieldName, Object value){
+         fields.put(fieldName,value);
+    }
+
     
     @Override
     public void valuesFromRow(Row row) {
@@ -67,6 +95,7 @@ public class ResultItem  extends PersistedEntity {
             fields.put(QueryResultItemFieldNames.LANGUAGE,  row.getString(QueryResultItemFieldNames.LANGUAGE) );
             fields.put(QueryResultItemFieldNames.PLACE,  row.getString(QueryResultItemFieldNames.PLACE) );
             fields.put(QueryResultItemFieldNames.POSSIBLY_SENSITIVE , row.getBool(QueryResultItemFieldNames.POSSIBLY_SENSITIVE));
+            fields.put(QueryResultItemFieldNames.QUERY_OWNER  , row.getString(QueryResultItemFieldNames.QUERY_OWNER));            
             fields.put(QueryResultItemFieldNames.QUERY_NAME  , row.getString(QueryResultItemFieldNames.QUERY_NAME));
             fields.put(QueryResultItemFieldNames.QUERY , row.getString(QueryResultItemFieldNames.QUERY));
             fields.put(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS, row.getString(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS));
@@ -118,10 +147,12 @@ public class ResultItem  extends PersistedEntity {
                 fields.get(QueryResultItemFieldNames.IN_REPLY_TO_STATUS_ID),
                 fields.get(QueryResultItemFieldNames.IN_REPLY_TO_USER_ID),
                 fields.get(QueryResultItemFieldNames.LATITUDE),
-                fields.get(QueryResultItemFieldNames.LONGITUDE),
+                fields.get(QueryResultItemFieldNames.LONGITUDE),               
                 fields.get(QueryResultItemFieldNames.MENTIONS),
+                fields.get(QueryResultItemFieldNames.LANGUAGE),
                 fields.get(QueryResultItemFieldNames.PLACE),
                 fields.get(QueryResultItemFieldNames.POSSIBLY_SENSITIVE),
+                fields.get(QueryResultItemFieldNames.QUERY_OWNER),
                 fields.get(QueryResultItemFieldNames.QUERY_NAME),
                 fields.get(QueryResultItemFieldNames.QUERY),
                 fields.get(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS),

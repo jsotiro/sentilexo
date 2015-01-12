@@ -18,6 +18,7 @@ package com.raythos.sentilexo.twitter.domain;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
 import com.raythos.sentilexo.persistence.cql.PersistedEntity;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ import java.util.List;
  */
 public class DefaultSetting extends PersistedEntity {
     private String name;
-    List<String> values;
+    List<String> values=new ArrayList();
 
     public DefaultSetting(){
         super();
@@ -35,8 +36,31 @@ public class DefaultSetting extends PersistedEntity {
     public DefaultSetting(String name, List values){
         super();
         this.name = name;
-        this.values = values;
+        if (values!=null)
+            this.values = values;
+        
     }
+    
+    public String getValue(int index){
+        return values.get(index);
+    }   
+    
+    public void setValue(int index, String value){
+        values.set(index, value);
+    }   
+   
+    public void addValue(String value){
+        values.add(value);
+    }
+    
+    public void removeValue(int index){
+        values.remove(index);
+    }
+    
+    public void removeValue(String value){
+        values.remove(value);
+    }
+
     
     public String getName() {
         return name;

@@ -51,6 +51,8 @@ public class ResultJson  extends PersistedEntity {
     
     public ResultJson(long statusId, String jsonText){
        super(); 
+       this.statusId =statusId;
+       this.jsonText = jsonText;
 
     }
     

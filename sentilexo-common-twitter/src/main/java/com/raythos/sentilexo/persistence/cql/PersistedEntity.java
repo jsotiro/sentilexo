@@ -17,7 +17,18 @@ package com.raythos.sentilexo.persistence.cql;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.smile.SmileFactory;
+import com.fasterxml.jackson.dataformat.smile.SmileParser;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,6 +44,37 @@ public abstract class  PersistedEntity implements Serializable, Persistable {
        DataManager.getInstance().getPersisterFor(this).save(this);
    }  
 
+   public static byte[] toBinaryJSon(PersistedEntity item){
+          try {
+              SmileFactory f = new SmileFactory();
+              f.configure(SmileParser.Feature.REQUIRE_HEADER, true);
+              ObjectMapper mapper = new ObjectMapper(f);
+                          mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+              byte[] result = mapper.writeValueAsBytes(item);
+              return result;
+          } catch (JsonProcessingException ex) {
+              Logger.getLogger(QueryResultItemMapper.class.getName()).log(Level.SEVERE, null, ex);
+              return null;
+              
+          }
+      }
+   
+     public static PersistedEntity fromBinaryJSon(byte[] data, Class classType ){
+        try {
+            SmileFactory f = new SmileFactory();
+            f.configure(SmileParser.Feature.REQUIRE_HEADER, true);
+            
+            ObjectMapper mapper = new ObjectMapper(f);
+            
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            Object result = mapper.readValue(data, classType);
+            return (PersistedEntity)result;
+        } catch (IOException ex) {
+            Logger.getLogger(PersistedEntity.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+       }
+   
     @Override
     public abstract void valuesFromRow(Row row); 
  

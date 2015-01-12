@@ -17,6 +17,10 @@
 
 package com.raythos.sentilexo.trident.twitter;
 
+import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
+import com.raythos.sentilexo.twitter.domain.ResultItem;
+import java.util.Map;
 import storm.trident.operation.BaseFilter;
 import storm.trident.tuple.TridentTuple;
 
@@ -44,9 +48,16 @@ public class LanguageFilter extends BaseFilter {
 
     // filtering on language is needed
     boolean result = false;
-    String value = tuple.getStringByField("lang").toLowerCase();
+    Map item = (Map) tuple.get(0);
+    String value = (String)item.get(QueryResultItemFieldNames.LANGUAGE);
+    // @TODO replace above with Avro object when serialsation works
+    //TwitterQueryResultItemAvro item = (TwitterQueryResultItemAvro)tuple.get(0);
+    // String value = item.getLang();
+    if (value==null) return false;
+    value = value.toLowerCase();
+    
     for (String lang : languages ){
-        if (lang.equals(lang.toLowerCase())) {
+        if (value.equals(lang.toLowerCase())) {
           result = true;
           break;
         }

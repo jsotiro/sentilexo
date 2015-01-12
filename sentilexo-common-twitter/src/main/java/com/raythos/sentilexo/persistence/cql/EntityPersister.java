@@ -27,7 +27,7 @@ import java.io.Serializable;
  *
  * @author yanni
  */
-public class EntityPersister implements Serializable {
+public class EntityPersister extends DataConnected implements Serializable {
   
    private PreparedStatement loadEntityPrepStmt;
    private PreparedStatement saveEntityPrepStmt;  
@@ -35,8 +35,7 @@ public class EntityPersister implements Serializable {
   private BoundStatement boundLoadStatement;
   private BoundStatement boundSaveStatement; 
   
-  private Session session;
-  
+ 
   
     public PreparedStatement getLoadEntityPreparedStmt() {
         return loadEntityPrepStmt;
@@ -64,12 +63,9 @@ public class EntityPersister implements Serializable {
         return boundSaveStatement;
     }
 
-    public Session getSession() {
-        return session;
-    }
    
    public void setSession(Session session) {
-        this.session = session;
+        super.setSession(session);
         boundLoadStatement = new BoundStatement(loadEntityPrepStmt);
         boundSaveStatement = new BoundStatement(saveEntityPrepStmt);
     }
@@ -79,7 +75,8 @@ public class EntityPersister implements Serializable {
    public boolean load(Persistable entity){
    boolean found;
    entity.bindCQLLoadParameters(boundLoadStatement); 
-   ResultSet results = session.execute(boundLoadStatement);
+   ResultSet results = getSession().execute(boundLoadStatement);
+   setLastResultSet(results);
    found = results.getAvailableWithoutFetching() > 0;
    if (found) {
         Row row = results.all().get(0);
@@ -88,15 +85,12 @@ public class EntityPersister implements Serializable {
    return found;
    }
    
-   
-   public void simpleSave(Persistable entity) {   
-      entity.bindCQLSaveParameters(boundSaveStatement); 
-      ResultSet results = session.execute(boundSaveStatement);
-     }
+  
    
    public void save(Persistable entity) {   
       entity.bindCQLSaveParameters(boundSaveStatement); 
-      ResultSet results = session.execute(boundSaveStatement);
+      ResultSet results = getSession().execute(boundSaveStatement);
+      setLastResultSet(results);
      }   
   
 }

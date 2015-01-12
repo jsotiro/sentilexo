@@ -25,6 +25,7 @@ public class TwitterQueryListener implements StatusStreamHandler {
      String[] queryTerms;
      String listenerQuery;
      String queryName;
+     String queryOwner;
      Date startedTime;
      TopicMessageProducer topic;
 
@@ -51,6 +52,14 @@ public class TwitterQueryListener implements StatusStreamHandler {
 
     public void setStartedTime(Date startedTime) {
         this.startedTime = startedTime;
+    }
+
+    public String getQueryOwner() {
+        return queryOwner;
+    }
+
+    public void setQueryOwner(String queryOwner) {
+        this.queryOwner = queryOwner;
     }
      
 
@@ -84,7 +93,7 @@ public class TwitterQueryListener implements StatusStreamHandler {
     
     void saveStatus(Status status){
      String s = TwitterObjectFactory.getRawJSON(status);
-     TwitterQueryResultItemAvro tqri = QueryResultItemMapper.mapItem(queryName, listenerQuery, status);
+     TwitterQueryResultItemAvro tqri = QueryResultItemMapper.mapItem(queryOwner, queryName, listenerQuery, status);
          try {
              byte[] avroData = QueryResultItemMapper.getAvroSerialized(tqri);
              topic.postBinary(avroData);

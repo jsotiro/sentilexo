@@ -23,17 +23,24 @@ import com.raythos.sentilexo.common.utils.DateTimeUtils;
 import com.raythos.sentilexo.common.utils.Helpers;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.avro.Schema;
+import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DatumWriter;
+import org.apache.avro.io.Decoder;
+import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.io.Encoder;
 import org.apache.avro.io.EncoderFactory;
+import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
-import twitter4j.Scopes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+    import twitter4j.Scopes;
 import twitter4j.Status;
 import twitter4j.User;
 
@@ -43,19 +50,100 @@ import twitter4j.User;
  * @author yanni
  */
 public class QueryResultItemMapper {
-   
+
+     static Logger log = LoggerFactory.getLogger(QueryResultItemMapper.class);
     
+   
+
+    public static Map getFieldsMapFromStatus(String queryOwner, String queryName, String queryString, Status status){
+       
+       if (queryName!=null)
+           queryName = queryName.toLowerCase();
+      if (queryOwner!=null)
+           queryOwner = queryOwner.toLowerCase();   
+        Map m = StatusArraysHelper.getUserMentionMap(status); 
+        Map newMap = new HashMap();
+        for(Object key: m.keySet()){
+            newMap.put(key.toString(), (Long)m.get(key));
+        }
+           Double longitude = null;
+           Double lattitude = null;            
+            if (status.getGeoLocation()!=null) {
+               longitude =  status.getGeoLocation().getLongitude();
+               lattitude = status.getGeoLocation().getLatitude();
+            }
+            String place = null;
+            if (status.getPlace()!=null){
+                    place = status.getPlace().getFullName();
+            }
+           
+            boolean isRetweet  = status.getRetweetedStatus()!=null;
+            Long retweetedId = null;
+            String retweetedText = null;
+            if (isRetweet ){
+                retweetedId = status.getRetweetedStatus().getId();
+                retweetedText = status.getRetweetedStatus().getText();
+            }
+     
+        
+        Map<String,Object> result = new HashMap<>();
+            result.put(QueryResultItemFieldNames.STATUS_ID, status.getId());
+            result.put(QueryResultItemFieldNames.CREATED_AT,status.getCreatedAt() );
+            result.put(QueryResultItemFieldNames.CURRENT_USER_RETWEET_ID, status.getCurrentUserRetweetId());    
+            result.put(QueryResultItemFieldNames.FAVOURITE_COUNT , status.getFavoriteCount() );
+            result.put(QueryResultItemFieldNames.FAVOURITED, status.isFavorited() );
+            result.put(QueryResultItemFieldNames.HASHTAGS,StatusArraysHelper.getHashTagsList(status)) ;
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_SCREEN_NAME, (status.getInReplyToScreenName()));
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_STATUS_ID, status.getInReplyToStatusId());
+            result.put(QueryResultItemFieldNames.IN_REPLY_TO_USER_ID, status.getInReplyToUserId() );
+            result.put(QueryResultItemFieldNames.LATITUDE,lattitude);
+            result.put(QueryResultItemFieldNames.LONGITUDE,longitude);
+            result.put(QueryResultItemFieldNames.MENTIONS, newMap) ;
+            result.put(QueryResultItemFieldNames.LANGUAGE, status.getLang());  
+            result.put(QueryResultItemFieldNames.PLACE,  place );            
+            result.put(QueryResultItemFieldNames.POSSIBLY_SENSITIVE , status.isPossiblySensitive());
+            result.put(QueryResultItemFieldNames.QUERY_NAME  , queryName);
+            result.put(QueryResultItemFieldNames.QUERY_OWNER  , queryOwner);
+            result.put(QueryResultItemFieldNames.QUERY , queryString);
+            result.put(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS, TwitterUtils.relevantQueryTermsFromStatus(queryString, status));
+            result.put(QueryResultItemFieldNames.RETWEET, isRetweet);
+            result.put(QueryResultItemFieldNames.RETWEET_COUNT,status.getRetweetCount());
+            result.put(QueryResultItemFieldNames.RETWEETED, status.isRetweeted());
+            result.put(QueryResultItemFieldNames.RETWEETED_BY_ME, status.isRetweetedByMe());
+            result.put(QueryResultItemFieldNames.RETWEET_STATUS_ID, retweetedId );
+            result.put(QueryResultItemFieldNames.RETWEETED_TEXT, retweetedText);
+            result.put(QueryResultItemFieldNames.SCOPES, StatusArraysHelper.getScopesList(status));
+            result.put(QueryResultItemFieldNames.SCREEN_NAME, status.getUser().getScreenName());
+            result.put(QueryResultItemFieldNames.SOURCE, (status.getSource()));
+            result.put(QueryResultItemFieldNames.TEXT, (status.getText()));
+            result.put(QueryResultItemFieldNames.TRUNCATED, status.isTruncated());
+            result.put(QueryResultItemFieldNames.URLS,  StatusArraysHelper.getUrlsList(status));
+            result.put(QueryResultItemFieldNames.USER_ID,status.getUser().getId());
+            result.put(QueryResultItemFieldNames.USER_NAME,(status.getUser().getName()));
+            result.put(QueryResultItemFieldNames.USER_DESCRIPTION, (status.getUser().getDescription()));
+            result.put(QueryResultItemFieldNames.USER_LOCATION, (status.getUser().getLocation()));
+            result.put(QueryResultItemFieldNames.USER_URL,(status.getUser().getURL()));
+            result.put(QueryResultItemFieldNames.USER_IS_PROTECTED , status.getUser().isProtected());
+            result.put(QueryResultItemFieldNames.USER_FOLLOWERS_COUNT ,status.getUser().getFollowersCount());
+            result.put(QueryResultItemFieldNames.USER_CREATED_AT , status.getUser().getCreatedAt());
+            result.put(QueryResultItemFieldNames.USER_FRIENDS_COUNT,status.getUser().getFriendsCount());
+            result.put(QueryResultItemFieldNames.USER_LISTED_COUNT, status.getUser().getListedCount());
+            result.put(QueryResultItemFieldNames.USER_STATUSES_COUNT, status.getUser().getStatusesCount());
+            result.put(QueryResultItemFieldNames.USER_FAVOURITES_COUNT , status.getUser().getFavouritesCount());
+       return result;
+    }
    
     
       public static Map getFieldsMap(TwitterQueryResultItemAvro status){
         
        Date createdAt = new Date();
        createdAt.setTime(status.getCreatedAt());
-       Date userCreatedAt = new Date(); //= DateTimeUtils.getDateFromString(status.getUserCreatedAtAsString());
+       Date userCreatedAt = new Date(); 
        userCreatedAt.setTime(status.getUserCreatedAt());
+       
        Map m = status.getMentions();
        Map newMap = new HashMap();
-       for(Object key: m.keySet()){
+        for(Object key: m.keySet()){
             newMap.put(key.toString(), (Long)m.get(key));
     }
        Map<String,Object> result = new HashMap<>();
@@ -75,6 +163,7 @@ public class QueryResultItemMapper {
             result.put(QueryResultItemFieldNames.PLACE,  status.getPlace() );
             result.put(QueryResultItemFieldNames.POSSIBLY_SENSITIVE , status.getPossiblySensitive());
             result.put(QueryResultItemFieldNames.QUERY_NAME  , (status.getQueryName()));
+            result.put(QueryResultItemFieldNames.QUERY_OWNER  , (status.getQueryOwner()));
             result.put(QueryResultItemFieldNames.QUERY , (status.getQuery()));
             result.put(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS, Helpers.cloneList(status.getRelevantQueryTerms()));
             result.put(QueryResultItemFieldNames.RETWEET, status.getRetweet());
@@ -104,14 +193,8 @@ public class QueryResultItemMapper {
        return result;
     }
     
-    
-    public static QueryResultItem getItemFromAvroObject(TwitterQueryResultItemAvro item){
-        QueryResultItem result = new  QueryResultItem();
-        return result;
-    }
-    
-    public static byte[] getAvroSerializedFromStatus( String queryName, String queryString, Status status) throws IOException{
-        TwitterQueryResultItemAvro item = mapItem(queryName, queryString, status);
+    public static byte[] getAvroSerializedFromStatus(String owner, String queryName, String queryString, Status status) throws IOException{
+        TwitterQueryResultItemAvro item = mapItem( owner,queryName, queryString, status);
         return getAvroSerialized(item);
     }
     
@@ -142,14 +225,49 @@ public class QueryResultItemMapper {
                 return out.toByteArray();
     }
     
-   
+    
+      static transient Schema avroSchema = null;
      
-    public static TwitterQueryResultItemAvro mapItem( String queryName, String queryString, Status status){
+    public static TwitterQueryResultItemAvro fromAvroBinary(byte[] bytes) {
+           
+        if (avroSchema == null) {
+                    Schema.Parser parser = new Schema.Parser();
+                    try {
+                        InputStream in = QueryResultItemMapper.class.getResourceAsStream("/TwitterResultSchema.avsc");
+                        avroSchema = parser.parse(in);
+                         in.close();
+                        in = null;
+                    } catch (IOException e) {
+                       log.error("Error reading Avro Scheme TwitterResultSchema.avsc. Error msg: " + e);
+                        }
+	}
+
+	TwitterQueryResultItemAvro result = null;
+	try 
+            {
+            DatumReader<TwitterQueryResultItemAvro> reader = new SpecificDatumReader<>(avroSchema,avroSchema);
+	    Decoder decoder = DecoderFactory.get().binaryDecoder(bytes, null);
+            //Decoder decoder = DecoderFactory.get().jsonDecoder(avroSchema,json);
+            result = reader.read(null, decoder);
+        } catch (IOException e) {
+            log.error("Error Deserialising TwitterResultItemAvro instance  Error msg: " + e);
+			throw new RuntimeException(e);
+           }
+	return result;
+	}
+    
+
+     
+    public static TwitterQueryResultItemAvro mapItem(String queryOwner, String queryName, String queryString, Status status){
       TwitterQueryResultItemAvro result = new TwitterQueryResultItemAvro();
     
-       if (queryName!=null)
+      if (queryName!=null)
            queryName = queryName.toLowerCase();
+      if (queryOwner!=null)
+           queryOwner = queryOwner.toLowerCase(); 
+
         result.setQueryName(queryName);
+        result.setQueryOwner(queryOwner);
         result.setQuery(queryString);
         result.setStatusId(status.getId());
         result.setText(status.getText());
@@ -182,30 +300,25 @@ public class QueryResultItemMapper {
         result.setInReplyToScreenName(status.getInReplyToScreenName());
         result.setInReplyToStatusId(status.getInReplyToStatusId());
         result.setInReplyToUserId(status.getInReplyToUserId());
-  
       
         if (status.getGeoLocation()!=null){
             result.setLatitude(status.getGeoLocation().getLatitude());
             result.setLongitude(status.getGeoLocation().getLongitude());
         }
-        
+      
         result.setSource(status.getSource());
         result.setTrucated(status.isTruncated());
         result.setPossiblySensitive(status.isPossiblySensitive());
-   
-      
-   
-      
+         
         result.setRetweet(status.getRetweetedStatus()!=null);
         if (result.getRetweet()){
             result.setRetweetStatusId(status.getRetweetedStatus().getId());
+            result.setRetweetedText(status.getRetweetedStatus().getText());
         }
         result.setRetweeted(status.isRetweeted());
         result.setRetweetCount(status.getRetweetCount());
         result.setRetweetedByMe(status.isRetweetedByMe());
-        if (status.getRetweetedStatus()!=null){
-             result.setRetweetedText(status.getRetweetedStatus().getText());
-      }
+      
       
       result.setFavoriteCount(status.getFavoriteCount());
       result.setFavourited(status.isFavorited());
@@ -219,14 +332,7 @@ public class QueryResultItemMapper {
             List scopes = Arrays.asList(scopesObj.getPlaceIds());
             result.setScopes(scopes);
         }
-
-    result.setHashtags(StatusArraysHelper.getHashTagsList(status));
-    
-    result.setUrls(StatusArraysHelper.getUrlsList(status));
-    result.setMentions(StatusArraysHelper.getUserMentionMap(status));
- 
-    
-    return result;
+   return result;
     }
 
 }   

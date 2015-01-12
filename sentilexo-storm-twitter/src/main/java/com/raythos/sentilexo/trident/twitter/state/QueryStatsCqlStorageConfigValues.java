@@ -17,6 +17,7 @@
 package com.raythos.sentilexo.trident.twitter.state;
 
 import com.raythos.sentilexo.persistence.cql.KeyValues;
+import com.raythos.sentilexo.state.CqlStorageConfigValues;
 
 /**
  *

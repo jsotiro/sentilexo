@@ -10,6 +10,8 @@ import com.raythos.messaging.kafka.StringTopicMessageProducer;
 import com.raythos.messaging.kafka.TopicMessageProducer;
 import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
 import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 
 /**
@@ -18,7 +20,7 @@ import twitter4j.Status;
  */
 public class TwitterJSONLoaderToKafka  extends TwitterJSONLoader {
     
-
+    private static Logger log = LoggerFactory.getLogger(TwitterJSONLoaderToKafka.class);
     TopicMessageProducer twitterResultItemTopic;
     StringTopicMessageProducer twitterJsonTopic;
 
@@ -42,12 +44,12 @@ public class TwitterJSONLoaderToKafka  extends TwitterJSONLoader {
   
     
     @Override 
-   void handleStatusObject(int lineNo, Status status, String rawJSONLine){
+   protected void handleStatusObject(int lineNo, Status status, String rawJSONLine){
         log.trace("Posting Status with id " +status.getId() +"from File" +filename +" line #"+lineNo);
                 try{
                     TwitterQueryResultItemAvro tqri = new TwitterQueryResultItemAvro();
                     
-                    tqri = QueryResultItemMapper.mapItem(queryName, queryTerms, status);
+                    tqri = QueryResultItemMapper.mapItem(queryOwner, queryName, queryTerms, status);
                     byte[] data = QueryResultItemMapper.getAvroSerialized(tqri);
                     twitterResultItemTopic.postBinary(data);
                     twitterJsonTopic.postPropertyValuePair(tqri.getStatusId().toString(), rawJSONLine);

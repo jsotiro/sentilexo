@@ -22,9 +22,10 @@ package com.raythos.sentilexo.twitter.domain;
  */
 
 public class QueryResultItemFieldNames {
-        public static  final int FiedlCount = 41;
+        public static  final int FiedlCount = 43;
         public static  final String STATUS_ID = "StatusId";
         public static  final String CREATED_AT = "CreatedAt";
+        public static  final String QUERY_OWNER = "queryOwner";
         public static  final String QUERY_NAME = "QueryName";
         public static  final String QUERY="Query";
         public static  final String HASHTAGS = "hashtags";
@@ -39,7 +40,7 @@ public class QueryResultItemFieldNames {
         public static  final String LATITUDE = "latitude";
         public static  final String LONGITUDE = "longitude";
         public static  final String MENTIONS =  "mentions" ;
-        public static  final String LANGUAGE = "lang";
+        public static  final String LANGUAGE = "Lang";
         public static  final String PLACE = "Place";
         public static  final String POSSIBLY_SENSITIVE = "PossiblySensitive";
         public static  final String RELEVANT_QUERY_TERMS = "relevantQueryTerms";

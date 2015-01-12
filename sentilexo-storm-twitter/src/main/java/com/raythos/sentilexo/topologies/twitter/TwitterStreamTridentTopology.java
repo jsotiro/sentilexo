@@ -30,25 +30,30 @@ import backtype.storm.StormSubmitter;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.tuple.Fields;
-import com.raythos.sentilexo.spouts.JSONFileTwitterSpout;
 import com.raythos.sentilexo.storm.pmml.NaiveBayesHandler;
 import com.raythos.sentilexo.trident.twitter.state.QueryStatsCqlStorageConfigValues;
-import com.raythos.sentilexo.trident.twitter.state.SentilexoStateFactory;
+import com.raythos.sentilexo.state.SentilexoStateFactory;
 import com.raythos.sentilexo.twitter.domain.Deployment;
 import com.raythos.sentilexo.persistence.cql.DataManager;
 import com.raythos.sentilexo.common.utils.AppProperties;
-import com.raythos.sentilexo.trident.twitter.CalculateHashtagTotals;
-import com.raythos.sentilexo.trident.twitter.CalculateNLPSentiment;
-import com.raythos.sentilexo.trident.twitter.CalculateSimpleSentimentTotals;
-import com.raythos.sentilexo.trident.twitter.CoreNLPSentimentClassifier;
-import com.raythos.sentilexo.trident.twitter.DeserializeAvroResultItem;
-import com.raythos.sentilexo.trident.twitter.DirectCalculatePmmlBayesSentiment;
+import com.raythos.sentilexo.trident.twitter.hashtags.CalculateHashtagTotals;
+import com.raythos.sentilexo.trident.twitter.sentiment.CalculateNLPSentiment;
+import com.raythos.sentilexo.trident.twitter.hashtags.CalculateSimpleSentimentTotals;
+import com.raythos.sentilexo.trident.twitter.sentiment.CoreNLPSentimentClassifier;
+import com.raythos.sentilexo.trident.twitter.AvroBytesToResultItemFunction;
+import com.raythos.sentilexo.trident.twitter.sentiment.DirectCalculatePmmlBayesSentiment;
 import com.raythos.sentilexo.trident.twitter.DuplicatesFilter;
-import com.raythos.sentilexo.trident.twitter.ExtractHashtags;
+import com.raythos.sentilexo.trident.twitter.hashtags.ExtractHashtags;
 import com.raythos.sentilexo.trident.twitter.ExtractStatsFields;
 import com.raythos.sentilexo.trident.twitter.LanguageFilter;
+import com.raythos.sentilexo.trident.SendResultItemToKafkaTopic;
+import com.raythos.sentilexo.trident.twitter.TextLineToResultItemFunction;
+import com.raythos.sentilexo.trident.UpdateTopologiesJournal;
+import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
 import com.raythos.sentilexo.twitter.domain.DefaultSetting;
 import com.raythos.sentilexo.twitter.domain.Deployments;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
+import com.raythos.storm.common.spouts.TextFileBatchedLinesSpout;
 import java.io.IOException;
 import java.util.Properties;
 import org.slf4j.Logger;
@@ -65,13 +70,21 @@ public class TwitterStreamTridentTopology {
      private static final String POSITIVE_KEYWORDS="positivekeywords";
      private static final String NEGATIVE_KEYWORDS="negativekeywords";
      protected  static Logger log = LoggerFactory.getLogger(TwitterStreamTridentTopology.class);
+    
      private static final String[] languagesToAccept = {"en","und"};
-     private static final Fields groupByFields = new Fields("owner", "queryName");
+     private static final Fields groupByFields = new Fields(QueryResultItemFieldNames.QUERY_OWNER, QueryResultItemFieldNames.QUERY_NAME);
      private static final Fields totalItemsFields = new Fields("totalitems");
-     private static final Fields hashtagTotalFields = new Fields("oN","oQ", "statid", "hashtag","cAt","retwt");
+     private static final Fields avroField = new Fields("item");
+     
+     
+     private static final Fields hashtagTotalFields = ExtractHashtags.hashtagTotalsFields;
      private static final Fields counterField = new Fields("count");
-    
-    
+     
+     
+     
+     private static final Fields itemField = new Fields("ResultItem");
+   
+     
     static OpaqueTridentKafkaSpout getKafkaSpout(){
         String zkhosts = AppProperties.getProperty("zkhosts");
         BrokerHosts brokerHosts = new ZkHosts(zkhosts);
@@ -83,30 +96,54 @@ public class TwitterStreamTridentTopology {
         return kafkaSpout;
      }  
      
-     static JSONFileTwitterSpout initJSONFileTwitterSpout() throws IOException{
-        JSONFileTwitterSpout spout = new JSONFileTwitterSpout(5);
+     static TextFileBatchedLinesSpout initJSONFileTwitterSpout() throws IOException{
+        TextFileBatchedLinesSpout spout = new TextFileBatchedLinesSpout(5);
+        spout.getFileWorker().setQueryOwner("raythos");
+        spout.getFileWorker().setQueryName(AppProperties.getProperty("QueryName"));
+        spout.getFileWorker().setQueryTerms(AppProperties.getProperty("QueryTerms"));
+        spout.getFileWorker().setFileExt(".json");
         spout.getFileWorker().setBasePath("/Users/yanni/sentidata");
+        
         return spout;
     } 
      
      
+     
+     static void caclQueryStats(Stream dataStream){
+        TridentState queryStatsState =dataStream   //.each(itemField, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
+                            .groupBy(groupByFields)
+                            .persistentAggregate(new SentilexoStateFactory(new QueryStatsCqlStorageConfigValues()),
+                                                                           ExtractStatsFields.statsFields, 
+                                                                           new QueryTotalsAggregator(), 
+                                                                           totalItemsFields);
+           
+     }
+     
+     
+     static void calcHashTagStats(Stream dataStream) {
+        DefaultSetting positiveKeywords = new DefaultSetting(POSITIVE_KEYWORDS, null);
+        positiveKeywords.load();
+        DefaultSetting negativeKeywords = new DefaultSetting(NEGATIVE_KEYWORDS, null);
+        negativeKeywords.load();
+        CalculateSimpleSentimentTotals simpleSentimentFunction = new CalculateSimpleSentimentTotals(positiveKeywords.getValues(), negativeKeywords.getValues());
+        Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagFields;
+        
+        Stream analysisStream = dataStream        
+                .each(itemField, simpleSentimentFunction,hashtagFields )
+                .each(new Fields(itemField.get(0),hashtagFields.get(0)), new ExtractHashtags(), hashtagTotalFields)
+                .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
+          
+
+     }
      static void setupTopology(Stream mainStream) {        
            
           
-          // keyword-based ("bag of words") sentiment classification
-          
-          DefaultSetting positiveKeywords = new DefaultSetting(POSITIVE_KEYWORDS, null);
-          positiveKeywords.load();
-          DefaultSetting negativeKeywords = new DefaultSetting(NEGATIVE_KEYWORDS, null);
-          negativeKeywords.load();
-          CalculateSimpleSentimentTotals simpleSentimentFunction = new CalculateSimpleSentimentTotals(positiveKeywords.getValues(), negativeKeywords.getValues());
-                  
+                            
           // neural network based sentiment calculation
           Properties props = new Properties();          
           // initialise the CoreNLP engine - this takes time do it before the topology is submited.
           CoreNLPSentimentClassifier.getInstance().setup();
           CalculateNLPSentiment neuralNetNLPSentimentAnalysisFunction = new CalculateNLPSentiment();
-
           
           // setup for the Naive Bayes classification model developed in R and exported using PMML 
           String pmmlFileName = AppProperties.getProperty("bayes-model", "twitter-sentiment-bayes.xml");
@@ -122,44 +159,38 @@ public class TwitterStreamTridentTopology {
          }
            */   
           
-          TridentState queryStatsState =mainStream.each(DeserializeAvroResultItem.avroObjectFields, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
-                            .groupBy(groupByFields)
-                            .persistentAggregate(new SentilexoStateFactory(new QueryStatsCqlStorageConfigValues()),
-                                                                           ExtractStatsFields.statsFields, 
-                                                                           new QueryTotalsAggregator(), 
-                                                                           totalItemsFields);
-                                         
+        
           
-          
-            Fields hashtagFields = CalculateSimpleSentimentTotals.hashtagFields;
+        
 
             Stream nlpSentimentStream = mainStream
-                    .each(DeserializeAvroResultItem.avroObjectFields,neuralNetNLPSentimentAnalysisFunction ,CalculateNLPSentiment.statusFields);
+                   .each(itemField,neuralNetNLPSentimentAnalysisFunction ,new Fields("NLPSentiment"));
             Stream bayesSentimentStream = mainStream
-            .each(DeserializeAvroResultItem.avroObjectFields, bayesModelClassifier , DirectCalculatePmmlBayesSentiment.statusFields);
+            .each(itemField, bayesModelClassifier , new Fields("BayesSentiment"));
 
  
             
-            Stream analysisStream = mainStream        
-                    .each(DeserializeAvroResultItem.avroObjectFields, simpleSentimentFunction,hashtagFields )
-                    .each(hashtagFields, new ExtractHashtags(), hashtagTotalFields)
-                    .each(hashtagTotalFields, new CalculateHashtagTotals(),counterField);
+       
 
      }
 
      public static void main(String[] args)  {
-          String topologyName="INCOMING_TRIDENT_TWEETS_TOPOLOGY";
+          String topologyName="INCOMING__TWEETS_TRIDENT_TOPOLOGY";
           
           String cqlhost =  AppProperties.getProperty("cqlhost", "localhost");
           String cqlschema = AppProperties.getProperty("cqlschema","twitterqueries");
           DataManager dataMgr =  DataManager.getInstance();
           dataMgr.connect(cqlhost,cqlschema);
-          
+          DefaultSetting mainTopologyName = new DefaultSetting("main_topology", null );
+          mainTopologyName.addValue(topologyName);
+          mainTopologyName.save();
           // read topologies from cassandra, increment and update with timestamp
           Deployment deploymentTracker = Deployments.getInstance(topologyName);
           deploymentTracker.load();
           boolean local = true;
-          boolean useKafka = false; 
+          boolean useKafka = true;
+          
+          
           if (args != null && args.length > 0) {
             topologyName= args[0];
             local = false;
@@ -167,9 +198,10 @@ public class TwitterStreamTridentTopology {
              useKafka = true;   
           }
           
-     
+    
          try {
             Config config = new Config();
+            config.registerSerialization(TwitterQueryResultItemAvro.class);
             config.setDebug(true);
             config.setNumWorkers(3);
             TridentTopology topology = new TridentTopology();
@@ -178,24 +210,51 @@ public class TwitterStreamTridentTopology {
             if (useKafka) { 
                 OpaqueTridentKafkaSpout kafkaSpout = getKafkaSpout();
                mainStream = topology.newStream("twitter-stream", kafkaSpout)
-                        .parallelismHint(1).
-                        each(new Fields("bytes"),
-                             new DeserializeAvroResultItem(), 
-                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter(topologyName))
-                             .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) ;            }
+                        .parallelismHint(20).
+                        each(kafkaSpout.getOutputFields(),
+                             new AvroBytesToResultItemFunction(), itemField);
+            }
             else {
-                JSONFileTwitterSpout spout = initJSONFileTwitterSpout();
+                TextFileBatchedLinesSpout spout = initJSONFileTwitterSpout();
                  mainStream = topology.newStream("twitter-stream", spout)
                         .parallelismHint(1).
-                        each(new Fields("bytes"),
-                             new DeserializeAvroResultItem(), 
-                             DeserializeAvroResultItem.avroObjectFields).each(DeserializeAvroResultItem.avroObjectFields, new DuplicatesFilter(topologyName))
-                            .each(DeserializeAvroResultItem.avroObjectFields, new LanguageFilter(languagesToAccept)) ;
-       
-            }    
+                        each(spout.getOutputFields(),
+                             new TextLineToResultItemFunction(),itemField);
+                 
+            }   
+                 
+                 Stream queryStream = mainStream.each(itemField, new LanguageFilter(languagesToAccept))
+                               .each(itemField, new DuplicatesFilter(topologyName))
+                               .each(itemField, new UpdateTopologiesJournal(topologyName));
+                 if (useKafka)
+                      queryStream.each(itemField, new SendResultItemToKafkaTopic(AppProperties.getProperty("kafka.topic.analytics")));
+ 
+                 
+                 
+                  TridentState queryStatsState =  
+                                            queryStream.each(itemField, new  ExtractStatsFields(),ExtractStatsFields.statsFields )
+                                            .groupBy(groupByFields)
+                                           .persistentAggregate(new SentilexoStateFactory(new QueryStatsCqlStorageConfigValues()),
+                                                                           ExtractStatsFields.statsFields, 
+                                                                           new QueryTotalsAggregator(), 
+                                                                           totalItemsFields); 
+           
+             
             
-       
-            setupTopology(mainStream);
+ /*           Stream filteredStream = mainStream
+                                    .each(itemField, new DuplicatesFilter(topologyName))
+                                    .each(itemField, new LanguageFilter(languagesToAccept)) ;
+*/
+   //         caclQueryStats(filteredStream);
+     //       calcHashTagStats(filteredStream);
+            //filteredStream.each(itemField, new UpdateTopologiesJournal(topologyName));
+        //    if (useKafka)
+          //       filteredStream.each(itemField, new SendResultItemToKafkaTopic(AppProperties.getProperty("kafka.topic.analytics")));
+            
+            
+            
+            
+            //setupTopology(mainStream);
        
             if (!local) {
             try {

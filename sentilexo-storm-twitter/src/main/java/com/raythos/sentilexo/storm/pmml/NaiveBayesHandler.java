@@ -22,7 +22,7 @@
  */
 package com.raythos.sentilexo.storm.pmml;
 
-import com.raythos.sentilexo.trident.twitter.DirectCalculatePmmlBayesSentiment;
+import com.raythos.sentilexo.trident.twitter.sentiment.DirectCalculatePmmlBayesSentiment;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;

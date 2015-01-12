@@ -35,29 +35,46 @@ import org.slf4j.LoggerFactory;
  */
 public class ExtractStatsFields  extends BaseFunction{
     protected  static Logger log = LoggerFactory.getLogger(ExtractStatsFields.class);
-   
-     public static final Fields statsFields = new Fields("statusId","createdAt");
+    int totals = 0;
+    
+    public static final Fields statsFields = new Fields( QueryResultItemFieldNames.QUERY_OWNER, 
+                                                         QueryResultItemFieldNames.QUERY_NAME,
+                                                         QueryResultItemFieldNames.STATUS_ID,
+                                                         QueryResultItemFieldNames.CREATED_AT);
   
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
+
         
-        Long statusId = (long)tuple.getLongByField("StatusId");
+        
+        Map item = (Map) tuple.getValueByField("ResultItem");        
+        String queryOwner = (String)item.get(QueryResultItemFieldNames.QUERY_OWNER);
+        String queryName  = (String)item.get(QueryResultItemFieldNames.QUERY_NAME);
+        Long statusId = (Long)item.get(QueryResultItemFieldNames.STATUS_ID);
+        
+/*        TwitterQueryResultItemAvro item = (TwitterQueryResultItemAvro) tuple.getValueByField("item");        
+        String queryOwner =item.getQueryOwner();
+        String queryName  = item.getQueryName();
+        Long statusId = item.getStatusId(); */
+        
         try {
-            Map<String,Object> result = (Map) tuple.getValueByField("ResultItem");
-        
-            Date resultCreationDate = new Date(); 
-            resultCreationDate.setTime(((Date)result.get(QueryResultItemFieldNames.CREATED_AT)).getTime());
-            List<Object> v = new ArrayList<>(); 
-        //     v.add("raythos"); // will param in the next iteration - for now only one owner 
-            // v.add(query); 
+           Date resultCreationDate = (Date)item.get(QueryResultItemFieldNames.CREATED_AT);
+           // Date resultCreationDate = new Date(); 
+           // resultCreationDate.setTime(item.getCreatedAt());
+            List<Object> v = new ArrayList<>();
+             v.add(queryOwner);
+             v.add(queryName);
              v.add(statusId); 
-             v.add(resultCreationDate.getTime()); 
-                    
-                    
+             v.add(resultCreationDate.getTime());
+             
+             totals++;
+          log.warn(totals + " item processed by ExtractStatsFields. Last item Status Id:"+statusId);
           collector.emit(v);
-          log.trace("StatusId "+statusId+" emiting stats fields to aggregator");         
+          //log.warn("StatusId "+statusId+" emitted stats fields to aggregator");         
           //result = null; 
+          
+          
           }
         catch (Exception e)     {
             log.error("error when emiting stats fields to aggregator for statusId "+statusId +". Error msg "+e);

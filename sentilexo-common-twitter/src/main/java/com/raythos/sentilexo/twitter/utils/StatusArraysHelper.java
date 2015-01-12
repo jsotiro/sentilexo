@@ -7,10 +7,12 @@
 package com.raythos.sentilexo.twitter.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import twitter4j.HashtagEntity;
+import twitter4j.Scopes;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
@@ -52,6 +54,13 @@ public class StatusArraysHelper {
         return result;       
     }      
    
-     
+   public static List getScopesList(Status status){
+        List scopes = null;
+        Scopes scopesObj = status.getScopes();
+        if (scopesObj!=null){
+            scopes = Arrays.asList(scopesObj.getPlaceIds());
+        }
+        return scopes;    
+    }   
        
 }

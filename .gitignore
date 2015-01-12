@@ -29,3 +29,5 @@ Thumbs.db
 /sentilexo-storm-twitter/target/
 /sentilexo-twitter-dataServices/data/senti2G.json
 /cql/
+/mavenproject1/storm-common/target/
+/storm-common/target/

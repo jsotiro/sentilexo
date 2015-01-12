@@ -46,7 +46,7 @@ public class DataManager {
     private final EntityPersister resultJsonLogPersister = new EntityPersister();
     private final EntityPersister settingsPersister = new EntityPersister();
     private final EntityPersister deploymentsPersister = new EntityPersister();
-    
+    private final EntityPersister topologiesJournalPersister = new EntityPersister();
    
     
     private final Map persistersForClassNames = new HashMap();
@@ -73,6 +73,8 @@ public class DataManager {
       
   
     void setupPersisters(){
+        
+        
         queryPersister.setLoadEntityPrepStmt(RegisteredPreparedStatements.loadQuery);
         queryPersister.setSaveEntityPrepStmt(RegisteredPreparedStatements.saveQuery);
         queryPersister.setSession(session);
@@ -105,6 +107,11 @@ public class DataManager {
         deploymentsPersister.setSession(session);
         persistersForClassNames.put(com.raythos.sentilexo.twitter.domain.Deployment.class.getCanonicalName(), deploymentsPersister);        
       
+        topologiesJournalPersister.setLoadEntityPrepStmt(RegisteredPreparedStatements.selectTopologyDeployment);
+        topologiesJournalPersister.setSaveEntityPrepStmt(RegisteredPreparedStatements.insertTopologyDeployment);
+        topologiesJournalPersister.setSession(session);
+        persistersForClassNames.put(com.raythos.sentilexo.twitter.domain.DeployedTopology.class.getCanonicalName(), topologiesJournalPersister);        
+          
     }
   
   public Session connect(String host, String keyspace){
@@ -112,7 +119,7 @@ public class DataManager {
       this.keyspace = keyspace;
       cluster = Cluster.builder().addContactPoint(host).build();
       session = cluster.connect(keyspace); 
-      RegisteredPreparedStatements.prepareSentimentStatements(session);
+      RegisteredPreparedStatements.prepareStatements(session);
       setupPersisters();
       return session;
    }

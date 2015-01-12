@@ -14,7 +14,7 @@
  */
 package com.raythos.sentilexo.twitter.domain;
 
-import com.raythos.sentilexo.persistence.cql.MaterialisedView;
+import com.raythos.sentilexo.persistence.cql.DataConnected;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.ResultSet;
 import com.raythos.sentilexo.common.utils.DateTimeUtils;
@@ -25,7 +25,7 @@ import java.util.Date;
  *
  * @author yanni
  */
-public class HashtagTotals extends MaterialisedView {
+public class HashtagTotals extends DataConnected {
     
     public void  updateHashtatgTotalsCQL(String owner,String queryName, String hashtag, int period_type, String period,  Date time_id, int retweet){   
         BoundStatement boundUpdateTotalStatement = new BoundStatement(RegisteredPreparedStatements.updateHashTagTotals);

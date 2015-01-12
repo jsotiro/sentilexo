@@ -19,6 +19,7 @@ package com.raythos.sentilexo.trident.twitter.aggregations;
 import java.util.List;
 import storm.trident.tuple.TridentTuple;
 import com.google.common.collect.Lists;
+import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.trident.operation.ReducerAggregator;
@@ -42,10 +43,11 @@ import storm.trident.operation.ReducerAggregator;
                     // return long for date and id
                     List<Number> result;
                     
-                    long statusId = tuple.getLong(1);
-                    long dateAsLong = tuple.getLong(2);
+                    long statusId = tuple.getLongByField(QueryResultItemFieldNames.STATUS_ID);
+                    long dateAsLong = tuple.getLongByField(QueryResultItemFieldNames.CREATED_AT);
+                    
                     result = Lists.newArrayList((Number)statusId,(Number)dateAsLong );
-                    log.info("initiating combiner " +  result);
+                    log.trace("initiating combiner " +  result);
                     return result;
 		}
 
@@ -71,14 +73,14 @@ import storm.trident.operation.ReducerAggregator;
                                                   (Number) maxId,
                                                   (Number)(totals) );
 
-                       log.info("Combining values minDate,MaxDate,MinId,MaxId, Totdals and returning" + result);
+                       log.trace("Combining values minDate,MaxDate,MinId,MaxId, Totdals and returning" + result);
                        return result;
 		}
 
 		
 		public List<Number> zero() {
                         List<Number> result = Lists.newArrayList((Number) 0L, (Number) 0L, (Number) 0L,(Number) 0L, (Number) 1L);
-                        log.info("Setting values to zero and returning " + result);
+                        log.trace("Setting values to zero and returning " + result);
                         return result;
 		}
 
@@ -86,7 +88,7 @@ import storm.trident.operation.ReducerAggregator;
     public List<Number> init() {
      // read the data from the database 
          List<Number> result = Lists.newArrayList((Number) 0L, (Number) 0L, (Number) 0L,(Number) 0L, (Number) 1L);
-         log.info("initialising reducer " + result);
+         log.trace("initialising reducer " + result);
       return result;
         
     }
@@ -94,8 +96,9 @@ import storm.trident.operation.ReducerAggregator;
     @Override
     public List<Number> reduce(List<Number> t, TridentTuple tt) {
          List<Number> result;
-         statusId = (long)tt.get(0);
-         dateAsLong = (long)tt.get(1);
+
+         statusId = tt.getLongByField(QueryResultItemFieldNames.STATUS_ID);
+         dateAsLong = tt.getLongByField(QueryResultItemFieldNames.CREATED_AT);
          
          minDate = (long)(t.get(0));
          maxDate = (long)(t.get(1));

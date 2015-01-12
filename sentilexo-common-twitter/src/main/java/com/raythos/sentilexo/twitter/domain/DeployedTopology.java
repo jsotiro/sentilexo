@@ -16,19 +16,25 @@
 
 package com.raythos.sentilexo.twitter.domain;
 
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Row;
+import com.raythos.sentilexo.persistence.cql.PersistedEntity;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author yanni
  */
-public class DeployedTopology {
+public class DeployedTopology extends PersistedEntity{
     private String name;
     private String owner;
     private String query;
     private long id; 
     private Date processed;
-
+    protected  static Logger log = LoggerFactory.getLogger(DeployedTopology.class);
+   
     public String getName() {
         return name;
     }
@@ -76,8 +82,37 @@ public class DeployedTopology {
       this.owner = owner;
       this.query = query;
       this.id = id;
-      this.processed = new Date(processed.getTime());
+      if (processed!=null)
+        this.processed = new Date(processed.getTime());
   }
+
+    @Override
+    public void valuesFromRow(Row row) {
+      this.name=row.getString("topology");;
+      this.owner = row.getString("owner");
+      this.query = row.getString("query_name");
+      this.id = row.getLong("id");
+      this.processed = row.getDate("update_time");
+    }
+    
+    @Override
+    public void bindCQLLoadParameters(BoundStatement boundStm) {
+    boundStm.bind(name,id,owner,query);
+    
+    }
+
+    
+    @Override
+     public void save() {
+     log.warn("Saving topology journal for id "+ id + " topology:"+name + " owner:"+owner +" queryName:"+query);     
+     super.save();
+   } 
+    @Override
+    public void bindCQLSaveParameters(BoundStatement boundStm) {
+      boundStm.bind(name,id,owner,query);
+       log.warn("Binding cql params of new topology journal item for id "+ id + " topology:"+name + " owner:"+owner +" queryName:"+query);     
+  
+    }
     
   
   

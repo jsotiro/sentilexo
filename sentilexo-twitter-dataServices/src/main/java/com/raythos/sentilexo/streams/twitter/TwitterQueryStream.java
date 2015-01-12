@@ -108,6 +108,7 @@ public final class TwitterQueryStream implements  Serializable {
       ArrayList listeners =  Lists.newArrayList();
       for (int i=0;i<noOfListeners+1;i++){
          TwitterQueryListener queryListener = new TwitterQueryListener();
+         queryListener.setQueryOwner("raythos"); // for now, later from queries table 
          queryListener.setQueryTerms(queryTerms);
          queryListener.setListenerQuery(searchQueries);
          queryListener.setQueryName(queryName);

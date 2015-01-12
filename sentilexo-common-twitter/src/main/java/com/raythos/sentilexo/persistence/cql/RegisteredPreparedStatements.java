@@ -34,7 +34,11 @@ public class RegisteredPreparedStatements {
     public static  PreparedStatement selectLastDeployment;    
     public static  PreparedStatement insertDeployment;
     
-
+    public static  PreparedStatement selectTopologyDeployment;    
+    public static  PreparedStatement insertTopologyDeployment;
+ 
+    
+    
     public static  PreparedStatement selectStatus;
     public static  PreparedStatement insertStatus;
     
@@ -58,10 +62,10 @@ public class RegisteredPreparedStatements {
     public static  PreparedStatement updateSentimentTotalsUnlcearNoRetweets;
     public static  PreparedStatement loadQuery;
     public static  PreparedStatement saveQuery;  
-   
-
+    public static  PreparedStatement selectLatestIdForTopology;
+    public static  PreparedStatement selectQueriesIdBatch;
     
-    static  void prepareSentimentStatements(Session session){
+    static  void prepareStatements(Session session){
       //YES and  RETWEET
         updateSentimentTotalsYesRetweets = session.prepare("UPDATE sentiment_totals SET alltotal = alltotal +?, yestotal=yestotal+?, allretweet_total=allretweet_total+?, yesretweet_total=yesretweet_total+? where sentiment_type=? and owner=? and query= ? and  period_type =? and time_id=?");
         //YES and NO RETWEET
@@ -104,6 +108,16 @@ public class RegisteredPreparedStatements {
         loadQuery = session.prepare(loadQueryCQL);
         saveQuery = session.prepare(saveQueryCQL);
         
+        // assumes clustering order for id is set to DESC when the columnfamily is created in CQL
+        selectLatestIdForTopology = session.prepare("select id, query_name, owner from topologies_journal where topology= ?");
+        selectQueriesIdBatch = session.prepare("select id from topologies_journal where topology=? and id<? LIMIT ?");
+       
+        selectTopologyDeployment = session.prepare("select *  from topologies_journal where topology=? and id=? and owner=? and query_name=?");   
+        insertTopologyDeployment = session.prepare("insert into topologies_journal(topology,id,owner,query_name,update_time) values(?,?,?,?,now() )");    
+       
+ 
+        
+        
      
   } 
 
@@ -121,9 +135,11 @@ public class RegisteredPreparedStatements {
             .append(Helpers.quotedString(QueryResultItemFieldNames.LATITUDE)).append(",")
             .append(Helpers.quotedString(QueryResultItemFieldNames.LONGITUDE)).append(",")
             .append(Helpers.quotedString(QueryResultItemFieldNames.MENTIONS)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.LANGUAGE)).append(",")               
             .append(Helpers.quotedString(QueryResultItemFieldNames.PLACE)).append(",")
             .append(Helpers.quotedString(QueryResultItemFieldNames.POSSIBLY_SENSITIVE)).append(",") 
-            .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY_NAME)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY_OWNER)).append(",") 
+            .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY_NAME)).append(",")   
             .append(Helpers.quotedString(QueryResultItemFieldNames.QUERY)).append(",")
             .append(Helpers.quotedString(QueryResultItemFieldNames.RELEVANT_QUERY_TERMS)).append(",")
             .append(Helpers.quotedString(QueryResultItemFieldNames.RETWEET)).append(",")

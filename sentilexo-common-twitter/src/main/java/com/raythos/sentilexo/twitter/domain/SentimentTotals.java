@@ -14,7 +14,7 @@
  */
 package com.raythos.sentilexo.twitter.domain;
 
-import com.raythos.sentilexo.persistence.cql.MaterialisedView;
+import com.raythos.sentilexo.persistence.cql.DataConnected;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -26,7 +26,7 @@ import java.util.Date;
  *
  * @author yanni
  */
-public class SentimentTotals extends MaterialisedView {
+public class SentimentTotals extends DataConnected {
   
     public void  updateSentimentTotalsCQL(String method, String owner, String queryName, String sentiment, int period_type, String period,  Date time_id, int retweet){   
         BoundStatement  boundUpdateSentimentTotals; 
@@ -47,7 +47,9 @@ public class SentimentTotals extends MaterialisedView {
          } 
         boundUpdateSentimentTotals = new BoundStatement(stmt);
         boundUpdateSentimentTotals.bind(1L,1L,1L,1L,method, owner, queryName,period_type,time_id);
-        getSession().execute(boundUpdateSentimentTotals);
+        ResultSet results = getSession().execute(boundUpdateSentimentTotals);
+        setLastResultSet(results);
+        
         
 }
    
