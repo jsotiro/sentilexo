@@ -28,7 +28,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.raythos.sentilexo.files.twitter.LoadRawJSON</mainClass>
+                            <mainClass>com.raythos.sentilexo.topologies.twitter.DataIngressTopology</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
