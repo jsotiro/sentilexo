@@ -19,15 +19,9 @@ package com.raythos.sentilexo.trident;
 
 import com.raythos.messaging.kafka.TopicMessageProducer;
 import com.raythos.messaging.kafka.TopicProducerManager;
-import com.raythos.sentilexo.twitter.TwitterQueryResultItemAvro;
-import com.raythos.sentilexo.twitter.domain.Deployments;
-import com.raythos.sentilexo.twitter.domain.QueryIndex;
 import com.raythos.sentilexo.twitter.domain.QueryResultItemFieldNames;
-import com.raythos.sentilexo.twitter.domain.QueryResultItemMapper;
 import com.raythos.sentilexo.twitter.domain.ResultItem;
-import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import storm.trident.operation.BaseFilter;
