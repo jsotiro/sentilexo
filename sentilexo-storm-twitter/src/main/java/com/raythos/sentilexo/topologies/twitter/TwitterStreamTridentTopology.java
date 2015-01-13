@@ -36,6 +36,7 @@ import com.raythos.sentilexo.state.SentilexoStateFactory;
 import com.raythos.sentilexo.twitter.domain.Deployment;
 import com.raythos.sentilexo.persistence.cql.DataManager;
 import com.raythos.sentilexo.common.utils.AppProperties;
+import com.raythos.sentilexo.storm.pmml.NaiveBayesPMMLModelLoader;
 import com.raythos.sentilexo.trident.twitter.hashtags.CalculateHashtagTotals;
 import com.raythos.sentilexo.trident.twitter.sentiment.CalculateNLPSentiment;
 import com.raythos.sentilexo.trident.twitter.hashtags.CalculateSimpleSentimentTotals;
@@ -147,7 +148,7 @@ public class TwitterStreamTridentTopology {
           
           // setup for the Naive Bayes classification model developed in R and exported using PMML 
           String pmmlFileName = AppProperties.getProperty("bayes-model", "twitter-sentiment-bayes.xml");
-          NaiveBayesHandler handler= null;//NaiveBayesPMMLModelLoader.loadModel(pmmlFileName);
+          NaiveBayesHandler handler= NaiveBayesPMMLModelLoader.loadModel(pmmlFileName);
           DirectCalculatePmmlBayesSentiment bayesModelClassifier = new DirectCalculatePmmlBayesSentiment(handler);
          /*try {
              PmmlModel model = new PmmlModel(pmmlFileName);
