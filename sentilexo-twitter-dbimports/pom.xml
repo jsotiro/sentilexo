@@ -1,74 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.raythos</groupId>
-        <artifactId>sentilexo</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <groupId>com.raythos.sentilexo</groupId>
     <artifactId>sentilexo-twitter-dbimports</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
- <build>
-           <plugins>
-      <!--
-        Bind the maven-assembly-plugin to the package phase
-        this will create a jar file without the storm dependencies
-        suitable for deployment to a cluster.
-       -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-         <archive>
-            <manifest>
-             <mainClass>com.raythos.sentilexo.mysql.twitter.MySQLImport</mainClass>  
-            </manifest>
-         </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-     </plugins>
-     </build>
-   <dependencies> 
-    <dependency>
-	<groupId>mysql</groupId>
-	<artifactId>mysql-connector-java</artifactId>
-	<version>5.1.18</version>
-    </dependency>
+    <build>
+        <plugins>
+            <!--
+             Bind the maven-assembly-plugin to the package phase
+             this will create a jar file without the storm dependencies
+             suitable for deployment to a cluster.
+            -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.raythos.sentilexo.mysql.twitter.MySQLImport</mainClass>  
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies> 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.18</version>
+        </dependency>
     
-    <dependency>
-	<groupId>commons-io</groupId>
-	<artifactId>commons-io</artifactId>
-	<version>2.4</version>
-</dependency>
-      <dependency>
-         <groupId>com.raythos.sentilexo</groupId>
-         <artifactId>sentilexo-common-twitter</artifactId>
-         <version>1.0-SNAPSHOT</version>
-         <type>jar</type>
-      </dependency>
-      <dependency>
-         <groupId>com.raythos.messaging</groupId>
-         <artifactId>sentilexo-twitter-dataServices</artifactId>
-         <version>1.0-SNAPSHOT</version>
-         <type>jar</type>
-      </dependency>
-   </dependencies>    
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.raythos.sentilexo</groupId>
+            <artifactId>sentilexo-common-twitter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>com.raythos.messaging</groupId>
+            <artifactId>sentilexo-twitter-dataServices</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>    
     
     
 </project>
