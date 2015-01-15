@@ -89,7 +89,8 @@ public class DataIngressTopology extends CoreTopology {
     }
     
      public static void main(String[] args)  {
-        DataIngressTopology data_topology = new  DataIngressTopology();
+        
+         DataIngressTopology data_topology = new  DataIngressTopology();
         data_topology.execute();        
     } 
     
