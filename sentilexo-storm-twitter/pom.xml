@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.raythos.storm</groupId>
-    <artifactId>sentilexo-storm-twitter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    
+     <parent>
+        <groupId>com.raythos.sentilexo</groupId>
+        <artifactId>sentilexo-project</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>storm-twitter</artifactId>
+     
+    <!--groupId>com.raythos.storm</groupId>
+     <version>1.0-SNAPSHOT</version!-->
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -146,17 +154,7 @@
             <version>17.0</version>
         </dependency>
         
-        <dependency>
-            <groupId>com.raythos.sentilexo</groupId>
-            <artifactId>sentilexo-common-twitter</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+      
         
         
         <dependency>
@@ -190,13 +188,27 @@
             <artifactId>pmml-runtime</artifactId>
             <version>1.1.13</version>
         </dependency>
+        
+          <dependency>
+            <groupId>com.raythos.sentilexo</groupId>
+            <artifactId>common-twitter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        
         <dependency>
-            <groupId>com.raythos</groupId>
-            <artifactId>storm-common</artifactId>
+            <groupId>com.raythos.sentilexo</groupId>
+            <artifactId>common-storm</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
        
     </dependencies>
-    <name>sentilexo-storm-twitter</name>
+    <name>storm-twitter</name>
 </project>
