@@ -39,6 +39,7 @@ Logger log = LoggerFactory.getLogger(AppProperties.class);
 
     public static void setPropertiesFile(String propertiesFile) {
         getInstance().propertiesFile = propertiesFile;
+        getInstance().loadAsFile();
     }
 
     private void load(){
