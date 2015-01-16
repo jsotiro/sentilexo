@@ -58,6 +58,7 @@ public class MySQLImportWorker {
     
     public void connect(String host, String database, String user, String password) throws Exception{
             dbUrl = "jdbc:mysql://"+host+"/"+database;
+            
             Class.forName(jbdcDriver);
            // Open a connection
             conn = DriverManager.getConnection(dbUrl, user, password);
