@@ -34,9 +34,12 @@ public class MySQLImport {
                String db = AppProperties.getProperty("import.db");
                String dbuser =  AppProperties.getProperty("import.dbuser");
                String dbpwd= AppProperties.getProperty("import.dbpwd");
+               
                updater.connect(dbhost,db,dbuser,dbpwd);
-    
-            DataManager.getInstance().connect("localhost", "sentilexo");
+               String cqlhost =AppProperties.getProperty("cqlhost");
+               String cqlschema =  AppProperties.getProperty("cqlschema");       
+                       
+            DataManager.getInstance().connect(cqlhost,cqlschema );
             updater.updateTable();
         } catch (Exception ex) {
             Logger.getLogger(MySQLImportWorker.class.getName()).log(Level.SEVERE, null, ex);
