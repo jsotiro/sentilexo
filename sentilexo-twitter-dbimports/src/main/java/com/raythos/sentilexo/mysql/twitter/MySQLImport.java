@@ -29,11 +29,11 @@ public class MySQLImport {
             statusTopic.start();
             updater.setTwitterResultItemTopic(statusTopic);
             
-               AppProperties.setPropertiesFile("/etc/raythos/dbutils.properties");
-               String dbhost = AppProperties.getProperty("dbhost");
-               String db = AppProperties.getProperty("db");
-               String dbuser =  AppProperties.getProperty("dbuser");
-               String dbpwd= AppProperties.getProperty("dbpwd");
+//               AppProperties.setPropertiesFile("/etc/raythos/dbutils.properties");
+               String dbhost = AppProperties.getProperty("import.dbhost");
+               String db = AppProperties.getProperty("import.db");
+               String dbuser =  AppProperties.getProperty("import.dbuser");
+               String dbpwd= AppProperties.getProperty("import.dbpwd");
                updater.connect(dbhost,db,dbuser,dbpwd);
     
             DataManager.getInstance().connect("localhost", "sentilexo");
