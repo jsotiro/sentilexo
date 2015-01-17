@@ -361,10 +361,17 @@ public abstract class CoreTopology  {
 
     
     public void configFromArgs(String[] args){
-        if (args != null && args.length > 0) {
-            topologyName= args[0];
+        if (args != null){
             runLocally = false;
+            if (args.length > 0) {
+              if ( ! args[0].equals("+"))
+                topologyName= args[0];
           }
+          if (args.length > 1) {
+              this.useKafka = args[1].toLowerCase().equals("kafka");
+          }
+  
+        }
     } 
     
     public void  execute(){
