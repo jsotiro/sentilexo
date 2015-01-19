@@ -61,6 +61,7 @@ public class TextSentimentAnalysisTopology extends BaseStreamAnalyticsTopology {
      
     }    
 
+     
      public static void main(String[] args)  {
         TextSentimentAnalysisTopology text_analysis_topology = new  TextSentimentAnalysisTopology();
         text_analysis_topology.configFromArgs(args);

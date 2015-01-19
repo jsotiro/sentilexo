@@ -15,7 +15,7 @@
  */
 
 
-package com.raythos.sentilexo.topologies.twitter;
+package com.raythos.sentilexo.topologies.twitter.deprecated;
 
 /**
  *

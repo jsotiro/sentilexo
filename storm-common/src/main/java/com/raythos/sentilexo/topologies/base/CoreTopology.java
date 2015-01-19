@@ -81,13 +81,13 @@ public abstract class CoreTopology  {
        
        public static final Fields itemField = new Fields("ResultItem");
       
-   
+      
        
     public  CoreTopology(){
-        super();
+      super();
     }   
 
-    public  CoreTopology(String[] args){
+    public CoreTopology(String[] args){
       super();
       configFromArgs(args);
     }
@@ -362,31 +362,31 @@ public abstract class CoreTopology  {
     
     public void configFromArgs(String[] args){
         if (args != null){
-            runLocally = false;
+            runLocally = args.length == 0;
             if (args.length > 0) {
               if ( ! args[0].equals("+"))
                 topologyName= args[0];
+            }
+            if (args.length > 1) {
+              if ( ! args[1].toLowerCase().equals("kafka"))
+                useKafka=true;  
+            else
+              if ( ! args[1].toLowerCase().equals("files"))
+                useKafka=false;
           }
-          if (args.length > 1) {
-              this.useKafka = args[1].toLowerCase().equals("kafka");
-          }
-  
         }
     } 
     
+    
+  
+   
     public void  execute(){
+       
         setupTopology();
         setupMainStream();
         defineFunctions();
         updateTrackingInfo();
         submitTopology();        
     }
-    
-    public static void main(String[] args)  {
-
-    }
-
-    
-   
-      
+          
 }

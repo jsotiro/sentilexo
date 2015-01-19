@@ -88,12 +88,11 @@ public class DataIngressTopology extends CoreTopology {
        setTopicToRouteTo(AppProperties.getProperty("kafka.topic.analytics"));
     }
     
-     public static void main(String[] args)  {
-        
-         DataIngressTopology data_topology = new  DataIngressTopology();
-         data_topology.configFromArgs(args);
-         data_topology.execute();        
+    public static void main(String[] args)  {
+       DataIngressTopology topology=new DataIngressTopology();
+       topology.configFromArgs(args);
+       topology.execute();
     } 
-    
+
  }
 

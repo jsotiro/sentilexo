@@ -21,6 +21,7 @@ package com.raythos.sentilexo.topologies.twitter;
  */
 public class FileBasedDataIngressTopology {
 
+    
     /**
      * @param args the command line arguments
      */

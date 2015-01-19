@@ -15,7 +15,7 @@
  */
 
 
-package com.raythos.sentilexo.topologies.twitter;
+package com.raythos.sentilexo.topologies.twitter.deprecated;
 
 /* Now deprecated and the trident topology and functions are used instead 
  * to guarantee exactly once semantics in aggregations

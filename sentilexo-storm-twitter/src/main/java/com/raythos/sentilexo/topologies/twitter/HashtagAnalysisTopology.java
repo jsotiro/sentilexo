@@ -51,6 +51,8 @@ public class HashtagAnalysisTopology extends BaseStreamAnalyticsTopology {
      
     }    
 
+     
+     
      public static void main(String[] args)  {
         HashtagAnalysisTopology hashtag_topology = new  HashtagAnalysisTopology();
         hashtag_topology.configFromArgs(args);
